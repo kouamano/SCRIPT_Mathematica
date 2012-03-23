@@ -1,0 +1,162 @@
+mean[data_List] :=
+  Apply[Plus, data]/Length[data];
+
+variance[data_List]:=
+ Apply[Plus,
+  Table[(data[[n,2]]-data[[n,1]])^2,
+  {n,1,Length[data]}
+  ]
+ ]/(Length[data]-1);
+
+variancemle[data_List]:=
+ Apply[Plus,
+  Table[(data[[n,2]]-data[[n,1]])^2,
+  {n,1,Length[data]}
+  ]
+ ]/(Length[data]);
+
+correlation[data_List]:=
+ Module[{n,mx,my,sxx,sxy,syy,r},
+  n=Length[data];
+  mx=Apply[Plus,Table[data[[k,1]],{k,1,n}]]/n;
+  my=Apply[Plus,Table[data[[k,2]],{k,1,n}]]/n;
+  sxx=Apply[Plus,Table[(data[[k,1]]-mx)^2,{k,1,n}]]/n;
+  syy=Apply[Plus,Table[(data[[k,2]]-my)^2,{k,1,n}]]/n;
+  sxy=Apply[Plus,Table[(data[[k,1]]-mx)*(data[[k,2]]-my),{k,1,n}]]/n;
+  r=sxy/Sqrt[sxx syy];
+  r
+ ];
+
+quant3[data_]:=
+ Module[{n,m,f,g,T,A,B,S,v,r,u,y,x},
+  n=Length[data];
+  m=Length[data[[1]]];
+  f[i_]:=Apply[Plus,Table[data[[i,t]],{t,1,m}]];
+  g[j_]:=Apply[Plus,Table[data[[s,j]],{s,1,n}]];
+  T=Apply[Plus,Table[f[i],{i,1,n}]];
+  A=N[Table[data[[t,s]]/Sqrt[g[s]],{s,1,m},{t,1,n}]];
+  B=N[Table[data[[t,s]]/f[t]/Sqrt[g[s]],{t,1,n},{s,1,m}]];
+  S=A.B;
+  v=Eigenvalues[S];
+  r=Sqrt[v];
+  u=Eigenvectors[S];
+  y[p_]:=Table[N[u[[p,k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
+  x[q_]:=N[B.u[[q]] Sqrt[T]/Sqrt[v[[q]]]];
+  {v,y[2],x[2]}
+ ];
+
+quant4[nn_List]:=
+ Module[{lnn, nn1, n2, zz, zz2, nn2, esnn2},
+  lnn = Length[nn];
+  nn1 = Table[nn[[i,j]]+nn[[j,i]],{i,lnn},{j,lnn}];
+  n2 = Plus @@ nn1;
+  zz = Table[0,{lnn},{lnn-1}];
+  zz2 = Table[Insert[zz[[k]],-n2[[k]],k],{k,lnn}];
+  nn2 = N[nn1+zz2];
+  esnn2 = Eigensystem[nn2];
+  {nn1, n2, zz, zz2, nn2, esnn2}
+ ]; 
+
+toPoint[datax_,datay_]:=
+ Module[{tdata},
+  tdata = Transpose[{datax,datay}];
+  Table[Point[tdata[[n]]],{n,Length[datax]}]
+ ];
+
+toNumber[datax_,datay_]:=
+ Module[{tdata},
+  tdata = Transpose[{datax,datay}];
+  Table[Text[n,tdata[[n]]],{n,Length[datax]}]
+ ];
+
+toNumber3D[datax_,datay_,dataz_]:=
+ Module[{tdata},
+  tdata = Transpose[{datax,datay,dataz}];
+  Table[Text[n,tdata[[n]]],{n,Length[datax]}]
+ ];
+
+simpleregression[datax_List,datay_List]:=
+ Module[{n,Sx,Sy,Avx,Avy,Sxx,Sxy,Syy,r,b1,b0},
+  n=Length[datax];
+  Sx=Apply[Plus,datax];
+  Sy=Apply[Plus,datay];
+  Avx=Sx/n;
+  Avy=Sy/n;
+  Sxx=Apply[Plus,datax^2]-(Apply[Plus,datax]^2)/n;
+  Syy=Apply[Plus,datay^2]-(Apply[Plus,datay]^2)/n;
+  Sxy=Apply[Plus,datax*datay]-(Apply[Plus,datax]*Apply[Plus,datay])/n;
+  r=Sqrt[Sxy^2/(Sxx*Syy)];
+  b1=Sxy/Sxx;
+  b0=Avy-b1*Avx;
+  Print["r = ",N[r]];
+  Print["regression"];
+  Print["    y = ",N[b1],"x + ",N[b0]]
+ ];
+
+multipleregression[data_List]:=
+ Module[{Tdata,l,n,m,Stable,table,ydrop,ylist,bn,b0,
+         Sr,St,Rtable,multiR},
+  Tdata=Transpose[data];
+  l=Length[data];
+  n=Length[data[[1]]];
+  m=Apply[Plus,Tdata]/n;
+  table=data.Tdata;
+  Stable=
+   Table[table[[q,w]]-(Apply[Plus,data[[q]]]*
+                       Apply[Plus,data[[w]]])/n,
+    {q,Length[data]},{w,Length[data]}
+   ];
+  ydrop=Drop[Transpose[Drop[Transpose[Stable],1]],1];
+  ylist=Drop[Stable[[1]],1];
+  bn=PseudoInverse[ydrop].ylist;
+  b0=Apply[Plus,Prepend[-bn,1]*m];
+  Sr=Apply[Plus,bn*ylist];
+  St=Syy=Stable[[1,1]];
+  Rtable=
+   N[
+    Table[
+     Stable[[q,w]]/(Sqrt[ Stable[[q,q]] Stable[[w,w]] ]),
+     {q,1,Length[Stable]},{w,1,Length[Stable]}
+    ]
+   ];
+  multiR=Sqrt[Sr/St];
+  Print[Rtable];
+  Print[multiR];
+  Print[Prepend[bn,b0]];
+ ];
+
+regularDistribution[x_, mue_, sigm_] := 
+  1/(Sqrt[2 Pi] sigm)*E^(-(x - mue)^2/(2 sigm^2));
+
+regularDistributionP[x_] := 
+  Module[{t}, Integrate[regularDistribution[t, 0, 1], {t, x, Infinity}]];
+
+spearman[k_List, l_List] :=
+  Module[{odrlistk, odrlistl, spearmanodrk, spearmanodrl, n},
+   orderlist[list_] :=
+    Module[{sorted},
+     sorted = Sort[list];
+     Table[
+      Position[sorted, list[[n]]], {n, Length[list]}
+     ]
+    ];
+   spearmanorder[list_] :=
+    Table[
+     Apply[Plus, list[[n]]]/Dimensions[list[[n]]][[1]],
+     {n, Length[list]}
+    ];
+   n = Length[k];
+   odrlistk = orderlist[k];
+   odrlistl = orderlist[l];
+   spearmanodrk = spearmanorder[odrlistk];
+   spearmanodrl = spearmanorder[odrlistl];
+   1 - 6*Apply[Plus, (spearmanodrk - spearmanodrl)^2]/n/(n^2 - 1)
+  ]
+
+entropy[l_List] :=
+  Module[{len,t, m},
+    len = Length[l];
+    t = Tr[l];
+    m = l/t;
+    If[ t==0, 0, -Tr[Map[Check[(# Log[len,#]),0]&,m]] ]
+  ]

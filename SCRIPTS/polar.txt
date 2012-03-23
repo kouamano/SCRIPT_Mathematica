@@ -1,0 +1,11 @@
+polarToxy[{r_, th_}] := {r Cos[th], r Sin[th]};
+
+pxyTopolar[{x_, y_}] := {Sqrt[N[x^2] + y^2], 
+  ArcCos[x/Sqrt[N[x^2] + y^2]]};
+
+nxyTopolar[{x_, y_}] := {Sqrt[N[x^2] + y^2], 
+  2 Pi - ArcCos[x/Sqrt[N[x^2] + y^2]]};
+
+xyTopolar[{x_,y_}] := If[ 	y >= 0, 
+				pxyTopolar[{x,y}],
+				nxyTopolar[{x,y}] ];

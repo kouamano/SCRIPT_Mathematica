@@ -1,0 +1,73 @@
+naturalQ[x_] :=
+  IntegerQ[x] && x >= 1;
+
+listFragmentation[list_, size_, gap_, shift_:0] :=
+  Table[
+    Take[list, {n, n + size - 1}], {n, 1 + shift, Length[list] - size + 1, gap}];
+
+stringFragmantation[str_String, size_, gap_, shift_:0] :=
+  Table[StringTake[str, {n, n + size - 1}], {n, 1 + shift, 
+      StringLength[str] - size + 1, gap}];
+
+stringtostringlist[list_] :=
+  Table[
+    StringTake[list, {n, n}], {n, StringLength[list]}];
+
+listtostringlist[list_] :=
+  Table[ToString[list[[n]]], {n, Length[list]}];
+
+dropfirstline[list_] :=
+  Block[{ps},
+    ps = Position[list, "\n"][[1]][[1]];
+    Drop[list, ps]
+    ];
+
+dropSpace[data_String] :=
+  StringReplace[data, {" " -> "", "\n" -> "", "\t" -> ""}];
+
+deletenull[list_] :=
+  Block[{ps},
+    ps = Position[list, Null];
+    Delete[list, ps]
+    ];
+
+countfrags[list_] :=
+  Module[{un, cnt},
+    un = Union[list];
+    {un, Table[Count[list, un[[n]]], {n, Length[un]}]}
+    ];
+
+countfrags[base_List, patt_List] :=
+  Module[{un, cnt},
+    un = Union[patt];
+    Table[Count[base, un[[n]]], {n, Length[un]}]
+    ];
+
+listpositiontest[source_, comp_] :=
+  Module[{lc},
+    lc = Length[comp];
+    Table[
+      Apply[And,
+        Table[
+          source[[n + m]] == comp[[n]], {n, lc}]], {m, 0, Length[source] - lc}]
+    ];
+
+listposition[source_, comp_] :=
+  Module[{lc},
+    lc = Length[comp];
+    Position[
+      Table[
+        Apply[And,
+          Table[
+            source[[n + m]] == comp[[n]], {n, lc}]], {m, 0, Length[source] - lc}], True]
+    ];
+
+pureFuncTogenFunc[fname_, pfunc_] :=
+  Block[{h1, h2, h3, h4, t1},
+    h1 = Map[ToString, pfunc[[1]]];
+    h2 = Map[StringJoin[#, "_"] &, h1];
+    h3 = Map[ToExpression, h2];
+    h4 = ReplacePart[h3, fname, 0];
+    t1 = pfunc[[2]];
+    ToExpression[StringJoin[{ToString[h4], ":=", ToString[t1]}]]
+    ];

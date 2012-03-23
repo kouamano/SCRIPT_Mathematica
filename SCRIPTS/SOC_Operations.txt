@@ -1,0 +1,34 @@
+socOP[condition_,logfile_String,rule_,framesChromosome_,rls_]:={
+  log[condition] = Get[logfile],
+
+  cluster[condition] = 
+  Map[Drop[#, 1] &, Drop[log[condition][[3]][[4]], 1]],
+
+  cumlativeFramesChromosome[condition] = 
+  Prepend[
+    Map[Tr[framesChromosome[[#]]] &, 
+      Range[Range[Length[framesChromosome]]]], 0],
+
+  frames[condition] = Tr[framesChromosome],
+
+  effectiveCluster[condition] = 
+  Select[cluster[condition], Length[#] > 0 &],
+
+  effectiveClusterMember[condition] = 
+  Map[ToExpression[StringReplace[#, rls
+      ]] &, effectiveCluster[condition], {2}],
+
+  lengthEffectiveClusterMember[
+  condition] = (effectiveClusterMember[condition] // Length),
+
+  bin[condition] = Table[
+   BinCounts[
+    effectiveClusterMember[condition][[i]], {0, 
+     Max[effectiveClusterMember[condition][[i]]], binvolume}],
+   {i, lengthEffectiveClusterMember[condition]}
+   ],
+
+  Map[gini[#] &, N[bin[condition]]],
+
+  Map[StandardDeviation[#] &, N[bin[condition]]]
+};

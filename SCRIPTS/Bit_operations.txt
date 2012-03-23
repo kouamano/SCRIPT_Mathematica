@@ -1,0 +1,18 @@
+periodicBitList[l_, i_] := 
+  Flatten[Table[{Table[0, {l}], Table[1, {l}]}, {i}]];
+
+periodicBitFilter[l_, i_, p_, w_] :=
+  Module[{filterlet, len, whole},
+    filterlet = periodicBitList[l, i];
+    len = Length[filterlet];
+    whole = Table[0, {w}];
+    Drop[Flatten[Insert[whole, filterlet, p]], -len]
+  ];
+
+periodicBitProduct[l_, i_, p_, w_List] :=
+  Module[{filterlet, len, region},
+    filterlet = periodicBitList[l, i];
+    len = Length[filterlet];
+    region = Take[w, {p, p + len - 1}];
+    filterlet*region
+  ];

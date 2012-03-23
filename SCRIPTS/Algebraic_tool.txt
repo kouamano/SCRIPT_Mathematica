@@ -1,0 +1,21 @@
+sqDistanceTable[table_List]:=
+  Table[ Apply[Plus,(table[[m]]-table[[n]])^2],{m,Length[table]},{n,Length[table]} ];
+
+distanceTable[table_List]:=
+  Sqrt[
+    Table[ Apply[Plus,(table[[m]]-table[[n]])^2],{m,Length[table]},{n,Length[table]} ] ];
+
+nDistanceTable[table_List]:=
+  Sqrt[
+    Table[ Apply[Plus,(table[[m]]-table[[n]])^2],{m,Length[table]},{n,Length[table]} ] ]//N;
+
+sqDistanceTable[table1_List,table2_List]:=
+  Table[ Apply[Plus,(table1[[m]]-table2[[n]])^2],{m,Length[table1]},{n,Length[table2]} ];
+
+distanceTable[table1_List,table2_List]:=
+  Sqrt[
+    Table[ Apply[Plus,(table1[[m]]-table2[[n]])^2],{m,Length[table1]},{n,Length[table2]} ] ];
+
+nDistanceTable[table1_List,table2_List]:=
+  Sqrt[
+    Table[ Apply[Plus,(table1[[m]]-table2[[n]])^2],{m,Length[table1]},{n,Length[table2]} ] ]//N;

@@ -1,0 +1,158 @@
+NA = {"A", "C", "G", "T"};
+
+combinatorialSeq[n_Integer] :=
+  ReplacePart[
+    Prepend[Table[NA, {n}], List], Outer, 0];
+
+combinatorialSeqJoin[n_Integer] :=
+  Map[StringJoin[#] &,
+    ReplacePart[
+      Prepend[Table[NA, {n}], List], Outer, 0], {n}];
+
+dropFastaHead[str_String] :=
+  StringReplace[str, RegularExpression[">[^\n]+\n"] -> ""];
+
+dropSpace[data_String] :=
+  StringReplace[data, {" " -> "", "\n" -> "", "\t" -> ""}];
+
+DNAchartest[char_String] :=
+  If[(char == "A") || (char == "C") || (char == "G") || (char == "T"), char];
+
+DNAchartesttable[list_] :=
+  Table[DNAchartest[list[[n]]], {n, Length[list]}];
+
+ATratio[sequence_String] :=
+  Module[{c, cc, x},
+    c = Characters[sequence];
+    cc = ReplaceAll[c, {"A" -> 1, "a" -> 1, "T" -> 1, "t" -> 1}];
+    Tr[(cc /. x : _String -> 0)]/Length[cc]
+    ];
+
+ATcount[sequence_String] :=
+  Module[{c, cc, x},
+    c = Characters[sequence];
+    cc = ReplaceAll[c, {"A" -> 1, "a" -> 1, "T" -> 1, "t" -> 1}];
+    Tr[(cc /. x : _String -> 0)]
+    ];
+
+ATCont[Chars_List] :=
+  Module[{c},
+    c = 0;
+    Map[If[# == "A" || # == "T",
+          c++] &, Chars];
+    c/Length[Chars]
+    ];
+
+ATContentScan[seq_String, window_Integer] :=
+  Module[{ch, n},
+    ch = Characters[seq];
+    n = Length[ch] - window + 1;
+    Map[ATCont[#] &, Table[Part[ch, Range[i, i + window - 1]], {i, n}]]
+    ];
+
+GCratio[sequence_String] :=
+  Module[{c, cc, x},
+    c = Characters[sequence];
+    cc = ReplaceAll[c, {"G" -> 1, "g" -> 1, "C" -> 1, "c" -> 1}];
+    Tr[(cc /. x : _String -> 0)]/Length[cc]
+    ];
+
+GCcount[sequence_String] :=
+  Module[{c, cc, x},
+    c = Characters[sequence];
+    cc = ReplaceAll[c, {"G" -> 1, "g" -> 1, "C" -> 1, "c" -> 1}];
+    Tr[(cc /. x : _String -> 0)]
+    ];
+
+GCCont[Chars_List] :=
+  Module[{c},
+    c = 0;
+    Map[If[# == "G" || # == "C",
+          c++] &, Chars];
+    c/Length[Chars]
+    ];
+
+GCContentScan[seq_String, window_Integer] :=
+  Module[{ch, n},
+    ch = Characters[seq];
+    n = Length[ch] - window + 1;
+    Map[GCCont[#] &, Table[Part[ch, Range[i, i + window - 1]], {i, n}]]
+    ];
+
+Nfilter["A"][data_String] :=
+  StringReplace[data, {"A" -> "1", "a" -> "1", "C" -> "0", "c" -> "0", "G" -> "0", "g" -> "0", "T" -> "0", "t" -> "0", _ -> "0"}] // 
+      Characters // ToExpression;
+
+Nfilter["C"][data_String] :=
+  StringReplace[data, {"A" -> "0", "a" -> "0", "C" -> "1", "c" -> "1", "G" -> "0", "g" -> "0", "T" -> "0", "t" -> "0", _ -> "0"}] // 
+      Characters // ToExpression;
+
+Nfilter["G"][data_String] :=
+  StringReplace[data, {"A" -> "0", "a" -> "0", "C" -> "0", "c" -> "0", "G" -> "1", "g" -> "1", "T" -> "0", "t" -> "0", _ -> "0"}] // 
+      Characters // ToExpression;
+
+Nfilter["T"][data_String] :=
+  StringReplace[data, {"A" -> "0", "a" -> "0", "C" -> "0", "c" -> "0", "G" -> "0", "g" -> "0", "T" -> "1", "t" -> "1", _ -> "0"}] // 
+      Characters // ToExpression;
+
+oligoNfilter[data_String, str_String] :=
+  Module[{pos, dlen, slen, list},
+    pos = StringPosition[data, str];
+    pos = Map[Drop[#, -1] &, pos];
+    dlen = StringLength[data];
+    slen = StringLength[str];
+    list = Table[0, {dlen - slen + 1}];
+    ReplacePart[list, 1, pos]
+    ];
+
+oligonucleotideStringPattern[s_String, n_] :=
+  Module[{strings, numbers, outpattern},
+    strings = Table[s, {n}];
+    numbers = Range[n];
+    outpattern = 
+      Table[ToString[strings[[i]]] <> ToString[numbers[[i]]] <> "_", {i, n}];
+    ToExpression[
+      StringJoin["(", Insert[outpattern, "~~", Map[{#} &, Range[2, n]]], 
+        ")"]]
+    ];
+
+patternIter[pat_, n_] :=
+  Module[{outstring},
+    outstring = ToString[Table[pat, {n}]];
+    ToExpression[
+      StringReplace[
+        outstring, {Whitespace -> "", "," -> "~~", "{" -> "", "}" -> ""}]]
+    ];
+
+nucleotideToComplex[nucleotide_String] :=
+  Module[{str, strlen, position, base},
+    str = ToUpperCase[nucleotide];
+    str = StringReplace[str, "\n" -> ""];
+    strlen = StringLength[str];
+    base = Table[0, {strlen}];
+    position["A"] = StringPosition[str, "A"];
+    position["A"] = Map[{#[[1]]} &, position["A"]];
+    position["G"] = StringPosition[str, "G"];
+    position["G"] = Map[{#[[1]]} &, position["G"]];
+    position["C"] = StringPosition[str, "C"];
+    position["C"] = Map[{#[[1]]} &, position["C"]];
+    position["T"] = StringPosition[str, "T"];
+    position["T"] = Map[{#[[1]]} &, position["T"]];
+    base = ReplacePart[base, 1, position["A"]];
+    base = ReplacePart[base, I, position["G"]];
+    base = ReplacePart[base, -I, position["C"]];
+    base = ReplacePart[base, -1, position["T"]];
+    base
+    ];
+
+isMatchSubString[base_String, query_String] :=
+  Block[{blen, qlen, l},
+    blen = StringLength[base];
+    qlen = StringLength[query];
+    l = blen - qlen;
+    (*Table[StringTake[base, {1, qlen} + n], {n, 0, l}]*)
+    Map[# == query &, Table[StringTake[base, {1, qlen} + n], {n, 0, l}]]
+    ];
+
+autoCorrelation[data_List] := ListCorrelate[data, Drop[data, 1], 1, 0];
+

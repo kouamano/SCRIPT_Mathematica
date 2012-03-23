@@ -1,0 +1,5 @@
+atomToDigit[list_] :=
+  ToExpression[ StringJoin[ Map[ ToString, list ] ] ];
+
+atomToDigitRule =
+  (atomToDigit[#1] > atomToDigit[#2])&;

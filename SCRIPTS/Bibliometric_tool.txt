@@ -1,0 +1,90 @@
+listFrequency[list_List] := Module[{tmp}, tmp = Union[list];
+  Table[{tmp[[n]], Count[list, tmp[[n]]]}, {n, Length[tmp]}]];
+
+v[n_] :=
+  Length[Union[n]];
+
+freqlist[t_] :=
+  Module[{k, l},
+    l = Union[t];
+    k = Table[Count[t, Union[t][[n]]], {n, Length[Union[t]]}];
+    {k, l}
+  ];
+
+freqorder[list_] :=
+  Transpose[
+    Sort[
+      Transpose[
+        Sort[
+          freqlist[list]
+        ]
+      ]
+    ]
+  ];
+
+freqsort[list_List] :=
+  Sort[
+    Transpose[
+      Reverse[list]
+    ]
+  ];
+
+cumulatetake[data_]:=
+  Table[
+    Take[
+      data,i
+    ],{i,1,Length[data]}
+  ];
+
+cumulatesum[data_]:=
+  Table[
+    Apply[Plus,
+      cumulatetake[data][[i]]
+    ],{i,1,Length[data]}
+  ];
+
+Gini[v_List] :=
+ Module[{l, mean},
+  l = Length[v];
+  mean = Mean[v];
+  Total[Table[Abs[v[[n]] - v[[m]]], {n, l}, {m, l}], 2]/(2*mean*l*(l-1)) // N
+  ];
+
+gini[v_List] :=
+ Module[{l, mean},
+  l = Length[v];
+  mean = Mean[v];
+  Total[Table[Abs[v[[n]] - v[[m]]], {n, l}, {m, l}], 2]/(2*mean*l^2) // N
+  ];
+
+iA[list_, e_] :=
+  1 - (1/v[list]*
+          Apply[Plus,
+            Flatten[
+              (freqlist[list][[1]]/Length[list] v[list])^(1 - e)
+            ]
+          ]
+      )^(1/(1 - e));
+
+con[list_] :=
+  Sqrt[
+    Apply[Plus, freqlist[list][[1]]^2 - 1/v[list]]/
+    (1 - 1/v[list])
+  ];
+
+c[n_] :=
+  Module[{q},
+    q = Apply[Plus,
+        Table[
+          i freqlist[n][[1]][[i]], {i, Length[freqlist[n][[1]]]}
+        ]
+      ];
+    2(((v[n] + 1)/2) - q)/(v[n] - 1)
+  ];
+
+q[n_] := Apply[Plus,
+    Table[
+      i freqlist[n][[1]][[i]], {i, Length[freqlist[n][[1]]]}
+    ]
+  ];
+

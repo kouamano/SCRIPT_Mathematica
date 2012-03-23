@@ -1,0 +1,5 @@
+scaleMW[mw_, scale_] :=
+  Flatten[Map[Table[#, {scale}] &, mw]];
+
+listWT[mw_, signal_] :=
+  ListConvolve[Reverse[mw], signal, {-1,-1}];

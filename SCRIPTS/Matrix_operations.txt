@@ -1,0 +1,9 @@
+toSymmetric[mat_] :=
+ Module[{cols, rows},
+  cols = Length[mat[[1]]];
+  rows = Length[mat];
+  Map[Tr[#] &, 
+   Table[
+    mat[[k]][[m]]*mat[[l]][[m]], {k, rows}, {l, rows}, {m, 
+     cols}], {2}]
+];

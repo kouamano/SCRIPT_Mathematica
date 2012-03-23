@@ -1,0 +1,32 @@
+moveClst[src_List,data_List,rate_]:=
+  data+(src - data)*rate;
+
+moveRateClst[src_List,data_List,rate_]:=
+  (src - data)*rate;
+
+nDistanceTable[table_List]:=
+  Sqrt[
+    Table[ Apply[Plus,(table[[m]]-table[[n]])^2],{m,Length[table]},{n,Length[table]} ]
+  ]//N;
+
+nDistanceTable[table1_List,table2_List]:=
+  Sqrt[
+    Table[ Apply[Plus,(table1[[m]]-table2[[n]])^2],{m,Length[table1]},{n,Length[table2]} ]
+  ]//N;
+
+somLm[sample_,clstOrg_,rate_,loop_,{jOn_,jR_,jTimes_},mon_]:=
+  Module[ {(*clst,sLen,cLen,dSampleClst,sampleMinList,sampleMinPosition,clstSampleGroup,addClstSampleGroupCo,averageClstSampleGroupCo,tmp*)},
+    clst = clstOrg;
+    sLen = Length[sample];
+    For[i=0,i<loop,i++;
+      cLen = Length[clst];
+      dSampleClst = nDistanceTable[sample, clst];
+      sampleMinList = Table[Min[dSampleClst[[n]]],{n,sLen}];
+      sampleMinPosition = Table[Position[dSampleClst[[n]], sampleMinList[[n]]],{n,sLen}]//Flatten;
+      clstSampleGroup = Table[Position[sampleMinPosition, n]//Flatten,{n,cLen}];
+      (*addClstSampleGroupCo = Table[ Apply[ Plus,sample[[clstSampleGroup[[n]] ]] ],{n,Length[clstSampleGroup]} ];*)
+      averageClstSampleGroupCo = Table[ If[ Length[ clstSampleGroup[[n]] ] > 0, Apply[ Plus,sample[[clstSampleGroup[[n]] ]] ] / Length[ clstSampleGroup[[n]] ], clst[[n]] ],{n,Length[clstSampleGroup]} ]//N;
+      AddTo[ clst,Table[moveRateClst[averageClstSampleGroupCo[[n]],clst[[n]],rate],{n,cLen}] ];
+    ];
+    clst
+  ]

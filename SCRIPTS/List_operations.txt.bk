@@ -1,0 +1,64 @@
+dataflatten[list_]:=
+ Module[{clength, rlength, csum, rsum},
+  clength = Length[list];
+  rlength = Length[list[[1]]];
+  csum = Apply[Plus, list];
+  rsum = Apply[Plus, Transpose[list]];
+  Transpose[Transpose[list/rsum]/csum]
+ ];
+
+dataflatten[list_,n_] :=
+ Module[{clength, rlength, csum, rsum},
+  clength = Length[list];
+  rlength = Length[list[[1]]];
+  csum = Apply[Plus, list];
+  rsum = Apply[Plus, Transpose[list]];
+  Transpose[Transpose[list/rsum^n]/csum^n]
+ ];
+
+diagonalmatrix[k_,l_,n_]:=
+ Module[{t, d},
+  t = Table[k, {n}, {n}];
+  d = Table[
+   ReplacePart[t[[m]], l, m], {m, n}
+  ]
+ ];
+
+intertest[a_,intb_,intc_]:=
+ If[a >= intb,
+  If[a < intc, a, nil], nil
+ ];
+
+interdistrib[data_, min_, max_, step_] :=
+ Module[{segs},
+  segs = Ceiling[(max - min)/step];
+  Table[
+   intertest[data[[k]], min + (step l), min + (step (l + 1))],
+   {l, 0, segs - 1}, {k, data // Length}
+  ]
+ ];
+
+numdistrib[distrib_]:=
+ Table[
+  Length[Complement[distrib[[n]], {nil}]],
+  {n, Length[distrib]}
+ ];
+
+intersectionNum[x___] := Length[Intersection[x]];
+
+unionNum[x___] := Length[Union[x]];
+
+clusterInner[cl1_List, cl2_List] := 
+ Tr[Flatten[((Outer[intersectionNum, cl1, cl2, 1] // N)/
+      Outer[unionNum, cl1, cl2, 1])]];
+
+clusterInnerSq[cl1_List, cl2_List] := 
+ Tr[Flatten[((Outer[intersectionNum, cl1, cl2, 1] // N)/
+      Outer[unionNum, cl1, cl2, 1])^2]];
+
+clusterAffinity[cl1_List, cl2_List] := 
+ clusterInner[cl1, cl2]^2/Length[cl1]/Length[cl2];
+
+clusterAffinitySq[cl1_List, cl2_List] := 
+ clusterInnerSq[cl1, cl2]^2/Length[cl1]/Length[cl2];
+
