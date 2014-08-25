@@ -46,6 +46,7 @@ D[K] = max[ i,1,K ; j,1,k ]( dshort(z[i],z[j]) )
 where
 n[i]: num of members of cluster i
 z[i]: medoid of cluster i"
+dMin::usage = "Min[n,1,K; m,1,K; n!=m](dshort(z[n],z[m])) ; z[n]: medoid of cluster n , n[i]: num of members of cluster S[i], K: num of clusters, S[i]: cluster S[i]."
 (**cXB**)
 cXB::usage = "cXB = (sum[i,1,K](sum[x\[Element]C[i]](dshort(x,z[i])))) / (n min[ i,1,K ; j,1,K ; i!=j](dshort(z[i],z[j])))"
 (**cSV**)
