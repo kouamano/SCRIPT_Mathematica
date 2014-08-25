@@ -4,7 +4,6 @@
 
 
 
-
 (*load other package*)
 Needs["Combinatorica`"]
 
@@ -47,7 +46,12 @@ D[K] = max[ i,1,K ; j,1,k ]( dshort(z[i],z[j]) )
 where
 n[i]: num of members of cluster i
 z[i]: medoid of cluster i"
-
+(**cXB**)
+cXB::usage = "cXB = (sum[i,1,K](sum[x\[Element]C[i]](dshort(x,z[i])))) / (n min[ i,1,K ; j,1,K ; i!=j](dshort(z[i],z[j])))"
+(**cSV**)
+cSV::usage = "cSV = 1/K * sum[i,1,K](sum[ x\[Element]C[i] ]( dshort(x,z[i])/n[i] )) + K/dmin
+dmin = min[ z:medoids ; i!=j ](dshort(z[i],z[j]))
+n[i] : number of members of cluster i"
 
 
 Begin["`Private`"]
@@ -146,6 +150,37 @@ cI[dshortMatZeroself_, cls_] := Module[
   medDmat = subDMat[dshortMatZeroself, sampleIDsOfmedoids];
   dK = Max[medDmat];
   (1/size) (1/eK) dK
+]
+(**cXB**)
+cXB[dshortMatZeroself_, cls_] := Module[
+  {size, numWholeSamples, subdmats, medoidsOfCl, medDmat, 
+  sampleIDsOfmedoids, numerator, denominator},
+  size = Length[cls];
+  numWholeSamples = Length[dshortMatZeroself];
+  subdmats = Map[subDMat[dshortMatZeroself, #] &, cls];
+  medoidsOfCl = Flatten[findMedoidsParCL[dshortMatZeroself, cls]];
+  numerator = 
+    Tr[Flatten[Table[subdmats[[n]][[medoidsOfCl[[n]]]], {n, size}]]];
+  sampleIDsOfmedoids = orgIndexFromMedoidParCL[cls, medoidsOfCl];
+  medDmat = subDMat[dshortMatZeroself, sampleIDsOfmedoids];
+  denominator = (Min[dropDiagonal[medDmat]] size);
+  numerator/denominator
+]
+(**cSV**)
+cSV[dshortMatZeroself_, cls_] := Module[
+  {size, numsClMems, subdmats, medoidsOfCl, vu, sampleIDsOfmedoids, 
+  meddmat, dmin},
+  size = Length[cls];
+  numsClMems = Map[Length[#] &, cls];
+  subdmats = Map[subDMat[dshortMatZeroself, #] &, cls];
+  medoidsOfCl = Flatten[findMedoidsParCL[dshortMatZeroself, cls]];
+  vu = (Tr[
+    Table[Tr[subdmats[[n]][[medoidsOfCl[[n]]]]/numsClMems[[n]]], {n,
+    size}]]/size);
+  sampleIDsOfmedoids = orgIndexFromMedoidParCL[cls, medoidsOfCl];
+  meddmat = subDMat[dshortMatZeroself, sampleIDsOfmedoids];
+  dmin = Min[dropDiagonal[meddmat]];
+  vu + dmin
 ]
 
 
