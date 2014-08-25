@@ -82,13 +82,11 @@ r[edMat_, dshortMatZeroself_, cls_, medoids_, i_] := Module[{js},
         s[dshortMatZeroself, cls[[#]], medoids[[#]]])/edMat[[i, #]] &, js]  
   ]
 ]
-cDB[edMat_, dshortMatZeroself_, cls_, medoids_] := 
-  Tr[Table[r[edMat, dshortMatZeroself, cls, medoids, i], {i, 
-    Length[cls]}]]
 cDB[edMat_, dshortMatZeroself_, cls_] := Module[{sampleMedoids},
   sampleMedoids = (orgIndexFromMedoidParCL[fc, findMedoidsParCL[edMat, cls]] // Flatten);
   Tr[Table[
-    r[edMat, dshortMatZeroself, cls, sampleMedoids, i], {i, Length[cls]}]]
+    r[edMat, dshortMatZeroself, cls, sampleMedoids, i], {i, 
+    Length[cls]}]]
 ]
 (**cDunn**)
 d[cl1_, cl2_, dshortMatZeroself_] := Module[
