@@ -49,7 +49,7 @@ connectiveClass`delta[cl_, dshortMatZeroself_] := Module[
   If[Length[subset] == 0, 0, 
     Max[Map[dshortMatZeroself[[#[[1]], #[[2]]]] &, subset]]]
 ]
-cDunn[cls_, dshortMatZeroself_] := Module[
+cDunn[dshortMatZeroself_, cls_] := Module[
   {numCls, maxdelta, subset},
   numCls = Length[cls];
   maxdelta = 
@@ -68,7 +68,7 @@ connectiveClass`Gd[s_List, t_List, dshortMatZeroself_List] :=
 connectiveClass`Gdelta[s_List, medID_, dshortMatZeroself_List] := 
   2 Tr[Table[dshortMatZeroself[[s[[x]], medID]], {x, Length[s]}]]/ 
     Length[s]
-cGDunn[cls_List, dshortMatZeroself_List] := 
+cGDunn[dshortMatZeroself_List, cls_List] := 
   Module[{medIDs, maxGdelta, subset},
     medIDs = (orgIndexFromMedoidParCL[cls, 
       findMedoidsParCL[dshortMatZeroself, cls]] // Flatten);
