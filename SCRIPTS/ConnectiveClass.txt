@@ -30,7 +30,7 @@ connectiveClass`r[edMat_, dshortMatZeroself_, cls_, medoids_, i_] :=
     ]
   ]
 cDB[edMat_, dshortMatZeroself_, cls_] := Module[{sampleMedoids},
-  sampleMedoids = (orgIndexFromMedoidParCL[fc, 
+  sampleMedoids = (orgIndexFromMedoidParCL[cls, 
     findMedoidsParCL[edMat, cls]] // Flatten);
   Tr[Table[
     connectiveClass`r[edMat, dshortMatZeroself, cls, sampleMedoids, 
