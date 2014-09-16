@@ -60,27 +60,6 @@ cDunn[dshortMatZeroself_, cls_] := Module[
 ]
 
 (*cGDunn*)
-Gdelta[cls_, medoid_, dshortMatZeroself_] :=
- 2 Tr[dshortMatZeroself[[medoid]][[cls]]]/Length[cls]
-Gd[clS_, clT_, dshortMatZeroself_] := Module[
-  {coords},
-  coords = Flatten[Outer[List, clS, clT, 1], 1];
-  Tr[Flatten[Map[dshortMatZeroself[[#]] &, coords]]]/ Length[clS] / 
-    Length[clT]
-]
-cGDunn[cls_, dshortMatZeroself_] := Module[
-  {numCLs, medoidIDs, maxGdelta, subset},
-  numCLs = Length[cls];
-  medoidIDs = 
-    Flatten[orgIndexFromMedoidParCL[cls, 
-    findMedoidsParCL[dshortMatZeroself, cls]]];
-  maxGdelta = 
-    Max[Table[
-      Gdelta[cls[[n]], medoidIDs[[n]], dshortMatZeroself], {n, 
-      numCLs}]];
-  subset = Subsets[cls, {2}];
-  Min[Map[Gd[#[[1]], #[[2]], dshortMatZeroself] &, subset]]/maxGdelta
-]
 
 (*cPS*)
 connectiveClass`dMin[dshortMatZeroself_, cls_] := Module[
