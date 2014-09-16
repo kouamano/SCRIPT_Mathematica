@@ -60,26 +60,27 @@ cDunn[dshortMatZeroself_, cls_] := Module[
 ]
 
 (*cGDunn*)
-connectiveClass`Gd[s_List, t_List, dshortMatZeroself_List] := 
-  1/(Length[s] Length[t]) Tr[
-    Flatten[Table[
-      dshortMatZeroself[[s[[x]], t[[y]]]], {x, Length[s]}, {y, 
-        Length[y]}]]]
-connectiveClass`Gdelta[s_List, medID_, dshortMatZeroself_List] := 
-  2 Tr[Table[dshortMatZeroself[[s[[x]], medID]], {x, Length[s]}]]/ 
-    Length[s]
-cGDunn[dshortMatZeroself_List, cls_List] := 
-  Module[{medIDs, maxGdelta, subset},
-    medIDs = (orgIndexFromMedoidParCL[cls, 
-      findMedoidsParCL[dshortMatZeroself, cls]] // Flatten);
+connectiveClass`Gdelta[cls_, medoid_, dshortMatZeroself_] :=
+ 2 Tr[dshortMatZeroself[[medoid]][[cls]]]/Length[cls]
+connectiveClass`Gd[clS_, clT_, dshortMatZeroself_] := Module[
+  {coords},
+  coords = Flatten[Outer[List, clS, clT, 1], 1];
+  Tr[Flatten[Map[dshortMatZeroself[[#]] &, coords]]]/ Length[clS] / 
+    Length[clT]
+]
+cGDunn[cls_, dshortMatZeroself_] := Module[
+  {numCLs, medoidIDs, maxGdelta, subset},
+  numCLs = Length[cls];
+  medoidIDs = 
+    Flatten[orgIndexFromMedoidParCL[cls, 
+    findMedoidsParCL[dshortMatZeroself, cls]]];
   maxGdelta = 
     Max[Table[
-      connectiveClass`Gdelta[cls[[i]], medIDs[[i]], 
-      dshortMatZeroself], {i, Length[cls]}]];
+      connecticeClass`Gdelta[cls[[n]], medoidIDs[[n]], dshortMatZeroself], {n, 
+      numCLs}]];
   subset = Subsets[cls, {2}];
-  Min[Map[connectiveClass`Gd[#[[1]], #[[2]], dshortMatZeroself] &, 
-    subset]]/maxGdelta
-  ]
+  Min[Map[connectiveClass`Gd[#[[1]], #[[2]], dshortMatZeroself] &, subset]]/maxGdelta
+]
 
 (*cPS*)
 connectiveClass`dMin[dshortMatZeroself_, cls_] := Module[
