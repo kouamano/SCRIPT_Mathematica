@@ -1,0 +1,26 @@
+(*距離行列から特定のクラスタに関する部分距離行列を抜き出す*)
+subDMat[dmat_,members_]:=
+  Transpose[Transpose[dmat[[members]]][[members]]]
+
+(*部分距離行列をもとに特定のクラスタのargminを求める*)
+argMinDMat[dmat_]:=Module[{sumList},
+  sumList=Map[Tr[#]&,dmat];
+  Position[sumList,Min[sumList]][[1]]
+]
+
+(*距離行列とクラスタリング結果から各クラスタのmedoidを求める*)
+findMedoidsParCL[dmat_,clusterResult_]:=
+  Map[argMinDMat[subDMat[dmat,#]]&,clusterResult]
+
+(*各クラスタのmedoid番号からもとのサンプル番号を求める*)
+orgIndexFromMedoidParCL[clusterResult_,medoids_]:=Module[{l,fmedoids},
+  l=Length[medoids];
+  fmedoids=Flatten[medoids];
+  Table[clusterResult[[i]][[medoids[[i]]]],{i,l}]
+]
+
+(*距離行列とクラスタリング結果から各クラスタの部分距離行列を求める*)
+clDmat[dmat_,cls_]:=
+  Map[subDMat[dmat,#]&,cls]
+
+
