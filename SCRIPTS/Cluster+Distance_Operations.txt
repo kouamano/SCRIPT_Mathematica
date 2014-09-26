@@ -23,4 +23,8 @@ orgIndexFromMedoidParCL[clusterResult_,medoids_]:=Module[{l,fmedoids},
 clDmat[dmat_,cls_]:=
   Map[subDMat[dmat,#]&,cls]
 
+(*行列から対角行列をdropする -> サイズは縮小*)
+dropDiagonal[mat_]:=
+  Table[Drop[mat[[n]],{n}],{n,Length[mat]}]
+
 
