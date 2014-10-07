@@ -1,29 +1,29 @@
-(*µ÷Î¥¹ÔÎó¤«¤éÆÃÄê¤Î¥¯¥é¥¹¥¿¤Ë´Ø¤¹¤ëÉôÊ¬µ÷Î¥¹ÔÎó¤òÈ´¤­½Ğ¤¹*)
+(*è·é›¢è¡Œåˆ—ã‹ã‚‰ç‰¹å®šã®ã‚¯ãƒ©ã‚¹ã‚¿ã«é–¢ã™ã‚‹éƒ¨åˆ†è·é›¢è¡Œåˆ—ã‚’æŠœãå‡ºã™*)
 subDMat[dmat_,members_]:=
   Transpose[Transpose[dmat[[members]]][[members]]]
 
-(*ÉôÊ¬µ÷Î¥¹ÔÎó¤ò¤â¤È¤ËÆÃÄê¤Î¥¯¥é¥¹¥¿¤Îargmin¤òµá¤á¤ë*)
+(*éƒ¨åˆ†è·é›¢è¡Œåˆ—ã‚’ã‚‚ã¨ã«ç‰¹å®šã®ã‚¯ãƒ©ã‚¹ã‚¿ã®argminã‚’æ±‚ã‚ã‚‹*)
 argMinDMat[dmat_]:=Module[{sumList},
   sumList=Map[Tr[#]&,dmat];
   Position[sumList,Min[sumList]][[1]]
 ]
 
-(*µ÷Î¥¹ÔÎó¤È¥¯¥é¥¹¥¿¥ê¥ó¥°·ë²Ì¤«¤é³Æ¥¯¥é¥¹¥¿¤Îmedoid¤òµá¤á¤ë*)
+(*è·é›¢è¡Œåˆ—ã¨ã‚¯ãƒ©ã‚¹ã‚¿ãƒªãƒ³ã‚°çµæœã‹ã‚‰å„ã‚¯ãƒ©ã‚¹ã‚¿ã®medoidã‚’æ±‚ã‚ã‚‹*)
 findMedoidsParCL[dmat_,clusterResult_]:=
   Map[argMinDMat[subDMat[dmat,#]]&,clusterResult]
 
-(*³Æ¥¯¥é¥¹¥¿¤ÎmedoidÈÖ¹æ¤«¤é¤â¤È¤Î¥µ¥ó¥×¥ëÈÖ¹æ¤òµá¤á¤ë*)
+(*å„ã‚¯ãƒ©ã‚¹ã‚¿ã®medoidç•ªå·ã‹ã‚‰ã‚‚ã¨ã®ã‚µãƒ³ãƒ—ãƒ«ç•ªå·ã‚’æ±‚ã‚ã‚‹*)
 orgIndexFromMedoidParCL[clusterResult_,medoids_]:=Module[{l,fmedoids},
   l=Length[medoids];
   fmedoids=Flatten[medoids];
   Table[clusterResult[[i]][[medoids[[i]]]],{i,l}]
 ]
 
-(*µ÷Î¥¹ÔÎó¤È¥¯¥é¥¹¥¿¥ê¥ó¥°·ë²Ì¤«¤é³Æ¥¯¥é¥¹¥¿¤ÎÉôÊ¬µ÷Î¥¹ÔÎó¤òµá¤á¤ë*)
+(*è·é›¢è¡Œåˆ—ã¨ã‚¯ãƒ©ã‚¹ã‚¿ãƒªãƒ³ã‚°çµæœã‹ã‚‰å„ã‚¯ãƒ©ã‚¹ã‚¿ã®éƒ¨åˆ†è·é›¢è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹*)
 clDmat[dmat_,cls_]:=
   Map[subDMat[dmat,#]&,cls]
 
-(*¹ÔÎó¤«¤éÂĞ³Ñ¹ÔÎó¤òdrop¤¹¤ë -> ¥µ¥¤¥º¤Ï½Ì¾®*)
+(*è¡Œåˆ—ã‹ã‚‰å¯¾è§’è¡Œåˆ—ã‚’dropã™ã‚‹ -> ã‚µã‚¤ã‚ºã¯ç¸®å°*)
 dropDiagonal[mat_]:=
   Table[Drop[mat[[n]],{n}],{n,Length[mat]}]
 
