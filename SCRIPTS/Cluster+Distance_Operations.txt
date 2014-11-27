@@ -27,15 +27,7 @@ clDmat[dmat_,cls_]:=
 dropDiagonal[mat_]:=
   Table[Drop[mat[[n]],{n}],{n,Length[mat]}]
 
-(*各クラスタのMSTと全体のMSTを使ったpi指標の変形*)
-mstPi[mst_List, mstm_, cls_] := Module[
-  {k, numMems, mstmaxs, MSTmmin},
-  k = Length[cls];
-  numMems = Map[Length[#] &, cls];
-  mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
-  MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  k Inner[Power, numMems, mstmaxs/MSTmmin, Times]
-]
+
 (*各クラスタのMSTを得るために複数のファイルを読み込む*)
 readMSTFiles[dir_, fileHead_, suffix_, numCLs_] := Module[
   {targetDir, targetFileNames},
@@ -46,3 +38,15 @@ readMSTFiles[dir_, fileHead_, suffix_, numCLs_] := Module[
   Print[targetFileNames];
   Map[Import[#, "Table"] &, targetFileNames]
 ]
+
+(*指標*)
+(*各クラスタのMSTと全体のMSTを使ったpi指標の変形*)
+mstPi[mst_List, mstm_, cls_] := Module[
+  {k, numMems, mstmaxs, MSTmmin},
+  k = Length[cls];
+  numMems = Map[Length[#] &, cls];
+  mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
+  MSTmmin = Min[Map[#[[-1]] &, mstm]];
+  k Inner[Power, numMems, mstmaxs/MSTmmin, Times]
+]
+
