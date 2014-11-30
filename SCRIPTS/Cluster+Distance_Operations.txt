@@ -27,7 +27,6 @@ clDmat[dmat_,cls_]:=
 dropDiagonal[mat_]:=
   Table[Drop[mat[[n]],{n}],{n,Length[mat]}]
 
-<<<<<<< HEAD
 (*クラスタインデックス付きベクトルを書くクラスタ集合に変換*)
 tableToCluster[t_] := Module[{ins, uins},
   ins = Map[#[[-1]] &, t];
@@ -44,9 +43,7 @@ mstPi[mst_List, mstm_, cls_] := Module[
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
   k Inner[Power, numMems, mstmaxs/MSTmmin, Times]
 ]
-=======
 
->>>>>>> d453856c4e09b35ff8566b216496d93f4403f501
 (*各クラスタのMSTを得るために複数のファイルを読み込む*)
 readMSTFiles[dir_, fileHead_, suffix_, numCLs_] := Module[
   {targetDir, targetFileNames},
