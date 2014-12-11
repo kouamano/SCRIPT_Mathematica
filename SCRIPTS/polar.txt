@@ -9,3 +9,12 @@ nxyTopolar[{x_, y_}] := {Sqrt[N[x^2] + y^2],
 xyTopolar[{x_,y_}] := If[ 	y >= 0, 
 				pxyTopolar[{x,y}],
 				nxyTopolar[{x,y}] ];
+
+xyzTopolar[{x_,y_,z_}] := Module[
+  {r,th,Cph,Sph},
+  r = Sqrt[x^2 + y^2 + z^2];
+  th = ArcCos[z/r];
+  Cph = x/Sqrt[x^2 + y^2];
+  Sph = y/Sqrt[x^2 + y^2];
+  {r Sin[th] Cph, r Sin[th] Sph, r Cos[th]}
+]
