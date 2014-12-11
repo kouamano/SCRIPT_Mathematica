@@ -18,3 +18,7 @@ xyzTopolar[{x_,y_,z_}] := Module[
   Sph = y/Sqrt[x^2 + y^2];
   {r Sin[th] Cph, r Sin[th] Sph, r Cos[th]}
 ]
+
+(*ver 10*)
+(* use CoordinateTransform[] *)
+(* ex. : CoordinateTransform["Spherical"->"Cartesioan",{1,0.01,Pi}] *)
