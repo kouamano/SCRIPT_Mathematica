@@ -1,0 +1,51 @@
+(*ネットワーク*)
+
+(*MST*)
+(*距離行列からユニークなエッジとその距離を求める*)
+udEdgeTake[dmat_] := 
+  Sort[Union[
+    Cases[Flatten[MapIndexed[{Sort[#2], #1} &, dmat, {2}], 1], 
+    {{x_, y_}, _} /; x != y]], #1[[2]] < #2[[2]] &]
+
+(*作成中のmstにエッジを与えるとクローズドパスとなるかをテスト*)
+mstCycleTest[mst_] := Module[
+  {nEdge, nNode},
+  nEdge = Length[mst];
+  nNode = Length[Union[Flatten[Map[#[[1]] &, mst]]]];
+  If[nEdge < nNode, True, False]
+]
+
+(*作成中のmstにオープンパスとなるエッジを与える*)
+mstAddTest[mstANDpoolPos_, edgePool_, size_] := Module[
+  {mst, mstNew, poolPos},
+  mst = mstANDpoolPos[[1]];
+  poolPos = mstANDpoolPos[[2]];
+  mstNew = Join[mst, {edgePool[[poolPos + 1]]}];
+  If[mstCycleTest[mstNew], {mstNew, poolPos + 1}, {mst, poolPos + 1}]
+]
+
+(*NestWhile[]用の最初の引数を作成*)
+mstCreateFirst[edgePool_] := {{edgePool[[1]]}, 1}
+
+(*エッジプールのノードの個数*)
+mstEdgePoolSize[edgePool_] := Max[Flatten[Map[#[[1]] &, edgePool]]]
+
+(*エッジのリストを引数にとるMST*)
+MST[edgePool_] := Module[
+  {first, size, e},
+  first = mstCreateFirst[edgePool];
+  size = mstEdgePoolSize[edgePool];
+  NestWhile[mstAddTest[#, edgePool, size] &, first, 
+  Length[#[[1]]] < size - 1 &]
+]
+
+(*距離行列を引数にとるMST*)
+MSTdmat[dm_] := Module[
+  {edgePool, first, size, e},
+  edgePool = udEdgeTake[dm];
+  first = mstCreateFirst[edgePool];
+  size = mstEdgePoolSize[edgePool];
+  NestWhile[mstAddTest[#, edgePool, size] &, first, 
+  Length[#[[1]]] < size - 1 &]
+]
+
