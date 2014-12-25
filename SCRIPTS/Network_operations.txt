@@ -9,10 +9,12 @@ udEdgeTake[dmat_] :=
 
 (*作成中のmstにエッジを与えるとクローズドパスとなるかをテスト*)
 mstCycleTest[mst_] := Module[
-  {nEdge, nNode},
+  {nEdge, nNode, g},
   nEdge = Length[mst];
   nNode = Length[Union[Flatten[Map[#[[1]] &, mst]]]];
-  If[nEdge == nNode-1, True, False]
+  g = Map[#[[1]]&, mst];
+  (*If[nEdge == nNode-1, True, False]*)
+  AcyclicGraphQ[Graph[g]]
 ]
 
 (*作成中のmstにオープンパスとなるエッジを与える*)
