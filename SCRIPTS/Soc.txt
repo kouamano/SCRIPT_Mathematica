@@ -7,12 +7,12 @@ moveRateClst[src_List,data_List,rate_]:=
 nDistanceTable[table_List]:=
   Sqrt[
     Table[ Apply[Plus,(table[[m]]-table[[n]])^2],{m,Length[table]},{n,Length[table]} ]
-  ]//N;
+]//N;
 
 nDistanceTable[table1_List,table2_List]:=
   Sqrt[
     Table[ Apply[Plus,(table1[[m]]-table2[[n]])^2],{m,Length[table1]},{n,Length[table2]} ]
-  ]//N;
+]//N;
 
 somLm[sample_,clstOrg_,rate_,loop_,{jOn_,jR_,jTimes_},mon_]:=
   Module[ {(*clst,sLen,cLen,dSampleClst,sampleMinList,sampleMinPosition,clstSampleGroup,addClstSampleGroupCo,averageClstSampleGroupCo,tmp*)},
@@ -30,3 +30,39 @@ somLm[sample_,clstOrg_,rate_,loop_,{jOn_,jR_,jTimes_},mon_]:=
     ];
     clst
   ]
+
+socOP[condition_,logfile_String,rule_,framesChromosome_,rls_]:={
+  log[condition] = Get[logfile],
+
+  cluster[condition] =
+  Map[Drop[#, 1] &, Drop[log[condition][[3]][[4]], 1]],
+
+  cumlativeFramesChromosome[condition] =
+  Prepend[
+    Map[Tr[framesChromosome[[#]]] &,
+      Range[Range[Length[framesChromosome]]]], 0],
+
+  frames[condition] = Tr[framesChromosome],
+
+  effectiveCluster[condition] =
+  Select[cluster[condition], Length[#] > 0 &],
+
+  effectiveClusterMember[condition] =
+  Map[ToExpression[StringReplace[#, rls
+      ]] &, effectiveCluster[condition], {2}],
+
+  lengthEffectiveClusterMember[
+  condition] = (effectiveClusterMember[condition] // Length),
+
+  bin[condition] = Table[
+   BinCounts[
+    effectiveClusterMember[condition][[i]], {0,
+     Max[effectiveClusterMember[condition][[i]]], binvolume}],
+   {i, lengthEffectiveClusterMember[condition]}
+   ],
+
+  Map[gini[#] &, N[bin[condition]]],
+
+  Map[StandardDeviation[#] &, N[bin[condition]]]
+};
+
