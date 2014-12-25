@@ -12,7 +12,7 @@ mstCycleTest[mst_] := Module[
   {nEdge, nNode},
   nEdge = Length[mst];
   nNode = Length[Union[Flatten[Map[#[[1]] &, mst]]]];
-  If[nEdge <= nNode-1, True, False]
+  If[nEdge == nNode-1, True, False]
 ]
 
 (*作成中のmstにオープンパスとなるエッジを与える*)
