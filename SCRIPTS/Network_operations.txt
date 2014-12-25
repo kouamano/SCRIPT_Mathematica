@@ -49,3 +49,5 @@ MSTdmat[dm_] := Module[
   Length[#[[1]]] < size - 1 &]
 ]
 
+(*整形*)
+MSTreform[mst_] := Map[ Flatten[#]&, mst[[1]] ]
