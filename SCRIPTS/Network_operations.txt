@@ -51,3 +51,4 @@ MSTdmat[dm_] := Module[
 
 (*整形*)
 MSTreform[mst_] := Map[ Flatten[#]&, mst[[1]] ]
+MSTBaseShift[mstNode_, s_] := mstNode + {s, s, 0}
