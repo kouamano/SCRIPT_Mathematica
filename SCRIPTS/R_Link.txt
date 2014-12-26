@@ -1,0 +1,25 @@
+(*R <-> Mathematica*)
+makeClusterFromRdata[rdata_] := 
+  Map[Drop[#, -1] &, 
+   Gather[Map[Drop[#, 1] &, 
+     Drop[rdata, 1]], #1[[-1]] == #2[[-1]] &], {2}]
+
+makeClusterFromRdata[rdata_, "Nohead"] := 
+  Map[Drop[#, -1] &, 
+    Gather[Map[Drop[#, 1] &, rdata], #1[[-1]] == #2[[-1]] &], {2}]
+
+makeClusterFromRdata[rdata_, "NoID"] := 
+  Map[Drop[#, -1] &, 
+    Gather[Drop[rdata, 1], #1[[-1]] == #2[[-1]] &], {2}]
+
+makeClusterFromRdata[rdata_, op__] := If[
+  Length[Flatten[Union[{{op}, {"NoID", "Nohead"}}]]] == 2,
+    Map[Drop[#, -1] &, Gather[rdata, #1[[-1]] == #2[[-1]] &], {2}] ]
+
+makeRClusterFromMMAClData[cl_List] := Module[
+  {len, dim, ClIDs},
+  len = Length[cl];
+  dim = Length[cl[[1, 1]]];
+  ClIDs = Table[i, {i, len}];
+  Flatten[Table[Map[Append[#, i] &, cl[[i]]], {i, len}], 1]
+]
