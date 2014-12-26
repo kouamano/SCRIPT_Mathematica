@@ -80,7 +80,8 @@ distancesFromEachClToCenter[cl_List] := Module[
   eachclcenter = centerOfEachClusters[cl];
   Map[EuclideanDistance[totalcenter, #] &, eachclcenter]
 ]
-
+(*各クラスタ重心から全サンプル重心までの平均距離:d*)
+d[cl_List] := Tr[distancesFromEachClToCenter[cl]] / Length[cl]
 
 (*指標pi*)
 WCSPowerWeighted[cl_] := 
