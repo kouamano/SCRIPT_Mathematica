@@ -45,9 +45,44 @@ readMSTFiles[dir_, fileHead_, suffix_, numCLs_] := Module[
   Map[Import[#, "Table"] &, targetFileNames]
 ]
 
-(*指標*)
-(*pi*)
+(*指標計算のための各モジュール*)
+(*重心から各サンプルへの平均距離*)
 averageDist[l_] := Mean[Map[EuclideanDistance[#, Mean[l]] &, l]]
+(*非階層か*)
+checkClDepth[cl_List] := 
+  If[Length[Dimensions[Flatten[cl, 1]]] == 2, cl, None]
+(*クラスタ数:N*)
+numOfClusters[cl_List] := Length[cl]
+(*各クラスタのメンバ数:Cn*)
+numOfClusterMembers[cl_List] := Map[Length[#] &, cl]
+(*全サンプル重心*)
+centerOfAllClSamples[cl_List] := Mean[Flatten[cl, 1]]
+(*全サンプルの重心からの平均距離*)
+radiusOfAllClSamples[cl_List] := Module[
+  {center},
+  center = Mean[Flatten[cl, 1]];
+  Mean[Map[EuclideanDistance[center, #] &, Flatten[cl, 1]]]
+]
+(*各クラスタの重心*)
+centerOfEachClusters[cl_List] := Map[Mean[#] &, cl]
+(*各クラスタの半径:rn*)
+radiusOfEachClusters[cl_List] := Module[
+  {numCl, eachcenter},
+  numCl = Length[cl];
+  eachcenter = Map[Mean[#] &, cl];
+  Table[Map[EuclideanDistance[#, eachcenter[[n]]] &, cl[[n]]] // 
+    Mean, {n, numCl}]
+]
+(*各クラスタ重心から全サンプル重心までの各距離:dn*)
+distancesFromEachClToCenter[cl_List] := Module[
+  {totalcenter, eachclcenter},
+  totalcenter = centerOfAllClSamples[cl];
+  eachclcenter = centerOfEachClusters[cl];
+  Map[EuclideanDistance[totalcenter, #] &, eachclcenter]
+]
+
+
+(*指標pi*)
 WCSPowerWeighted[cl_] := 
   Tr[Map[Length[#]^(averageDist[#]/averageDist[Flatten[cl, 1]]) &, cl],
     Times]*Length[cl]
