@@ -44,11 +44,14 @@ MST[edgePool_] := Module[
 (*距離行列を引数にとるMST*)
 MSTdmat[dm_] := Module[
   {edgePool, first, size, e},
-  edgePool = udEdgeTake[dm];
-  first = mstCreateFirst[edgePool];
-  size = mstEdgePoolSize[edgePool];
-  NestWhile[mstAddTest[#, edgePool, size] &, first, 
-  Length[#[[1]]] < size - 1 &]
+  If[Length[dm] == 1,
+    {{{{}, 0}}, 0},
+    edgePool = udEdgeTake[dm];
+    first = mstCreateFirst[edgePool];
+    size = mstEdgePoolSize[edgePool];
+    NestWhile[mstAddTest[#, edgePool, size] &, first, 
+    Length[#[[1]]] < size - 1 &]
+  ]
 ]
 
 (*整形*)
