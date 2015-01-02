@@ -122,4 +122,28 @@ mstPi[mst_List, mstm_, cls_] := Module[
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
   k Inner[Power, numMems, mstmaxs/MSTmmin, Times]
 ]
+mstPin[mst_List, mstm_, cls_] := Module[
+  {k, numMems, mstmaxs, MSTmmin},
+  (*k = Length[cls];*)
+  numMems = Map[Length[#] &, cls];
+  mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
+  MSTmmin = Min[Map[#[[-1]] &, mstm]];
+  Inner[Power, numMems, mstmaxs/MSTmmin, Times]
+]
+mstPim[mst_List, mstm_, cls_] := Module[
+  {k, numMems, mstmins, MSTmmin},
+  k = Length[cls];
+  numMems = Map[Length[#] &, cls];
+  mstmins = Map[Min[#] &, Map[#[[-1]] &, mst, {2}]];
+  MSTmmin = Min[Map[#[[-1]] &, mstm]];
+  k Inner[Power, numMems, mstmins/MSTmmin, Times]
+]
+mstPinm[mst_List, mstm_, cls_] := Module[
+  {k, numMems, mstmins, MSTmmin},
+  (*k = Length[cls];*)
+  numMems = Map[Length[#] &, cls];
+  mstmins = Map[Min[#] &, Map[#[[-1]] &, mst, {2}]];
+  MSTmmin = Min[Map[#[[-1]] &, mstm]];
+  Inner[Power, numMems, mstmins/MSTmmin, Times]
+]
 
