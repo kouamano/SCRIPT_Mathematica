@@ -168,6 +168,6 @@ mstPi2[mst_List, mstm_, cls_] := Module[
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  k^(MSTmmin) Inner[Power, numMems, mstmaxs, Times]
+  k^(-MSTmmin) Inner[Power, numMems, mstmaxs, Times]
 ]
 
