@@ -194,6 +194,14 @@ mstPi2i[mst_List, mstm_, cls_] := Module[
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
   k^(1/MSTmmin) Inner[Power, numMems, mstmaxs, Times]
 ]
+mstPi2iM[mst_List, mstm_, cls_] := Module[
+  {k, numMems, mstmeans, MSTmmean},
+  k = Length[cls];
+  numMems = Map[Length[#] &, cls];
+  mstmeans = Map[Mean[#] &, Map[#[[-1]] &, mst, {2}]];
+  MSTmmean = Mean[Map[#[[-1]] &, mstm]];
+  k^(1/MSTmmean) Inner[Power, numMems, mstmeans, Times]
+]
 mstPi2ix[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
