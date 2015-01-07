@@ -211,3 +211,12 @@ mstPi2ix[mst_List, mstm_, cls_] := Module[
   k^(1/MSTmmax) Inner[Power, numMems, mstmaxs, Times]
 ]
 
+(*maxminPi*)
+MaxMin[m_] := Min[Map[Max[#] &, m]]
+MinMax[m_] := Max[Map[Min[#] &, m]]
+maxminPi[dmat_, medcls_, cls_] := 
+  Module[{k, numMems, submaxmins, medmaxmin}, k = Length[cls];
+   numMems = Map[Length[#] &, cls];
+   medmaxmin = MaxMin[subDMat[dmat, medcls]];
+   submaxmins = Map[MaxMin[subDMat[dmat, #]] &, cls];
+   k Inner[Power, numMems, submaxmins/medmaxmin, Times] ]
