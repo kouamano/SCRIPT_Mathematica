@@ -226,12 +226,12 @@ maxminPi2[dmat_, medcls_, cls_] :=
    numMems = Map[Length[#] &, cls];
    medmaxmin = MaxMin[subDMat[dmat, medcls]];
    submaxmins = Map[MaxMin[subDMat[dmat, #]] &, cls];
-   k(-medmaxmin) Inner[Power, numMems, submaxmins, Times] ]
+   k^(-medmaxmin) Inner[Power, numMems, submaxmins, Times] ]
 
 maxminPi2i[dmat_, medcls_, cls_] := 
   Module[{k, numMems, submaxmins, medmaxmin}, k = Length[cls];
    numMems = Map[Length[#] &, cls];
    medmaxmin = MaxMin[subDMat[dmat, medcls]];
    submaxmins = Map[MaxMin[subDMat[dmat, #]] &, cls];
-   k(1/medmaxmin) Inner[Power, numMems, submaxmins, Times] ]
+   k^(1/medmaxmin) Inner[Power, numMems, submaxmins, Times] ]
 
