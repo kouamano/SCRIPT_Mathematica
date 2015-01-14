@@ -226,7 +226,7 @@ mstPi2ir[mst_List, mstm_, cls_] := Module[
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
   k^(1/MSTmmax) * (Inner[Power, numMems, mstmaxs, Times])^(1/k)
 ]
-mstPi2irn[mst_List, mstm_, cls_] := Module[
+mstPi2rn[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
@@ -234,7 +234,7 @@ mstPi2irn[mst_List, mstm_, cls_] := Module[
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
   (Inner[Power, numMems, mstmaxs, Times])^(1/k)
 ]
-mstPi2irk[mst_List, mstm_, cls_] := Module[
+mstPi2rk[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
