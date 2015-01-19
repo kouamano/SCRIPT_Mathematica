@@ -19,6 +19,11 @@ xyzTopolar[{x_,y_,z_}] := Module[
   {r Sin[th] Cph, r Sin[th] Sph, r Cos[th]}
 ]
 
+sPolarToxyz[{r_,th_,ph_}]:= {
+  r Sin[th] Cos[ph],
+  r Sin[th] Sin[ph],
+  r Cos[th]}
+
 (*ver 10*)
 (* use CoordinateTransform[] *)
 (* ex. : CoordinateTransform["Spherical"->"Cartesioan",{1,0.01,Pi}] *)
