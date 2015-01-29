@@ -131,6 +131,14 @@ mstPiM[mst_List, mstm_, cls_] := Module[
   MSTmmean = Mean[Map[#[[-1]] &, mstm]];
   k Inner[Power, numMems, mstmeans/MSTmmean, Times]
 ]
+mstPiX[mst_List, mstm_, cls_] := Module[
+  {k, numMems, mstmaxs, MSTmmean},
+  k = Length[cls];
+  numMems = Map[Length[#] &, cls];
+  mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
+  MSTmmean = Mean[Map[#[[-1]] &, mstm]];
+  k Inner[Power, numMems, mstmaxs/MSTmmean, Times]
+]
 mstPin[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
   (*k = Length[cls];*)
