@@ -152,8 +152,7 @@ patternIter[pat_, n_] :=
         outstring, {Whitespace -> "", "," -> "~~", "{" -> "", "}" -> ""}]]
     ];
 
-nucleotideToComplex[
-  DNA_String] := (Characters[
+nucleotideToComplex[DNA_String] := (Characters[
      ToUpperCase[StringReplace[DNA, "\n" -> ""]]] /. {"A" -> 1, "T" -> -1, "G" -> I, "C" -> -I}) /. {_String -> 0};
 
 nucleotideToInteger[
@@ -168,6 +167,29 @@ isMatchSubString[base_String, query_String] :=
     (*Table[StringTake[base, {1, qlen} + n], {n, 0, l}]*)
     Map[# == query &, Table[StringTake[base, {1, qlen} + n], {n, 0, l}]]
     ];
+
+seqToSubseqs[s_String, w_] := Module[
+  {len},
+  len = StringLength[s];
+  StringTake[s, Table[{n, n + w - 1}, {n, len - w + 1}]]
+  ];
+
+oligonucToVec[s_String, w_] := Module[
+  {len, substrs, addstrs},
+  len = StringLength[s];
+  substrs = StringTake[ToUpperCase[s], Table[{n, n + w - 1}, {n, len - w + 1}]];
+  substrs = Select[substrs, StringMatchQ[#, RegularExpression["[ACGTacgt]*"]]&];
+  addstrs = combinatorialSeqJoin[w];
+  Map[#[[2]] &, Sort[Tally[Flatten[{substrs, addstrs}]]]] - 1
+  (*Sort[Tally[substrs]]*)
+  ];
+
+contactPair[l_List, w_] := Module[
+  {len, pos},
+  len = Length[l];
+  pos = Table[{n, n + w}, {n, len - w}];
+  Map[l[[#]] &, pos]
+  ];
 
 autoCorrelation[data_List] := ListCorrelate[data, Conjugate[data], 1];
 
