@@ -399,7 +399,8 @@ mstPi2iS[3][mst_List, mstm_, cls_, totalR_, clRs_] :=
   (*k^(totalR/MSTmmin) Inner[Power,numMems,mstmaxs/clRs,Times]*)
   k^(MSTmminS) Inner[Power, numMems, mstmaxsS, Times]
 ]
-mstPi2iS[4][mst_List, mstm_, cls_] := Module[
+
+mstPi2n[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
