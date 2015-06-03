@@ -1,3 +1,13 @@
+(*クラスタID付きのデータより、もとのベクトルデータとクラスタIDのリストに分ける*)
+divideClData[data_] := Module[{len, org, ids, idsuniq, cIDs},
+  len = Length[data[[1]]];
+  org = Map[#[[1 ;; len - 1]] &, data];
+  ids = Map[#[[-1]] &, data];
+  idsuniq = Sort[Union[ids]];
+  cIDs = Map[Flatten[Position[ids, #]] &, idsuniq];
+  {org, cIDs}
+]
+
 (*距離行列から特定のクラスタに関する部分距離行列を抜き出す*)
 subDMat[dmat_,members_]:=
   Transpose[Transpose[dmat[[members]]][[members]]]
