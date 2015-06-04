@@ -136,7 +136,7 @@ piG2[mat_, cls_] :=
        classes[[n]]]], {n, numCL}]/totalRmean;
   (numCL * Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL)
 ]
-piG2[mat_, cls_] := 
+piG3[mat_, cls_] := 
   Module[{numMem, numCL, numsCLMem, totalCenter, totalRmean, classes, centers, rs},
   numMem = Length[mat];
   numCL = Length[cls];
