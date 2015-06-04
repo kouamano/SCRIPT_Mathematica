@@ -120,7 +120,7 @@ piG[mat_, cls_] :=
   rs = Table[
      Mean[Map[EuclideanDistance[#, centers[[n]]] &, 
        classes[[n]]]], {n, numCL}]/totalRmean;
-  numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/k)
+  numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL)
 ]
 
 (*mstPi 系: 各クラスタのMSTと全体のMSTを使ったpi指標の変形*)
