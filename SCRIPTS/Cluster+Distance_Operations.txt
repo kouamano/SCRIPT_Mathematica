@@ -122,34 +122,6 @@ piG[mat_, cls_] :=
        classes[[n]]]], {n, numCL}]/totalRmean;
   numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL)
 ]
-piG2[mat_, cls_] := 
-  Module[{numMem, numCL, numsCLMem, totalCenter, totalRmean, classes, centers, rs},
-  numMem = Length[mat];
-  numCL = Length[cls];
-  numsCLMem = Map[Length, cls];
-  totalCenter = Mean[mat];
-  totalRmean = Mean[Map[EuclideanDistance[#, totalCenter] &, mat]];
-  classes = Map[mat[[#]] &, cls];
-  centers = Map[Mean, classes];
-  rs = Table[
-     Mean[Map[EuclideanDistance[#, centers[[n]]] &, 
-       classes[[n]]]], {n, numCL}]/totalRmean;
-  (numCL * Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL)
-]
-piG3[mat_, cls_] := 
-  Module[{numMem, numCL, numsCLMem, totalCenter, totalRmean, classes, centers, rs},
-  numMem = Length[mat];
-  numCL = Length[cls];
-  numsCLMem = Map[Length, cls];
-  totalCenter = Mean[mat];
-  totalRmean = Mean[Map[EuclideanDistance[#, totalCenter] &, mat]];
-  classes = Map[mat[[#]] &, cls];
-  centers = Map[Mean, classes];
-  rs = Table[
-     Mean[Map[EuclideanDistance[#, centers[[n]]] &, 
-       classes[[n]]]], {n, numCL}]/totalRmean;
-  (numCL * Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/(numCL+1))
-]
 
 (*mstPi 系: 各クラスタのMSTと全体のMSTを使ったpi指標の変形*)
 (*mstPi 派生*)
