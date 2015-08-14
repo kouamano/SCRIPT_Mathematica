@@ -57,3 +57,30 @@ MSTdmat[dm_] := Module[
 (*整形*)
 MSTreform[mst_] := Map[ Flatten[#]&, mst[[1]] ]
 MSTBaseShift[mstNode_, s_] := mstNode + {s, s, 0}
+
+(*結合距離(ステップ)行列*)
+(*エッジリストから隣接行列を得る*)
+adjMatFromList[l_] := Module[{max, tab},
+  max = Max[Flatten[l]];
+  tab = Table[0, {max}, {max}];
+  Map[(tab[[#[[1]], #[[2]]]] = 1) &, l ];
+  Map[(tab[[#[[2]], #[[1]]]] = 1) &, l ];
+  tab
+]
+(*エッジリストから結合距離(ステップ)行列を得る*)
+conjMatFromAdjE[l_] := Module[{tab, len, dMat, aMat, pfunc, i, pos},
+  tab = adjMatFromList[l];
+  len = Length[tab];
+  dMat = Table[0, {len}, {len}];
+  aMat = IdentityMatrix[len];
+  pfunc[d_, a_] := 
+    Intersection[Position[d, 0], Position[a, x_ /; x != 0]];
+  For[i = 1, i <= len, i++, 
+    If[Length[Position[dMat, 0]] == 0, Break[]]; aMat = aMat.tab; 
+    pos = pfunc[dMat, aMat]; Map[(dMat[[#[[1]], #[[2]]]] = i) &, pos]; 
+    (*Print[pos]*)
+  ];
+  
+  ReplacePart[dMat, {x_, x_} -> 0]
+  
+]
