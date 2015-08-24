@@ -260,7 +260,15 @@ mstPi2rkS[3][mst_List, mstm_, cls_, totalR_] := Module[
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
-  MSTmmax = Max[Map[#[[-1]] &, mstm]];
+  (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
+  k * (Inner[Power, numMems, mstmaxs/totalR, Times])^(1/k)
+]
+mstPi2rkS[3][mst_List, cls_, totalR_] := Module[
+  {k, numMems, mstmaxs, MSTmmax},
+  k = Length[cls];
+  numMems = Map[Length[#] &, cls];
+  mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
+  (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
   k * (Inner[Power, numMems, mstmaxs/totalR, Times])^(1/k)
 ]
 mstPi2rkS[4][mst_List, mstm_, cls_, clRs_] := Module[
@@ -268,7 +276,15 @@ mstPi2rkS[4][mst_List, mstm_, cls_, clRs_] := Module[
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
-  MSTmmax = Max[Map[#[[-1]] &, mstm]];
+  (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
+  k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)
+]
+mstPi2rkS[4][mst_List, cls_, clRs_] := Module[
+  {k, numMems, mstmaxs, MSTmmax},
+  k = Length[cls];
+  numMems = Map[Length[#] &, cls];
+  mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
+  (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
   k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)
 ]
 
