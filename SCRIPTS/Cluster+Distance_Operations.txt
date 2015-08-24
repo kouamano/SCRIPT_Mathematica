@@ -8,6 +8,7 @@ divideClData[data_] := Module[{len, org, ids, idsuniq, cIDs},
   {org, cIDs}
 ]
 
+
 (*距離行列から特定のクラスタに関する部分距離行列を抜き出す*)
 subDMat[dmat_,members_]:=
   Transpose[Transpose[dmat[[members]]][[members]]]
@@ -56,6 +57,9 @@ readMSTFiles[dir_, fileHead_, suffix_, numCLs_] := Module[
 ]
 
 (*指標計算のための各モジュール*)
+(*サンプルIDのリストと座標行列よりベクトルのクラスタを抽出*)
+takeVecByID[mat_,li_]:=
+  Map[mat[[#]]&,li];
 (*重心から各サンプルへの平均距離*)
 averageDist[l_] := Mean[Map[EuclideanDistance[#, Mean[l]] &, l]]
 (*非階層か*)
