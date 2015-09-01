@@ -70,4 +70,69 @@ pureFuncTogenFunc[fname_, pfunc_] :=
     h4 = ReplacePart[h3, fname, 0];
     t1 = pfunc[[2]];
     ToExpression[StringJoin[{ToString[h4], ":=", ToString[t1]}]]
-    ];
+  ];
+
+(*n-gram match*)
+nGram[n_Integer, str_String] := Module[
+  {strchars, re},
+  re = "(?s).{" <> ToString[n] <> "}"; 
+  StringCases[str, RegularExpression[re], Overlaps -> True]
+];
+
+nGram[n_Integer, str_List] := Module[
+  {re},
+  re = "(?s).{" <> ToString[n] <> "}";
+  Flatten[
+    Map[StringCases[#, RegularExpression[re], Overlaps -> True] &, str]]
+];
+
+Freq[n_Integer, str_List] := Tr[Map[StringLength[#] - n + 1 &, str]];
+
+Freq[n_Integer, str_String] := Tr[StringLength[str] - n + 1];
+
+Freq[e_String, n_Integer, str_List] := 
+  Length[Flatten[Map[StringCases[#, e, Overlaps -> True] &, str]]];
+
+Freq[e_String, n_Integer, str_String] := 
+  Length[StringCases[str, e, Overlaps -> True]];
+
+M[n_Integer, str_List] := Module[
+  {re, depth, pre, pat},
+  re = "(?s).{" <> ToString[n] <> "}";
+  pre = Apply[Outer, 
+    Prepend[Map[
+      StringCases[#, RegularExpression[re], Overlaps -> True] &, str], List]];
+  depth = ArrayDepth[pre];
+  pat = Table[x_, {depth - 1}];
+  pre = Flatten[pre, depth - 2];
+  Length[Cases[pre, pat]]
+];
+
+M[e_String, n_Integer, str_List] := 
+  Apply[Times, Map[Length[StringCases[#, e, Overlaps -> True]] &, str]];
+
+Mpat[n_Integer, str_List] := Module[
+  {re, depth, pre, pat},
+  re = "(?s).{" <> ToString[n] <> "}";
+  pre = Apply[Outer, 
+    Prepend[Map[
+      StringCases[#, RegularExpression[re], Overlaps -> True] &, str], List]];
+  depth = ArrayDepth[pre];
+  pat = Table[x_, {depth - 1}];
+  pre = Flatten[pre, depth - 2];
+  Cases[pre, pat]
+];
+
+Mpat[e_String, n_Integer, str_List] := 
+  Map[StringCases[#, e, Overlaps -> True] &, str];
+
+SimA[n_, str_List] := (M[n, str]^2)/
+  Apply[Times, Map[M[n, {#, #}] &, str]];
+
+SimB[n_Integer, str_List] := Module[
+  {tal, lens},
+  lens = Map[StringLength[#] - n + 1 &, str];
+  tal = Tally[nGram[n, str]];
+  Apply[Plus, lens]*
+    Tr[Map[M[#[[1]], n, str]/#[[2]] &, tal]]/Apply[Times, lens]
+];
