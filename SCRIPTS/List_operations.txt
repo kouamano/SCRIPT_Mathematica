@@ -44,6 +44,7 @@ numdistrib[distrib_]:=
   {n, Length[distrib]}
  ];
 
+(*Cluster affinity*)
 intersectionNum[x___] := Length[Intersection[x]];
 
 unionNum[x___] := Length[Union[x]];
@@ -62,3 +63,34 @@ clusterAffinity[cl1_List, cl2_List] :=
 clusterAffinitySq[cl1_List, cl2_List] := 
  clusterInnerSq[cl1, cl2]^2/Length[cl1]/Length[cl2];
 
+(*Cluster sim: non-exclusive*)
+getNumElem[listoflist__] := Length[Flatten[{listoflist}]];
+
+getWeight[listoflist__] := 1/Counts[Flatten[{listoflist}]];
+
+getSearchSpace[{lista_, listb_}] := getNumElem[lista]*getNumElem[listb];
+
+getSearchLen[{lista_, listb_}] := getNumElem[lista] + getNumElem[listb];
+
+matchSyms[{lista_, listb_}] := 
+ Map[#[[1]] &, Cases[Outer[List, lista, listb, 1], {x_, x_}, {2}]];
+
+makeAllPairFromClusterPair[cl1_, cl2_] := 
+ Flatten[Outer[List, cl1, cl2, 1], 1];
+
+weghtedPairMatch[{lista_, listb_}] := Module[{len, sp},
+  len = getSearchLen[{lista, listb}];
+  sp = getSearchSpace[{lista, listb}];
+  Tr[matchSyms[{lista, listb}] /. getWeight[{lista, listb}]]*len/sp
+  ];
+
+clusterPairSim[cl1_, cl2_] := 
+ Module[{pairofpair, pairself1, pairself2, pairmatch, selfmatch1, selfmatch2},
+  pairofpair = makeAllPairFromClusterPair[cl1, cl2];
+  pairself1 = makeAllPairFromClusterPair[cl1, cl1];
+  pairself2 = makeAllPairFromClusterPair[cl2, cl2];
+  pairmatch = Tr[Map[weghtedPairMatch, pairofpair]];
+  selfmatch1 = Tr[Map[weghtedPairMatch, pairself1]];
+  selfmatch2 = Tr[Map[weghtedPairMatch, pairself2]];
+  pairmatch^2/(selfmatch1 selfmatch2)
+  ];
