@@ -80,7 +80,5 @@ conjMatFromAdjE[l_] := Module[{tab, len, dMat, aMat, pfunc, i, pos},
     pos = pfunc[dMat, aMat]; Map[(dMat[[#[[1]], #[[2]]]] = i) &, pos]; 
     (*Print[pos]*)
   ];
-  
   ReplacePart[dMat, {x_, x_} -> 0]
-  
 ]
