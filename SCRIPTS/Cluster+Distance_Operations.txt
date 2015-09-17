@@ -252,7 +252,7 @@ mstPi2rkS[2][mst_List, mstm_, cls_] :=
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   mstmeans = Map[Mean[#] &, Map[#[[-1]] &, mst, {2}]];
-  MSTmmax = Max[Map[#[[-1]] &, mstm]];
+  (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
   mstmaxsS = 
     Table[Function[If[#1 == 0, 0, #1/#2]][mstmaxs[[i]], 
       mstmeans[[i]]], {i, Length[mstmaxs]}];
