@@ -18,7 +18,8 @@ $stra =~ s/Cell\[/\nCell\[/g;
 
 print "Notebook[{\n";
 foreach(@arr){
-	if($_ =~ /, \"Input\", /){
+	if($_ =~ /BoxData.+, \"Input\", /){
+		$_ =~ s/(^.+Input.+?\])(.*)/$1/;
 		print "$_ ,\n";
 	}
 }
