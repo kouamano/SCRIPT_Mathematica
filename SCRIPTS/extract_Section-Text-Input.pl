@@ -27,19 +27,19 @@ foreach(@arr){
 		@tmparr = split(/\n/,$line);
 		$line = shift(@tmparr);
 	}
-	if($line =~ /, \"[a-zA-Z]*[Ss]ection\", /){
+	if($line =~ /GraphicsBox\[/){
+		;
+	}
+	elsif($line =~ /, \"[a-zA-Z]*[Ss]ection\", /){
 		$line =~ s/(Cell.+ \"[a-zA-Z]*[Ss]ection.+?\])(.*)/$1/;
 		print "$line ,\n";
-	}
-	elsif($line =~ /GraphicsBox\[/){
-		;
 	}
 	elsif($line =~ / FormBox\[/){
 		$line =~ s/(Cell\[.*?FormBox\[.+?\]\]\])(.*)/$1/;
 		print "$line ,\n";
 	}
-	elsif($line=~ /^Cell\[[a-zA-Z].*, \"Text\", /){
-		$line =~ s/(Cell.+ \"Text.+?\])(.*)/$1/;
+	elsif($line=~ /Cell\[TextData/){
+		#$line =~ s/(Cell.+ \"Text.+?\])(.*)/$1/;
 		print "$line,\n";
 	}
 	elsif($line =~ /BoxData.+, \"Input\", /){
@@ -47,4 +47,4 @@ foreach(@arr){
 		print "$line ,\n";
 	}
 }
-print "}]\n";
+print "}]";
