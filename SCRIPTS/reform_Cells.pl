@@ -5,8 +5,9 @@ while(<>){
 }
 $stra = join("",@arr);
 
-$stra =~ s/\n/ /g;
+$stra =~ s/\s/ /g;
 $stra =~ s/\\ / /g;
+$stra =~ s/ +/ /g;
 
 #drop comment
 $stra =~ s/\(\*.+?\*\)//g;
