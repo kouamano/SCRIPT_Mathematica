@@ -18,16 +18,33 @@ $stra =~ s/Cell\[/\nCell\[/g;
 
 print "Notebook[{\n";
 foreach(@arr){
-	if($_ =~ /, \"[a-zA-Z]*[Ss]ection\", /){
-		print "$_\n";
+	$line = "";
+	if($_ =~ /^Cell/){
+		$line = $_;
 	}
-	if($_ =~ /, \"Text\", /){
-		$_ =~ s/(Cell.+ \"Text\".*?\])/$1/;
-		print "$_,\n";
+	if($line =~ /CellChangeTimes.+CellChangeTimes/){
+		$line =~ s/(CellChangeTimes.+?\}\])/$1 \n/g;
+		@tmparr = split(/\n/,$line);
+		$line = shift(@tmparr);
 	}
-	if($_ =~ /BoxData.+, \"Input\", /){
-		$_ =~ s/(^.+Input.+?\])(.*)/$1/;
-		print "$_ ,\n";
+	if($line =~ /, \"[a-zA-Z]*[Ss]ection\", /){
+		$line =~ s/(Cell.+ \"[a-zA-Z]*[Ss]ection.+?\])(.*)/$1/;
+		print "$line ,\n";
+	}
+	elsif($line =~ /GraphicsBox\[/){
+		;
+	}
+	elsif($line =~ / FormBox\[/){
+		$line =~ s/(Cell\[.*?FormBox\[.+?\]\]\])(.*)/$1/;
+		print "$line ,\n";
+	}
+	elsif($line=~ /^Cell\[[a-zA-Z].*, \"Text\", /){
+		$line =~ s/(Cell.+ \"Text.+?\])(.*)/$1/;
+		print "$line,\n";
+	}
+	elsif($line =~ /BoxData.+, \"Input\", /){
+		$line =~ s/(^.+Input.+?\])(.*)/$1/;
+		print "$line ,\n";
 	}
 }
-print "}]";
+print "}]\n";
