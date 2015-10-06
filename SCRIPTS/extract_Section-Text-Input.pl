@@ -5,8 +5,9 @@ while(<>){
 }
 $stra = join("",@arr);
 
-$stra =~ s/\n/ /g;
+$stra =~ s/\s/ /g;
 $stra =~ s/\\ / /g;
+$stra =~ s/ +/ /g;
 
 #drop comment
 $stra =~ s/\(\*.+?\*\)//g;
@@ -21,10 +22,12 @@ foreach(@arr){
 		print "$_\n";
 	}
 	if($_ =~ /, \"Text\", /){
-		print "$_\n";
+		$_ =~ s/(Cell.+ \"Text\".*?\])/$1/;
+		print "$_,\n";
 	}
-	if($_ =~ /, \"Input\", /){
-		print "$_\n";
+	if($_ =~ /BoxData.+, \"Input\", /){
+		$_ =~ s/(^.+Input.+?\])(.*)/$1/;
+		print "$_ ,\n";
 	}
 }
 print "}]";
