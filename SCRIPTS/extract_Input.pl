@@ -19,7 +19,7 @@ $stra =~ s/Cell\[/\nCell\[/g;
 print "Notebook[{\n";
 foreach(@arr){
 	if($_ =~ /, \"Input\", /){
-		print "$_\n";
+		print "$_ ,\n";
 	}
 }
 print "}]";
