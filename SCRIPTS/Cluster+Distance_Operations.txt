@@ -282,7 +282,7 @@ mstPi2rkS[4][mst_List, mstm_, cls_, clRs_] := Module[
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
   mstmaxsS = 
-    Table[Function[If[#1 == 0, 0, #1/#2]][mstmaxs[[i]], 
+    Table[Function[If[#2 == 0, 0, #1/#2]][mstmaxs[[i]], 
       clRs[[i]]], {i, Length[mstmaxs]}];
   (*k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)*)
   k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k)
@@ -293,7 +293,7 @@ mstPi2rkS[4][mst_List, cls_, clRs_] := Module[
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   mstmaxsS = 
-    Table[Function[If[#1 == 0, 0, #1/#2]][mstmaxs[[i]], 
+    Table[Function[If[#2 == 0, 0, #1/#2]][mstmaxs[[i]], 
       clRs[[i]]], {i, Length[mstmaxs]}];
   (*k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)*)
   k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k)
