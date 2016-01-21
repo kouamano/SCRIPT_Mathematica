@@ -1,13 +1,13 @@
 (*ネットワーク*)
 
-(*MST*)
-(*距離行列からユニークなエッジとその距離を求める*)
+(**MST**)
+(***距離行列からユニークなエッジとその距離を求める***)
 udEdgeTake[dmat_] := 
   Sort[Union[
     Cases[Flatten[MapIndexed[{Sort[#2], #1} &, dmat, {2}], 1], 
     {{x_, y_}, _} /; x != y]], #1[[2]] < #2[[2]] &]
 
-(*作成中のmstにエッジを与えるとクローズドパスとなるかをテスト*)
+(***作成中のmstにエッジを与えるとクローズドパスとなるかをテスト***)
 mstCycleTest[mst_] := Module[
   {(*nEdge, nNode,*) g},
   (*nEdge = Length[mst];*)
@@ -17,7 +17,7 @@ mstCycleTest[mst_] := Module[
   AcyclicGraphQ[Graph[g]]
 ]
 
-(*作成中のmstにオープンパスとなるエッジを与える*)
+(***作成中のmstにオープンパスとなるエッジを与える***)
 mstAddTest[mstANDpoolPos_, edgePool_, size_] := Module[
   {mst, mstNew, poolPos},
   mst = mstANDpoolPos[[1]];
@@ -26,13 +26,13 @@ mstAddTest[mstANDpoolPos_, edgePool_, size_] := Module[
   If[mstCycleTest[mstNew], {mstNew, poolPos + 1}, {mst, poolPos + 1}]
 ]
 
-(*NestWhile[]用の最初の引数を作成*)
+(***NestWhile[]用の最初の引数を作成***)
 mstCreateFirst[edgePool_] := {{edgePool[[1]]}, 1}
 
-(*エッジプールのノードの個数*)
+(***エッジプールのノードの個数***)
 mstEdgePoolSize[edgePool_] := Max[Flatten[Map[#[[1]] &, edgePool]]]
 
-(*エッジのリストを引数にとるMST*)
+(***エッジのリストを引数にとるMST***)
 MST[edgePool_] := Module[
   {first, size, e},
   first = mstCreateFirst[edgePool];
@@ -41,7 +41,7 @@ MST[edgePool_] := Module[
   Length[#[[1]]] < size - 1 &]
 ]
 
-(*距離行列を引数にとるMST*)
+(***距離行列を引数にとるMST***)
 MSTdmat[dm_] := Module[
   {edgePool, first, size, e},
   If[Length[dm] == 1,
@@ -54,12 +54,31 @@ MSTdmat[dm_] := Module[
   ]
 ]
 
-(*整形*)
+(***get max edge***)
+getMaxEdge[mst_] := 
+  mst[[Ordering[mst, 1, (#1[[3]] > #2[[3]]) &]]][[1]][[{1, 2}]]
+
+(***make group from selected edge***)
+makeFirstGr[edge_List, len_] := Table[edge[[1]], {len}]
+
+(***decide group ID***)
+getGroupBySortedEdge[sedge_, pos_, conj_, prev_] := 
+  Module[{edge, li, len, target, disc},
+  edge = sedge[[pos]][[{1, 2}]];
+  li = Transpose[conj[[edge]]];
+  len = Length[prev];
+  target = Union[prev[[edge]]];
+  disc = Map[If[#[[1]] <= #[[2]], edge[[1]], edge[[2]]] &, li];
+  Table[If[prev[[n]] == target[[1]], disc[[n]], prev[[n]]], {n, len}]
+]
+
+(***整形***)
 MSTreform[mst_] := Map[ Flatten[#]&, mst[[1]] ]
 MSTBaseShift[mstNode_, s_] := mstNode + {s, s, 0}
 
-(*結合距離(ステップ)行列*)
-(*エッジリストから隣接行列を得る*)
+
+(**結合距離(ステップ)行列**)
+(***エッジリストから隣接行列を得る***)
 adjMatFromList[l_] := Module[{max, tab},
   max = Max[Flatten[l]];
   tab = Table[0, {max}, {max}];
@@ -67,7 +86,7 @@ adjMatFromList[l_] := Module[{max, tab},
   Map[(tab[[#[[2]], #[[1]]]] = 1) &, l ];
   tab
 ]
-(*エッジリストから結合距離(ステップ)行列を得る*)
+(***エッジリストから結合距離(ステップ)行列を得る***)
 conjMatFromAdjE[l_] := Module[{tab, len, dMat, aMat, pfunc, i, pos},
   tab = adjMatFromList[l];
   len = Length[tab];
