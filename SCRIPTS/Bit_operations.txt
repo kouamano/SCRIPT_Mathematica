@@ -6,13 +6,17 @@ periodicBitFilter[l_, i_, p_, w_] :=
     filterlet = periodicBitList[l, i];
     len = Length[filterlet];
     whole = Table[0, {w}];
-    Drop[Flatten[Insert[whole, filterlet, p]], -len]
-  ];
+    Drop[Flatten[Insert[whole, filterlet, p]], -len] ];
 
 periodicBitProduct[l_, i_, p_, w_List] :=
   Module[{filterlet, len, region},
     filterlet = periodicBitList[l, i];
     len = Length[filterlet];
     region = Take[w, {p, p + len - 1}];
-    filterlet*region
-  ];
+    filterlet*region ];
+
+digitbin2num[list_] :=
+  Block[{n, basetable},
+    n = length[list[[1]]];
+    basetable = Reverse[Table[Power[2, n], {n, 0, 7}]];
+    Apply[Plus, basetable*Transpose[list]] ];
