@@ -87,7 +87,7 @@ distancesFromEachClToCenter[cl_List] := Module[
 d[cl_List] := Tr[distancesFromEachClToCenter[cl]] / Length[cl]
 
 (*指標*)
-(*Within Cluster 系 指標基準*)
+(**Within Cluster 系 指標基準**)
 WCSPower[cl_] := 
   Tr[Map[Length[#]^(averageDist[#]/averageDist[Flatten[cl, 1]]) &, cl], Times]
 WCSPower[memOfCls_List, radOfCls_List, meanRadTotal_] := 
@@ -98,7 +98,7 @@ WCSPowerWeighted[cl_] :=
 WCSPowerWeighted[memOfCls_List, radOfCls_List, meanRadTotal_] := 
   Length[memOfCls]*Tr[memOfCls^(radOfCls/meanRadTotal), Times]
 
-(*指標pi*)
+(**指標pi**)
 piS[mat_, cls_] := Module[{classes},
   classes = Map[mat[[#]] &, cls];
   WCSPowerWeighted[classes] ]
@@ -116,8 +116,8 @@ piG[mat_, cls_] :=
        classes[[n]]]], {n, numCL}]/totalRmean;
   numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL) ]
 
-(*mstPi 系: 各クラスタのMSTと全体のMSTを使ったpi指標の変形*)
-(*mstPi 派生*)
+(**mstPi 系: 各クラスタのMSTと全体のMSTを使ったpi指標の変形**)
+(***mstPi 派生***)
 mstPi[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
   k = Length[cls];
@@ -182,7 +182,7 @@ mstPinx[mst_List, mstm_, cls_] := Module[
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
   Inner[Power, numMems, mstmaxs/MSTmmax, Times] ]
 
-(*mstPi2 派生*)
+(***mstPi2 派生***)
 mstPi2[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
   k = Length[cls];
@@ -215,7 +215,7 @@ mstPi2rn[mst_List, mstm_, cls_] := Module[
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
   (Inner[Power, numMems, mstmaxs, Times])^(1/k) ]
 
-(*mstPi2rk 派生*)
+(***mstPi2rk 派生***)
 mstPi2rk[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
@@ -285,7 +285,7 @@ mstPi2rkS[4][mst_List, cls_, clRs_] := Module[
   (*k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)*)
   k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k) ]
 
-(*mstPi2i 派生*)
+(***mstPi2i 派生***)
 mstPi2i[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
   k = Length[cls];
@@ -334,7 +334,7 @@ mstPi2r[mst_List, mstm_, cls_] := Module[
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
   k^(-MSTmmax) * (Inner[Power, numMems, mstmaxs, Times])^(1/k) ]
 
-(*Kの調整*)
+(***Kの調整***)
 mstPi2iN[mst_List, mstm_, cls_] := Module[
   {k, n, numMems, mstmaxs, MSTmmin},
   k = Length[cls];
@@ -400,7 +400,7 @@ mstPi2iS[3][mst_List, mstm_, cls_, totalR_, clRs_] :=
   k^(MSTmminS) Inner[Power, numMems, mstmaxsS, Times]
 ]
 
-(*maxminPi 系*)
+(***maxminPi 系***)
 Maxmin[m_] := Min[Map[Max[#] &, m]]
 Minmax[m_] := Max[Map[Min[#] &, m]]
 maxminPi[dmat_, medcls_, cls_] := 
