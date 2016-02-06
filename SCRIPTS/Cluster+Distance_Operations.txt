@@ -1,3 +1,4 @@
+(*クラスターデータの基本処理*)
 (*クラスタID付きのデータより、もとのベクトルデータとクラスタIDのリストに分ける*)
 divideClData[data_] := Module[{len, org, ids, idsuniq, cIDs},
   len = Length[data[[1]]];
@@ -5,46 +6,33 @@ divideClData[data_] := Module[{len, org, ids, idsuniq, cIDs},
   ids = Map[#[[-1]] &, data];
   idsuniq = Sort[Union[ids]];
   cIDs = Map[Flatten[Position[ids, #]] &, idsuniq];
-  {org, cIDs}
-]
-
-
+  {org, cIDs} ]
 (*距離行列から特定のクラスタに関する部分距離行列を抜き出す*)
 subDMat[dmat_,members_]:=
   Transpose[Transpose[dmat[[members]]][[members]]]
-
 (*部分距離行列をもとに特定のクラスタのargminを求める*)
 argMinDMat[dmat_]:=Module[{sumList},
   sumList=Map[Tr[#]&,dmat];
-  Position[sumList,Min[sumList]][[1]]
-]
-
+  Position[sumList,Min[sumList]][[1]] ]
 (*距離行列とクラスタリング結果から各クラスタのmedoidを求める*)
 findMedoidsParCL[dmat_,clusterResult_]:=
   Map[argMinDMat[subDMat[dmat,#]]&,clusterResult]
-
 (*各クラスタのmedoid番号からもとのサンプル番号を求める*)
 orgIndexFromMedoidParCL[clusterResult_,medoids_]:=Module[{l,fmedoids},
   l=Length[medoids];
   fmedoids=Flatten[medoids];
-  Table[clusterResult[[i]][[medoids[[i]]]],{i,l}]
-]
-
+  Table[clusterResult[[i]][[medoids[[i]]]],{i,l}] ]
 (*距離行列とクラスタリング結果から各クラスタの部分距離行列を求める*)
 clDmat[dmat_,cls_]:=
   Map[subDMat[dmat,#]&,cls]
-
 (*行列から対角行列をdropする -> サイズは縮小*)
 dropDiagonal[mat_]:=
   Table[Drop[mat[[n]],{n}],{n,Length[mat]}]
-
 (*クラスタインデックス付きベクトルを各クラスタ集合に変換*)
 tableToCluster[t_] := Module[{ins, uins},
   ins = Map[#[[-1]] &, t];
   uins = Union[ins];
-  Map[Flatten[Position[ins, #]] &, uins]
-]
-
+  Map[Flatten[Position[ins, #]] &, uins] ]
 (*各クラスタのMSTを得るために複数のファイルを読み込む*)
 readMSTFiles[dir_, fileHead_, suffix_, numCLs_] := Module[
   {targetDir, targetFileNames},
@@ -53,8 +41,7 @@ readMSTFiles[dir_, fileHead_, suffix_, numCLs_] := Module[
   targetFileNames = 
     Table[targetDir <> fileHead <> ToString[i] <> suffix, {i, numCLs}];
   Print[targetFileNames];
-  Map[Import[#, "Table"] &, targetFileNames]
-]
+  Map[Import[#, "Table"] &, targetFileNames] ]
 
 (*指標計算のための各モジュール*)
 (*サンプルIDのリストと座標行列よりベクトルのクラスタを抽出*)
@@ -97,6 +84,7 @@ distancesFromEachClToCenter[cl_List] := Module[
 (*各クラスタ重心から全サンプル重心までの平均距離:d*)
 d[cl_List] := Tr[distancesFromEachClToCenter[cl]] / Length[cl]
 
+(*指標*)
 (*Within Cluster 系 指標基準*)
 WCSPower[cl_] := 
   Tr[Map[Length[#]^(averageDist[#]/averageDist[Flatten[cl, 1]]) &, cl], Times]
@@ -124,8 +112,7 @@ piG[mat_, cls_] :=
   rs = Table[
      Mean[Map[EuclideanDistance[#, centers[[n]]] &, 
        classes[[n]]]], {n, numCL}]/totalRmean;
-  numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL)
-]
+  numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL) ]
 
 (*mstPi 系: 各クラスタのMSTと全体のMSTを使ったpi指標の変形*)
 (*mstPi 派生*)
@@ -135,64 +122,63 @@ mstPi[mst_List, mstm_, cls_] := Module[
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  k Inner[Power, numMems, mstmaxs/MSTmmin, Times]
-]
+  k Inner[Power, numMems, mstmaxs/MSTmmin, Times] ]
+
 mstPiM[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmeans, MSTmmean},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmeans = Map[Mean[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmean = Mean[Map[#[[-1]] &, mstm]];
-  k Inner[Power, numMems, mstmeans/MSTmmean, Times]
-]
+  k Inner[Power, numMems, mstmeans/MSTmmean, Times] ]
+
 mstPiX[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmean},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmean = Mean[Map[#[[-1]] &, mstm]];
-  k Inner[Power, numMems, mstmaxs/MSTmmean, Times]
-]
+  k Inner[Power, numMems, mstmaxs/MSTmmean, Times] ]
+
 mstPin[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
   (*k = Length[cls];*)
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  Inner[Power, numMems, mstmaxs/MSTmmin, Times]
-]
+  Inner[Power, numMems, mstmaxs/MSTmmin, Times] ]
+
 mstPim[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmins, MSTmmin},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmins = Map[Min[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  k Inner[Power, numMems, mstmins/MSTmmin, Times]
-]
+  k Inner[Power, numMems, mstmins/MSTmmin, Times] ]
+
 mstPinm[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmins, MSTmmin},
   (*k = Length[cls];*)
   numMems = Map[Length[#] &, cls];
   mstmins = Map[Min[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  Inner[Power, numMems, mstmins/MSTmmin, Times]
-]
+  Inner[Power, numMems, mstmins/MSTmmin, Times] ]
+
 mstPix[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  k Inner[Power, numMems, mstmaxs/MSTmmax, Times]
-]
+  k Inner[Power, numMems, mstmaxs/MSTmmax, Times] ]
+
 mstPinx[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   (*k = Length[cls];*)
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  Inner[Power, numMems, mstmaxs/MSTmmax, Times]
-]
+  Inner[Power, numMems, mstmaxs/MSTmmax, Times] ]
 
 (*mstPi2 派生*)
 mstPi2[mst_List, mstm_, cls_] := Module[
@@ -201,32 +187,31 @@ mstPi2[mst_List, mstm_, cls_] := Module[
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  k^(-MSTmmin) Inner[Power, numMems, mstmaxs, Times]
-]
+  k^(-MSTmmin) Inner[Power, numMems, mstmaxs, Times] ]
+
 mstPi2n[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  k^MSTmmin Inner[Power, numMems, mstmaxs, Times]
-]
+  k^MSTmmin Inner[Power, numMems, mstmaxs, Times] ]
+
 mstPi2x[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  k^(-MSTmmax) Inner[Power, numMems, mstmaxs, Times]
-]
+  k^(-MSTmmax) Inner[Power, numMems, mstmaxs, Times] ]
+
 mstPi2rn[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  (Inner[Power, numMems, mstmaxs, Times])^(1/k)
-]
+  (Inner[Power, numMems, mstmaxs, Times])^(1/k) ]
 
 (*mstPi2rk 派生*)
 mstPi2rk[mst_List, mstm_, cls_] := Module[
@@ -235,8 +220,8 @@ mstPi2rk[mst_List, mstm_, cls_] := Module[
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  k * (Inner[Power, numMems, mstmaxs, Times])^(1/k)
-]
+  k * (Inner[Power, numMems, mstmaxs, Times])^(1/k) ]
+
 mstPi2rkS[1][mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax, MSTmmean},
   k = Length[cls];
@@ -244,8 +229,8 @@ mstPi2rkS[1][mst_List, mstm_, cls_] := Module[
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
   MSTmmean = Mean[Map[#[[-1]] &, mstm]];
-  k * (Inner[Power, numMems, mstmaxs/MSTmmean, Times])^(1/k)
-]
+  k * (Inner[Power, numMems, mstmaxs/MSTmmean, Times])^(1/k) ]
+
 mstPi2rkS[2][mst_List, mstm_, cls_] := 
   Module[{k, numMems, mstmaxs, mstmeans, MSTmmax, mstmaxsS},
   k = Length[cls];
@@ -257,24 +242,24 @@ mstPi2rkS[2][mst_List, mstm_, cls_] :=
     Table[Function[If[#1 == 0, 1, #1/#2]][mstmaxs[[i]], 
       mstmeans[[i]]], {i, Length[mstmaxs]}];
   (*k*(Inner[Power,numMems,mstmaxs/mstmeans,Times])^(1/k)*)
-  k*(Inner[Power, numMems, mstmaxsS, Times])^(1/k)
-]
+  k*(Inner[Power, numMems, mstmaxsS, Times])^(1/k) ]
+
 mstPi2rkS[3][mst_List, mstm_, cls_, totalR_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
-  k * (Inner[Power, numMems, mstmaxs/totalR, Times])^(1/k)
-]
+  k * (Inner[Power, numMems, mstmaxs/totalR, Times])^(1/k) ]
+
 mstPi2rkS[3][mst_List, cls_, totalR_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   (*MSTmmax = Max[Map[#[[-1]] &, mstm]];*)
-  k * (Inner[Power, numMems, mstmaxs/totalR, Times])^(1/k)
-]
+  k * (Inner[Power, numMems, mstmaxs/totalR, Times])^(1/k) ]
+
 mstPi2rkS[4][mst_List, mstm_, cls_, clRs_] := Module[
   {k, numMems, mstmaxs, MSTmmax, mstmaxsS},
   k = Length[cls];
@@ -285,8 +270,8 @@ mstPi2rkS[4][mst_List, mstm_, cls_, clRs_] := Module[
     Table[Function[If[#2 == 0, 0, #1/#2]][mstmaxs[[i]], 
       clRs[[i]]], {i, Length[mstmaxs]}];
   (*k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)*)
-  k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k)
-]
+  k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k) ]
+
 mstPi2rkS[4][mst_List, cls_, clRs_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
@@ -296,8 +281,7 @@ mstPi2rkS[4][mst_List, cls_, clRs_] := Module[
     Table[Function[If[#2 == 0, 0, #1/#2]][mstmaxs[[i]], 
       clRs[[i]]], {i, Length[mstmaxs]}];
   (*k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)*)
-  k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k)
-]
+  k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k) ]
 
 (*mstPi2i 派生*)
 mstPi2i[mst_List, mstm_, cls_] := Module[
@@ -306,48 +290,47 @@ mstPi2i[mst_List, mstm_, cls_] := Module[
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmin = Min[Map[#[[-1]] &, mstm]];
-  k^(1/MSTmmin) Inner[Power, numMems, mstmaxs, Times]
-]
+  k^(1/MSTmmin) Inner[Power, numMems, mstmaxs, Times] ]
+
 mstPi2iM[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmeans, MSTmmean},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmeans = Map[Mean[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmean = Mean[Map[#[[-1]] &, mstm]];
-  k^(1/MSTmmean) Inner[Power, numMems, mstmeans, Times]
-]
+  k^(1/MSTmmean) Inner[Power, numMems, mstmeans, Times] ]
+
 mstPi2ix[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  k^(1/MSTmmax) Inner[Power, numMems, mstmaxs, Times]
-]
+  k^(1/MSTmmax) Inner[Power, numMems, mstmaxs, Times] ]
+
 mstPi2im[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmean},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmean = Mean[Map[#[[-1]] &, mstm]];
-  k^(1/MSTmmean) Inner[Power, numMems, mstmaxs, Times]
-]
+  k^(1/MSTmmean) Inner[Power, numMems, mstmaxs, Times] ]
+
 mstPi2ir[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  k^(1/MSTmmax) * (Inner[Power, numMems, mstmaxs, Times])^(1/k)
-]
+  k^(1/MSTmmax) * (Inner[Power, numMems, mstmaxs, Times])^(1/k) ]
+
 mstPi2r[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   MSTmmax = Max[Map[#[[-1]] &, mstm]];
-  k^(-MSTmmax) * (Inner[Power, numMems, mstmaxs, Times])^(1/k)
-]
+  k^(-MSTmmax) * (Inner[Power, numMems, mstmaxs, Times])^(1/k) ]
 
 (*Kの調整*)
 mstPi2iN[mst_List, mstm_, cls_] := Module[
