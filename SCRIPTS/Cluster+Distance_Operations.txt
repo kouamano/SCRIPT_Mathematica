@@ -1,3 +1,5 @@
+(* Needs: Network_operations.txt *)
+(* Needs: Version_ctrl.txt *)
 (*クラスターデータの基本処理*)
 (*クラスタID付きのデータより、もとのベクトルデータとクラスタIDのリストに分ける*)
 divideClData[data_] := Module[{len, org, ids, idsuniq, cIDs},
@@ -442,4 +444,109 @@ maxminPim2i[dmat_, medcls_, cls_] :=
    medminmin = Min[dropDiagonal[subDMat[dmat, medcls]]];
    submaxmins = Map[Maxmin[subDMat[dmat, #]] &, cls];
    k^(1/medminmin) Inner[Power, numMems, submaxmins, Times] ]
+
+(*Brute-force classify*)
+(**Kruskal Method**)
+kruskalFirstGr[li_] := Table[n, {n, Length[li]}]
+
+findFirstMinPos[dmat_] := Position[dmat, Min[dmat], 2][[1]]
+
+firstKruskalDmat[dmat_] := 
+  ReplacePart[dmat, {x_, y_} /; y <= x -> Infinity]
+
+dmatRewrite[dmat_, pos_] := ReplacePart[dmat, pos -> Infinity]
+
+classRewrite[classList_, pos_] := Module[{targetPos, minId, reprls},
+  targetPos = 
+   Flatten[{Position[classList, classList[[pos[[1]]]]], 
+     Position[classList, classList[[pos[[2]]]]]}];
+  minId = Min[{classList[[pos[[1]]]], classList[[pos[[2]]]]}];
+  reprls = Map[# -> minId &, targetPos];
+  ReplacePart[classList, reprls]
+  ]
+
+nextKruskal[{dmat_, classList_}] := 
+ Module[{outdmat, outClassList, minpos},
+  minpos = findFirstMinPos[dmat];
+  outdmat = dmatRewrite[dmat, minpos];
+  outClassList = classRewrite[classList, minpos];
+  {outdmat, outClassList}
+  ]
+
+nextKruskalEdge[{dmat_, classList_, mstEdge_}] := 
+  Module[{outdmat, outClassList, minpos, outMSTEdge},
+    minpos = findFirstMinPos[dmat];
+    outdmat = dmatRewrite[dmat, minpos];
+    outClassList = classRewrite[classList, minpos];
+    If[classList[[minpos[[1]]]] != classList[[minpos[[2]]]], 
+      outMSTEdge = Append[mstEdge, minpos], outMSTEdge = mstEdge];
+    {outdmat, outClassList, outMSTEdge}
+  ]
+
+kruskalBuild[data_] := Module[{len, dmat, dmat1, li1},
+  len = Length[data];
+  dmat = Outer[EuclideanDistance, data, data, 1];
+  dmat1 = firstKruskalDmat[dmat];
+  li1 = kruskalFirstGr[data];
+  NestList[nextKruskal, {dmat1, li1}, (len*len - len)/2]
+  ]
+
+kruskalBuild[data_, n_] := Module[{len, dmat, dmat1, li1},
+  len = Length[data];
+  dmat = Outer[EuclideanDistance, data, data, 1];
+  dmat1 = firstKruskalDmat[dmat];
+  li1 = kruskalFirstGr[data];
+  NestList[nextKruskal, {dmat1, li1}, n]
+  ]
+
+kruskalEdgeBuild[data_] := Module[{len, dmat, dmat1, li1},
+  len = Length[data];
+  dmat = Outer[EuclideanDistance, data, data, 1];
+  dmat1 = firstKruskalDmat[dmat];
+  li1 = kruskalFirstGr[data];
+  NestList[nextKruskalEdge, {dmat1, li1, {}}, (len*len - len)/2]
+  ]
+
+kruskalEdgeWhileBuild[data_] := Module[{len, dmat, dmat1, li1},
+  len = Length[data];
+  dmat = Outer[EuclideanDistance, data, data, 1];
+  dmat1 = firstKruskalDmat[dmat];
+  li1 = kruskalFirstGr[data];
+  NestWhileList[nextKruskalEdge, {dmat1, li1, {}}, 
+   Length[Union[#[[2]]]] >= 2 & ]
+  ]
+
+kruskalEdgeBuild[data_, n_] := Module[{len, dmat, dmat1, li1},
+  len = Length[data];
+  dmat = Outer[EuclideanDistance, data, data, 1];
+  dmat1 = firstKruskalDmat[dmat];
+  li1 = kruskalFirstGr[data];
+  NestList[nextKruskalEdge, {dmat1, li1, {}}, n]
+  ]
+
+createMST[dmat_, edgeList_] := 
+  Map[Flatten[{#, dmat[[#[[1]], #[[2]]]]}] &, edgeList]
+
+(**Cluster Build**)
+makeClusterByGr[li_] := Module[{classes},
+  classes = Union[li];
+  Map[Flatten[Position[li, #]] &, classes]
+  ]
+
+extractEdgeGrFromCl[mst_, cl_ /; Length[cl] <= 1] := {}
+extractEdgeGrFromCl[mst_, cl_ /; Length[cl] == 2] := Module[{mstEd},
+  mstEd = Map[Sort[{#[[1]], #[[2]]}] &, mst];
+  mst[[Flatten[Position[mstEd, Sort[cl]]]]] ]
+extractEdgeGrFromCl[mst_, cl_ /; Length[cl] >= 3] := 
+ Module[{mstEd, startEd, endEd, startContPos, endContPos},
+  mstEd = Map[Sort[{#[[1]], #[[2]]}] &, mst];
+  startEd = Map[#[[1]] &, mst];
+  endEd = Map[#[[2]] &, mst];
+  startContPos = 
+   Position[Map[ContainsAny[cl, {#}] &, startEd], True];
+  endContPos = Position[Map[ContainsAny[cl, {#}] &, endEd], True];
+  mst[[Flatten[Intersection[startContPos, endContPos]]]] ]
+
+makeEdgeGrFromCluster[mst_, cl_] := 
+ Map[extractEdgeGrFromCl[mst, #] &, cl]
 
