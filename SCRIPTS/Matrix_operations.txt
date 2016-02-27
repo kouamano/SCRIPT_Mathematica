@@ -6,7 +6,9 @@ toSymmetric[mat_] :=
     Table[
     mat[[k]][[m]]*mat[[l]][[m]], {k, rows}, {l, rows}, {m, cols}], {2} ] ];
 
-matOrdering[mat_, odr_] := Map[#[[odr]] &, mat[[odr]]];
+matReOrder[mat_, odr_] := Map[#[[odr]] &, mat[[odr]]];
+
+matColReOrder[mat_, odr_] := Map[#[[odr]] &, mat];
 
 linkTotal[mat_] := Map[Total, mat];
 
