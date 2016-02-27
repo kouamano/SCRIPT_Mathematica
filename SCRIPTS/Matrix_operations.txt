@@ -1,9 +1,35 @@
 toSymmetric[mat_] :=
- Module[{cols, rows},
+  Module[{cols, rows},
   cols = Length[mat[[1]]];
   rows = Length[mat];
   Map[Tr[#] &, 
-   Table[
-    mat[[k]][[m]]*mat[[l]][[m]], {k, rows}, {l, rows}, {m, 
-     cols}], {2}]
-];
+    Table[
+    mat[[k]][[m]]*mat[[l]][[m]], {k, rows}, {l, rows}, {m, cols}], {2} ] ];
+
+matOrdering[mat_, odr_] := Map[#[[odr]] &, mat[[odr]]];
+
+linkTotal[mat_] := Map[Total, mat];
+
+mapNorm[mat_] := Map[Norm, mat];
+
+matReverse[mat_] := Map[Reverse, mat];
+
+diagonalTotal[mat_] := Module[{dlen},
+  dlen = Length[mat];
+  Table[Diagonal[mat, i] // Total, {i, 1 - dlen, dlen - 1}] ];
+
+revDiagonalTotal[mat_] := Module[{matrev, dlen},
+  dlen = Length[mat];
+  matrev = matReverse[mat];
+  Table[Diagonal[matrev, i] // Total, {i, dlen - 1, 1 - dlen, -1}] ];
+
+paddingDioagonalTotal[mat_] := Module[{mate, dlen},
+  dlen = Length[mat];
+  mate = Flatten[{mat, mat}, 1];
+  Table[Diagonal[mate, i] // Total, {i, -dlen, -1}] ];
+
+paddingRevDioagonalTotal[mat_] := Module[{matrev, mate, dlen},
+  dlen = Length[mat];
+  matrev = matReverse[mat];
+  mate = Flatten[{matrev, matrev}, 1];
+  Table[Diagonal[mate, i] // Total, {i, -1, -dlen, -1}] ];
