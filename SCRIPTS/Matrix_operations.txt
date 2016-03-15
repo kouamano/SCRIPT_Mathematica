@@ -1,3 +1,5 @@
+eigenIntensity[mat_] := Eigensystem[mat][[1]]*Eigensystem[mat][[2]];
+
 toSymmetric[mat_] :=
   Module[{cols, rows},
   cols = Length[mat[[1]]];
