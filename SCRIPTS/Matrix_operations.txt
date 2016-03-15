@@ -9,7 +9,7 @@ toSymmetric[mat_] :=
     mat[[k]][[m]]*mat[[l]][[m]], {k, rows}, {l, rows}, {m, cols}], {2} ] ];
 
 matReOrder[mat_, odr_] := Map[#[[odr]] &, mat[[odr]]];
-mapReorder[mat_, odr_] := Map[#[[odr]] &, mat];
+mapReOrder[mat_, odr_] := Map[#[[odr]] &, mat];
 reOrder[mat_,odr_] := mat[[odr]];
 
 matColReOrder[mat_, odr_] := Map[#[[odr]] &, mat];
