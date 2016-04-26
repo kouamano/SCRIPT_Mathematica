@@ -10,7 +10,7 @@ toSymmetric[mat_] :=
 
 matReOrder[mat_, odr_] := Map[#[[odr]] &, mat[[odr]]];
 mapReOrder[mat_, odr_] := Map[#[[odr]] &, mat];
-reOrder = matRowReOrder[mat_, odr_] := mat[[odr]];
+matRowReOrder[mat_, odr_] := mat[[odr]];
 matColReOrder[mat_, odr_] := Map[#[[odr]] &, mat];
 
 linkTotal[mat_] := Map[Total, mat];
