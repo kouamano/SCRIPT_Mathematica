@@ -299,7 +299,6 @@ mstPi2rkS[5][mst_List, cls_, maxMSTt_] := Module[
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   k * (Inner[Power, numMems, mstmaxs/maxMSTt, Times])^(1/k) ]
 
-
 (***mstPi2i 派生***)
 mstPi2i[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
