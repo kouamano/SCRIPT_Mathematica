@@ -38,3 +38,57 @@ paddingRevDioagonalTotal[mat_] := Module[{matrev, mate, dlen},
   matrev = matReverse[mat];
   mate = Flatten[{matrev, matrev}, 1];
   Table[Diagonal[mate, i] // Total, {i, -1, -dlen, -1}] ];
+
+createRandomSymMat[size_] := Module[
+  {pre, out},
+  pre = Table[RandomReal[], {size}, {size}];
+  Table[pre[[j]][[i]] = pre[[i]][[j]], {i, size}, {j, i}];
+  pre
+  ];
+
+createRandomSymMat[size_, tr_] := Module[
+  {pre, out},
+  pre = Table[RandomReal[], {size}, {size}];
+  Table[pre[[j]][[i]] = pre[[i]][[j]], {i, size}, {j, i}];
+  Table[pre[[i]][[i]] = 0, {i, size}];
+  pre
+  ];
+
+zeroTr[m_] := Module[{out},
+  out = m;
+  For[i = 1, i <= Length[out], i++, out[[i, i]] = 0];
+  out
+  ];
+
+zeroInsert[m_, s_, z_] := Module[
+  {zerolist1, zerolist2, inspos, out},
+  zerolist1 = Table[0, {Length[m]}];
+  zerolist2 = Table[0, {Length[m] + z}];
+  inspos = Table[{s}, {z}];
+  out = Insert[m, zerolist1, inspos];
+  Insert[Transpose[out], zerolist2, inspos]
+  ];
+
+zeroInsertRow[m_, s_, z_] := Module[
+  {zerolist, inspos},
+  zerolist = Table[0, {Length[m]}];
+  inspos = Table[{s}, {z}];
+  Insert[m, zerolist, inspos]
+  ];
+
+zeroInsertCol[m_, s_, z_] := Module[
+  {zerolist, inspos},
+  zerolist = Table[0, {Length[m]}];
+  inspos = Table[{s}, {z}];
+  Transpose[Insert[Transpose[m], zerolist, inspos]]
+  ];
+
+trRep[m_, t_] := Module[
+  {lm, lt, rep, out},
+  lm = Length[m];
+  lt = Length[t];
+  If[lm <= lt, rep = t[[1 ;; lm]], rep = Join[t, Table[0, {lm - lt}]]];
+  ReplacePart[m, Table[{i, i} -> rep[[i]], {i, lm}]]
+  ];
+
+
