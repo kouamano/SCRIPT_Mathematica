@@ -94,3 +94,14 @@ clusterPairSim[cl1_, cl2_] :=
   selfmatch2 = Tr[Map[weghtedPairMatch, pairself2]];
   pairmatch^2/(selfmatch1 selfmatch2)
   ];
+
+numberNumbering[{sym_, count_}] := Table[sym[i], {i, count}];
+
+seqComplement[list1_, list2_] := Module[
+  {tally1, tally2, seqnum1, seqnum2},
+  tally1 = Tally[list1];
+  tally2 = Tally[list2];
+  seqnum1 = Map[numberNumbering, tally1] // Flatten;
+  seqnum2 = Map[numberNumbering, tally2] // Flatten;
+  Map[#[[0]] &, Complement[seqnum1, seqnum2]]
+  ];
