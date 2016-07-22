@@ -1,0 +1,23 @@
+getElementAdjMat[chem_String] := Module[{adj, tr, trn},
+  adj = Normal[ChemicalData[chem, "AdjacencyMatrix"]];
+  tr = ChemicalData[chem, "VertexTypes"];
+  trn = Map[ElementData[#, "AtomicNumber"] &, tr];
+  trRep[adj, trn]
+  ];
+
+addTr[mat_, tr_] := Module[
+  {tmpmat, pos, rn, rls},
+  tmpmat = zeroInsert[mat, Length[mat] + 1, Length[tr]];
+  pos = Range[Length[mat] + 1, Length[mat] + Length[tr]];
+  rn = Range[Length[tr]];
+  rls = Map[{pos[[#]], pos[[#]]} -> tr[[#]] &, rn];
+  ReplacePart[tmpmat, rls]
+  ];
+
+expandAdjMat[mat_, tr_] := Module[
+  {orgtr, addlist},
+  orgtr = Tr[mat, List];
+  addlist = seqComplement[tr, orgtr];
+  addTr[mat, addlist]
+  ];
+
