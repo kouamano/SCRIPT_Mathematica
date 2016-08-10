@@ -1,3 +1,6 @@
+(* Needs: Matrix_operations.txt *)
+(* Needs: List_operations.txt *)
+
 getElementAdjMat[chem_String] := Module[{adj, tr, trn},
   adj = Normal[ChemicalData[chem, "AdjacencyMatrix"]];
   tr = ChemicalData[chem, "VertexTypes"];
@@ -19,5 +22,33 @@ expandAdjMat[mat_, tr_] := Module[
   orgtr = Tr[mat, List];
   addlist = seqComplement[tr, orgtr];
   addTr[mat, addlist]
+  ];
+
+eigenSpectrumDistance[m1_, m2_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[expandAdjMat[m1, d2] // N];
+  evl2 = Eigenvalues[expandAdjMat[m2, d1] // N];
+  EuclideanDistance[evl1, evl2]
+  ];
+eigenSpectrumDistance[m1_, m2_, func_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[expandAdjMat[m1, d2] // N];
+  evl2 = Eigenvalues[expandAdjMat[m2, d1] // N];
+  func[evl1, evl2]
+  ];
+
+eigenSpectrumSim[m1_, m2_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[expandAdjMat[m1, d2] // N];
+  evl2 = Eigenvalues[expandAdjMat[m2, d1] // N];
+  Inner[Times, evl1, evl2, Plus]/
+   Sqrt[Inner[Times, evl2, evl2, Plus] * 
+     Inner[Times, evl1, evl1, Plus] ]
   ];
 
