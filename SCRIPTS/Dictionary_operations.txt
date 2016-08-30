@@ -1,1 +1,2 @@
 partsofspeech[term_String]:= Union[Map[#[[2]]&,WordData[term]]]
+isCapital[term_String]:= UpperCaseQ[StringTake[term,1]]
