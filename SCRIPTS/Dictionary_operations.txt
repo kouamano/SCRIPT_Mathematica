@@ -1,2 +1,5 @@
-partsofspeech[term_String]:= Union[Map[#[[2]]&,WordData[term]]]
-isCapital[term_String]:= UpperCaseQ[StringTake[term,1]]
+partsofspeech[term_String] := Union[Map[#[[2]]&,WordData[term]]];
+containNoun[term_String] := Module[ {parts},
+  parts = partsofspeech[term];
+  Intersection[parts,{"Noun"}] === {"Noun"} ];
+isCapital[term_String] := UpperCaseQ[StringTake[term,1]];
