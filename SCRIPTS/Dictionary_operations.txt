@@ -15,3 +15,9 @@ checkPropernoun[phrase_String] := Module[
   target = Transpose[{cN, cap}];
   testing = {True,True};
   Intersection[target, {testing}] == {testing} ];
+
+existWordAll[phrase_String] := Module[
+  {sp},
+  sp = StringSplit[phrase];
+  target = Map[WordData,sp];
+  Intersection[target,{{}}] == {} ];
