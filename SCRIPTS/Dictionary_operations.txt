@@ -13,5 +13,5 @@ checkPropernoun[phrase_String] := Module[
   cN = Map[containNoun, sp];
   cap = Map[isCapital, sp];
   target = Transpose[{cN, cap}];
-  testing = Table[True, {len}];
+  testing = {True,True};
   Intersection[target, {testing}] == {testing} ];
