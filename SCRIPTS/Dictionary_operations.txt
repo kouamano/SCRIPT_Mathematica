@@ -1,5 +1,17 @@
 partsofspeech[term_String] := Union[Map[#[[2]]&,WordData[term]]];
+
 containNoun[term_String] := Module[ {parts},
   parts = partsofspeech[term];
   Intersection[parts,{"Noun"}] === {"Noun"} ];
+
 isCapital[term_String] := UpperCaseQ[StringTake[term,1]];
+
+checkPropernoun[phrase_String] := Module[
+  {len, sp, cN, cap, target, testing},
+  sp = StringSplit[phrase];
+  len = Length[sp];
+  cN = Map[containNoun, sp];
+  cap = Map[isCapital, sp];
+  target = Transpose[{cN, cap}];
+  testing = Table[True, {len}];
+  Intersection[target, {testing}] == {testing} ];
