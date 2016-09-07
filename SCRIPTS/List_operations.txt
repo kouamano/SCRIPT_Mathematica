@@ -45,13 +45,28 @@ numdistrib[distrib_]:=
  ];
 
 (*Cluster affinity*)
+intersectionW[x___] := 
+ Map[#[[1]] -> (1/#[[2]]) &, Tally[Flatten[{x}, Infinity]]];
+
+IntersectionNumW[x___] := Intersection[x] /. intersectionW[x] // Tr;
+
 intersectionNum[x___] := Length[Intersection[x]];
 
 unionNum[x___] := Length[Union[x]];
 
+flattenNum[x___] := Length[Flatten[{x},Infinity]]
+
 clusterInner[cl1_List, cl2_List] := 
  Tr[Flatten[((Outer[intersectionNum, cl1, cl2, 1] // N)/
       Outer[unionNum, cl1, cl2, 1])]];
+
+clusterInnerW[cl1_List, cl2_List] := 
+ Tr[Flatten[((Outer[intersectionNumW, cl1, cl2, 1] // N)/
+      Outer[unionNum, cl1, cl2, 1])]];
+
+clusterInnerF[cl1_List, cl2_List] := 
+ Tr[Flatten[((Outer[intersectionNum, cl1, cl2, 1] // N)/
+      Outer[flattenNum, cl1, cl2, 1])]];
 
 clusterInnerSq[cl1_List, cl2_List] := 
  Tr[Flatten[((Outer[intersectionNum, cl1, cl2, 1] // N)/
@@ -59,6 +74,13 @@ clusterInnerSq[cl1_List, cl2_List] :=
 
 clusterAffinity[cl1_List, cl2_List] := 
  clusterInner[cl1, cl2]^2/Length[cl1]/Length[cl2];
+
+clusterAffinityW[cl1_List, cl2_List] := 
+ clusterInner[cl1, cl2]^2/Length[cl1]/Length[cl2];
+
+clusterAffinityF[cl1_List, cl2_List] := 
+ clusterInnerF[cl1, cl2]^2/Length[cl1]/Length[cl2];
+
 
 clusterAffinitySq[cl1_List, cl2_List] := 
  clusterInnerSq[cl1, cl2]^2/Length[cl1]/Length[cl2];
