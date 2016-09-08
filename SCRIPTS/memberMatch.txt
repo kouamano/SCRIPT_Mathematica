@@ -1,0 +1,13 @@
+memMatchCount[g1_, g2_] := Module[
+  {base},
+  base = Flatten[Outer[List, g1, g2, 1], 1];
+  Count[base, {x_, y_} /; x == y]
+  ];
+
+memMatchSim["A"][g1_, g2_] := Module[
+  {bind, self1, self2},
+  bind = memMatchCount[g1, g2]^2;
+  self1 = memMatchCount[g1, g1];
+  self2 = memMatchCount[g2, g2];
+  bind/(self1 self2)
+  ];
