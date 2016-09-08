@@ -127,3 +127,13 @@ seqComplement[list1_, list2_] := Module[
   seqnum2 = Map[numberNumbering, tally2] // Flatten;
   Map[#[[0]] &, Complement[seqnum1, seqnum2]]
   ];
+
+seqIntersection[list1_, list2_] := Module[
+  {tally1, tally2, seqnum1, seqnum2},
+  tally1 = Tally[list1];
+  tally2 = Tally[list2];
+  seqnum1 = Map[numberNumbering, tally1] // Flatten;
+  seqnum2 = Map[numberNumbering, tally2] // Flatten;
+  Map[#[[0]] &, Intersection[seqnum1, seqnum2]]
+  ];
+
