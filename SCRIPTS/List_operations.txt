@@ -16,6 +16,9 @@ dataflatten[list_,n_] :=
   Transpose[Transpose[list/rsum^n]/csum^n]
  ];
 
+weight[li_] :=
+ li[[1]]*li[[2]];
+
 diagonalmatrix[k_,l_,n_]:=
  Module[{t, d},
   t = Table[k, {n}, {n}];
