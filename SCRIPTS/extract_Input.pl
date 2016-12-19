@@ -23,4 +23,4 @@ foreach(@arr){
 		print "$_ ,\n";
 	}
 }
-print "}]";
+print "}]\n";
