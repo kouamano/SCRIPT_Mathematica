@@ -1,0 +1,3 @@
+$binKernel = "/usr/local/bin/math";
+launchBind[n_]:= LaunchKernels[ LocalMachine[ "numactl --physcpubind="<>ToString[n]<>$binKernel<>" -subkernel  -noinit -mathlink"]]
+
