@@ -143,3 +143,4 @@ seqIntersection[list1_, list2_] := Module[
   Map[#[[0]] &, Intersection[seqnum1, seqnum2]]
   ];
 
+shift[list_] := {list[[1]], Drop[list, 1]};
