@@ -1,6 +1,39 @@
 (*ネットワーク*)
 
 (**MST**)
+(*** mst with distance matrix ***)
+shift[list_] := {list[[1]], Drop[list, 1]};
+mstD[dmat_] := 
+ Module[{pairdistS, seqMax, nodeClasses, head, headID, headClass, 
+   minClass, maxClass, maxClassMate, out, h, n},
+  seqMax = Length[dmat];
+  pairdistS = 
+   Select[Sort[
+     Flatten[MapIndexed[{#2, #1} &, dmat, {2}], 
+      1], #1[[2]] < #2[[2]] &], #[[1, 1]] != #[[1, 2]] &];
+  nodeClasses = Range[seqMax];
+  
+  (*recursive*)
+  out = Reap[
+    Sow[nodeClasses, n];
+    While[Length[Union[nodeClasses]] != 1,
+     ({head, pairdistS} = shift[pairdistS];
+       headID = head[[1]];
+       headClass = nodeClasses[[headID]];
+       minClass = Min[headClass];
+       maxClass = Max[headClass];
+       maxClassMate = Flatten[Position[nodeClasses, maxClass]];
+       If[Length[Union[headClass]] == 2, Sow[head, h]; 
+        nodeClasses[[headID[[1]]]] = minClass; 
+        nodeClasses[[headID[[2]]]] = minClass;
+        nodeClasses[[maxClassMate]] = minClass;
+        Sow[nodeClasses, n];];
+       (*Print[pairdistS//Length,nodeClasses,head]*);)
+     ];
+    ];
+  out[[2]]
+  ];
+
 (***距離行列からユニークなエッジとその距離を求める***)
 udEdgeTake[dmat_] := 
   Sort[Union[
