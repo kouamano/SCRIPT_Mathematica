@@ -274,7 +274,8 @@ mstPi2rkS[4][mst_List, mstm_, cls_, clRs_] := Module[
   (*k * (Inner[Power, numMems, mstmaxs/clRs, Times])^(1/k)*)
   k * (Inner[Power, numMems, mstmaxsS, Times])^(1/k) ]
 
-mstPi2rkS[4][mst_List, cls_, clRs_] := Module[
+mstPi2rkS[4][mst_List, cls_, clRs_] := Module[ 
+(* mst: clusterd mst, cls: medoid from exampler of class, clRs: Radius *)
   {k, numMems, mstmaxs, MSTmmax},
   k = Length[cls];
   numMems = Map[Length[#] &, cls];
