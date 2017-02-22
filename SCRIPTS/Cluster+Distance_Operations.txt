@@ -311,6 +311,17 @@ mstPi2rkS[5][mst_List, maxMSTt_] :=
   mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
   k*(Inner[Power, numMems, mstmaxs/maxMSTt, Times])^(1/k) ];
 
+mstPi2rkS[6][mst_List, meanMSTt_] := 
+ (* mst: clusterd mst data, meanMSTt: a cluster radius *)
+ Module[{k, clIDs, numMems, mstmaxs, MSTmmax},
+  k = Length[mst];
+  clIDs = Map[{#[[1]], #[[2]]} &, mst, {2}];
+  clIDs = Map[Union[Flatten[#]] &, clIDs];
+  numMems = Map[Length, clIDs];
+  mstmaxs = Map[Max[#] &, Map[#[[-1]] &, mst, {2}]];
+  k*(Inner[Power, numMems, mstmaxs/meanMSTt, Times])^(1/k) ];
+
+
 (***mstPi2i 派生***)
 mstPi2i[mst_List, mstm_, cls_] := Module[
   {k, numMems, mstmaxs, MSTmmin},
