@@ -15,7 +15,7 @@ mstD[dmat_] :=
   
   (*recursive*)
   out = Reap[
-    Sow[nodeClasses, n];
+    (*Sow[nodeClasses, n];*)
     While[Length[Union[nodeClasses]] != 1,
      ({head, pairdistS} = shift[pairdistS];
        headID = head[[1]];
