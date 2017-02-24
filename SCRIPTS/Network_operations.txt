@@ -24,7 +24,7 @@ mstD[dmat_] :=
        minClass = Min[headClass];
        maxClass = Max[headClass];
        maxClassMate = Flatten[Position[nodeClasses, maxClass]];
-       If[Length[Union[headClass]] == 2, Sow[Flatten[head], h]; 
+       If[Length[Union[headClass]] == 2, Sow[head, h]; 
         nodeClasses[[headID[[1]]]] = minClass; 
         nodeClasses[[headID[[2]]]] = minClass;
         nodeClasses[[maxClassMate]] = minClass;
