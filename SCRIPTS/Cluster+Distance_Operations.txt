@@ -587,3 +587,8 @@ extractEdgeGrFromCl[mst_, cl_ /; Length[cl] >= 3] :=
 makeEdgeGrFromCluster[mst_, cl_] := 
  Map[extractEdgeGrFromCl[mst, #] &, cl]
 
+maxmstEdgeEach[cl_] := If[cl == {}, 0, Max[ Map[#[[3]] &, cl] ]];
+
+maxmstEdgeClusterd[cls_] := Map[maxmstEdgeEach[#] &, cls];
+
+
