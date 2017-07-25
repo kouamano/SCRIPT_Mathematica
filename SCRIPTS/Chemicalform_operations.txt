@@ -23,6 +23,15 @@ expandAdjMat[mat_, tr_] := Module[
   addlist = seqComplement[tr, orgtr];
   addTr[mat, addlist]
   ];
+expandAdjMat[mat_, tr_, bk_] := Module[
+  {s, orgtr, addlist, bkg},
+  s = Dimensions[mat];
+  bkg = Table[bk, {s[[1]]},{s[[2]]}];
+  For[i=1, i<=s[[1]], i++, bkg[[i,i]]=0 ];
+  orgtr = Tr[mat, List];
+  addlist = seqComplement[tr, orgtr];
+  addTr[mat+bkg, addlist]
+  ];
 
 eigenSpectrumDistance[m1_, m2_] := Module[
   {d1, evl1, d2, evl2},
