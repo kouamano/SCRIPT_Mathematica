@@ -50,6 +50,23 @@ eigenSpectrumDistance[m1_, m2_, func_] := Module[
   func[evl1, evl2]
   ];
 
+eigenSpectrumDistanceB[m1_, m2_, bk_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[expandAdjMat[m1, d2, bk] // N];
+  evl2 = Eigenvalues[expandAdjMat[m2, d1, bk] // N];
+  EuclideanDistance[evl1, evl2]
+  ];
+eigenSpectrumDistanceB[m1_, m2_, bk_, func_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[expandAdjMat[m1, d2, bk] // N];
+  evl2 = Eigenvalues[expandAdjMat[m2, d1, bk] // N];
+  func[evl1, evl2]
+  ];
+
 eigenSpectrumSim[m1_, m2_] := Module[
   {d1, evl1, d2, evl2},
   d1 = Diagonal[m1];
