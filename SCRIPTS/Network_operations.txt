@@ -1,7 +1,7 @@
 (*ネットワーク*)
 
 (**MST**)
-(*** mst with distance matrix ***)
+(*** 距離行列から最終的なMSTと各ステップでのクラスタを出力 ***)
 shift[list_] := {list[[1]], Drop[list, 1]};
 mstD[dmat_] := 
  Module[{pairdistS, seqMax, nodeClasses, head, headID, headClass, 
