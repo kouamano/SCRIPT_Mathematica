@@ -127,7 +127,7 @@ Mpat[e_String, n_Integer, str_List] :=
   Map[StringCases[#, e, Overlaps -> True] &, str];
 
 SimA[n_, str_List] := (M[n, str]^2)/
-  Apply[Times, Map[M[n, {#, #}] &, str]];
+  Apply[Times, Map[M[n, {#, #}] &, str]]; (*3D以上の時不正*)
 
 SimB[n_Integer, str_List] := Module[
   {tal, lens},
@@ -135,4 +135,4 @@ SimB[n_Integer, str_List] := Module[
   tal = Tally[nGram[n, str]];
   Apply[Plus, lens]*
     Tr[Map[M[#[[1]], n, str]/#[[2]] &, tal]]/Apply[Times, lens]
-];
+]; (*3D以上の時不正*)
