@@ -126,6 +126,8 @@ Mpat[n_Integer, str_List] := Module[
 Mpat[e_String, n_Integer, str_List] := 
   Map[StringCases[#, e, Overlaps -> True] &, str];
 
+(*3 strings 以上のaffを求めるには、以下以外にない?*)
+(* sim = (cmp(str1,str2) x cmp(str1,str3) x cmp(str2,str3))^係数/(cmp(str1,str1) x cmp(str2,str2) x cmp(str3,str3))^係数 *)
 SimA[n_, str_List] := (M[n, str]^2)/
   Apply[Times, Map[M[n, {#, #}] &, str]]; (*3D以上の時不正*)
 
