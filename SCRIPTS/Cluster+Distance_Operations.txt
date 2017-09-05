@@ -98,11 +98,11 @@ WCSPowerWeighted[cl_] :=
 WCSPowerWeighted[memOfCls_List, radOfCls_List, meanRadTotal_] := 
   Length[memOfCls]*Tr[memOfCls^(radOfCls/meanRadTotal), Times]
 
-(**指標pi**)
-piS[mat_, cls_] := Module[{classes},
+(**指標pi (SI: Simplicity Index)**)
+piS:=SIS[mat_, cls_] := Module[{classes},
   classes = Map[mat[[#]] &, cls];
   WCSPowerWeighted[classes] ]
-piG[mat_, cls_] := 
+piG:=SIG[mat_, cls_] := 
   Module[{numMem, numCL, numsCLMem, totalCenter, totalRmean, classes, centers, rs},
   numMem = Length[mat];
   numCL = Length[cls];
