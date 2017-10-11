@@ -116,6 +116,16 @@ piG[mat_, cls_] :=
        classes[[n]]]], {n, numCL}]/totalRmean;
   numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL) ]
 
+(** 指標pi (類似度ベース; SIs) **)
+piSIM[smat_(*similarity matrix*), cls_] := 
+ Module[{k, meanS, nums, simCls},
+  k = Length[cls];
+  meanS = Mean[Flatten[smat]];
+  nums = Map[Length, cls];
+  simCls = Map[meanS/Mean[Flatten[subMat[smat, #]]] &, cls];
+  k Inner[Power, nums, simCls, Times]
+  ];
+
 (**mstPi 系: 各クラスタのMSTと全体のMSTを使ったpi指標の変形**)
 (***mstPi 派生***)
 (***  mst: clusterd mst, mstm: mst from medoids, cls: clustered IDs; result of clustering ***)
