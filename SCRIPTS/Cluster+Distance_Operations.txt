@@ -125,6 +125,16 @@ piSIM[smat_(*similarity matrix*), cls_] :=
   simCls = Map[meanS/Mean[Flatten[subMat[smat, #]]] &, cls];
   k Inner[Power, nums, simCls, Times]
   ];
+piSIMG[smat_(*similarity matrix*), cls_] := 
+ Module[{k, meanS, nums, simCls},
+  k = Length[cls];
+  meanS = Mean[Flatten[smat]];
+  nums = Map[Length, cls];
+  simCls = Map[meanS/Mean[Flatten[subMat[smat, #]]] &, cls];
+  k Inner[Power, nums, simCls, Times]^(1/k)
+  ];
+
+
 
 (**mstPi 系: 各クラスタのMSTと全体のMSTを使ったpi指標の変形**)
 (***mstPi 派生***)
