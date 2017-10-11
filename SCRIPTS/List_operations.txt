@@ -16,6 +16,8 @@ dataflatten[list_,n_] :=
   Transpose[Transpose[list/rsum^n]/csum^n]
  ];
 
+seqSim[s1_, s2_] := Inner[Times, Normalize[s1], Normalize[s2], Plus];
+
 meanLv[li_,lv_] :=
  Mean[Flatten[li, lv]];
 
