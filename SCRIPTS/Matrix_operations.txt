@@ -87,12 +87,16 @@ zeroInsertCol[m_, s_, z_] := Module[
   Transpose[Insert[Transpose[m], zerolist, inspos]]
   ];
 
-trRep[m_, t_] := Module[
+(*trRep[m_, t_] := Module[
   {lm, lt, rep, out},
   lm = Length[m];
   lt = Length[t];
   If[lm <= lt, rep = t[[1 ;; lm]], rep = Join[t, Table[0, {lm - lt}]]];
   ReplacePart[m, Table[{i, i} -> rep[[i]], {i, lm}]]
-  ];
+  ];*)
 
+trRep[mat_, li_] := Module[{rls},
+  rls = Table[{n, n} -> li[[n]], {n, Length[li]}];
+  ReplacePart[mat, rls]
+  ];
 
