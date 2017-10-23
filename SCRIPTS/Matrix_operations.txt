@@ -49,6 +49,12 @@ createRandomSymMat[size_] := Module[
   Table[pre[[j]][[i]] = pre[[i]][[j]], {i, size}, {j, i}];
   pre
   ];
+createRandomSymIntMat[size_] := Module[
+  {pre, out},
+  pre = Table[RandomInteger[{1,size}], {size}, {size}];
+  Table[pre[[j]][[i]] = pre[[i]][[j]], {i, size}, {j, i}];
+  pre
+  ];
 
 createRandomSymMat[size_, tr_] := Module[
   {pre, out},
