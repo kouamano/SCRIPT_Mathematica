@@ -116,6 +116,16 @@ piG[mat_, cls_] :=
        classes[[n]]]], {n, numCL}]/totalRmean;
   numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL) ]
 
+(**指標pi (距離行列ベース; piDM)**)
+piDMG[dmat_(*distance matrix*), cls_] := 
+ Module[{k, meanS, nums, simCls},
+  k = Length[cls];
+  meanS = Mean[Flatten[dmat]];
+  nums = Map[Length, cls];
+  simCls = Map[ Mean[Flatten[subMat[dmat, #]]]/meanS &, cls ];
+  k Inner[Power, nums, simCls, Times]^(1/k)
+  ];
+
 (** 指標pi (類似度ベース; SIs) **)
 piSIM[smat_(*similarity matrix*), cls_] := 
  Module[{k, meanS, nums, simCls},
