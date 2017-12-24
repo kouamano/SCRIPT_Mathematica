@@ -111,9 +111,14 @@ piG[mat_, cls_] :=
   totalRmean = Mean[Map[EuclideanDistance[#, totalCenter] &, mat]];
   classes = Map[mat[[#]] &, cls];
   centers = Map[Mean, classes];
+  If[totalRmean == 0,
   rs = Table[
      Mean[Map[EuclideanDistance[#, centers[[n]]] &, 
-       classes[[n]]]], {n, numCL}]/totalRmean;
+       classes[[n]]]], {n, numCL}],
+  rs = Table[
+     Mean[Map[EuclideanDistance[#, centers[[n]]] &, 
+       classes[[n]]]], {n, numCL}]/totalRmean
+  ];
   numCL * (Tr[Table[numsCLMem[[n]]^rs[[n]], {n, numCL}], Times])^(1/numCL) ]
 
 (**指標pi (距離行列ベース; piDM)**)
