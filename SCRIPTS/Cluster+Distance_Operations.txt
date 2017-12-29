@@ -127,7 +127,10 @@ piDMG[dmat_(*distance matrix*), cls_] :=
   k = Length[cls];
   meanS = Mean[Flatten[dmat]];
   nums = Map[Length, cls];
-  simCls = Map[ Mean[Flatten[subMat[dmat, #]]]/meanS &, cls ];
+  If[meanS==0,
+  simCls = Map[ Mean[Flatten[subMat[dmat, #]]] &, cls ],
+  simCls = Map[ Mean[Flatten[subMat[dmat, #]]]/meanS &, cls ]
+  ];
   k Inner[Power, nums, simCls, Times]^(1/k)
   ];
 
