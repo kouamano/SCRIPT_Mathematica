@@ -70,7 +70,7 @@ Module[
 ];
 
 (*cGDunn*)
-connectiveClass`Gdelta[cls_, medoid_, dshortMatZeroself_] :=
+connectiveClass`Gdelta[cls_, medoid_, dshortMatZeroself_] (*Delta3 in Patt.Rec.2013 by Olatz*) :=
   2 Tr[dshortMatZeroself[[medoid]][[cls]]]/Length[cls];
 
 connectiveClass`Gd[clS_, clT_, dshortMatZeroself_] := 
