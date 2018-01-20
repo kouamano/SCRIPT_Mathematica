@@ -73,7 +73,7 @@ Module[
 connectiveClass`Gdelta[cls_, medoid_, dshortMatZeroself_] (*Delta3 in Patt.Rec.2013 by Olatz*) :=
   2 Tr[dshortMatZeroself[[medoid]][[cls]]]/Length[cls];
 
-connectiveClass`Gd[clS_, clT_, dshortMatZeroself_] := 
+connectiveClass`Gd[clS_, clT_, dshortMatZeroself_] (*delta3 in Patt.Rec.2013 by Olatz*) := 
 Module[
   {coords},
   coords = Flatten[Outer[List, clS, clT, 1], 1];
