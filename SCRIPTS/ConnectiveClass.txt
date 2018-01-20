@@ -81,7 +81,7 @@ Module[
   Length[clT]
 ];
 
-cGDunn[dshortMatZeroself_, cls_] := 
+cGDunn[3,3][dshortMatZeroself_, cls_] := 
 Module[
   {numCLs, medoidIDs, maxGdelta, subset},
   numCLs = Length[cls];
