@@ -70,10 +70,10 @@ Module[
 ];
 
 (*cGDunn*)
-connectiveClass`Gdelta[cls_, medoid_, dshortMatZeroself_] (*Delta3 in Patt.Rec.2013 by Olatz*) :=
+connectiveClass`Gdelta[3][cls_, medoid_, dshortMatZeroself_] (*Delta3 in Patt.Rec.2013 by Olatz*) :=
   2 Tr[dshortMatZeroself[[medoid]][[cls]]]/Length[cls];
 
-connectiveClass`Gd[clS_, clT_, dshortMatZeroself_] (*delta3 in Patt.Rec.2013 by Olatz*) := 
+connectiveClass`Gd[3][clS_, clT_, dshortMatZeroself_] (*delta3 in Patt.Rec.2013 by Olatz*) := 
 Module[
   {coords},
   coords = Flatten[Outer[List, clS, clT, 1], 1];
@@ -90,10 +90,10 @@ Module[
     findMedoidsParCL[dshortMatZeroself, cls]]];
   maxGdelta = 
     Max[Table[
-      connectiveClass`Gdelta[cls[[n]], medoidIDs[[n]], 
+      connectiveClass`Gdelta[3][cls[[n]], medoidIDs[[n]], 
       dshortMatZeroself], {n, numCLs}]];
   subset = Subsets[cls, {2}];
-  Min[Map[connectiveClass`Gd[#[[1]], #[[2]], dshortMatZeroself] &, 
+  Min[Map[connectiveClass`Gd[3][#[[1]], #[[2]], dshortMatZeroself] &, 
   subset]]/maxGdelta
 ];
 
