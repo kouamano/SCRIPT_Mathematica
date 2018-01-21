@@ -1,4 +1,4 @@
-(*Needs["Combinatorica`"]*)
+Needs["Combinatorica`"]
 
 (*basic program*)
 subDMat[dmat_, members_] := 
