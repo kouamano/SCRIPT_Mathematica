@@ -1,5 +1,10 @@
-
-
+eigenNormalize[] := 
+  Module[{val,vec,norms},
+    val = es[[1]];
+    vec = es[[2]];
+    {val,Map[Normalize,vec]}
+];
+    
 subMat[mat_, lw_, up_] := Transpose[Transpose[mat[[lw ;; up]]][[lw ;; up]]];
 subMat[mat_, sel_List] := Transpose[Transpose[mat[[sel]]][[sel]]];
 subMat[mat_, selL_List, selC_List] := Transpose[Transpose[mat[[selL]]][[selC]]];
