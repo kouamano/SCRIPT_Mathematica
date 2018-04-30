@@ -1,6 +1,7 @@
 (* Needs: Matrix_operations.txt *)
 (* Needs: List_operations.txt *)
 
+
 getElementAdjMat[chem_String] := Module[{adj, tr, trn},
   adj = Normal[ChemicalData[chem, "AdjacencyMatrix"]];
   tr = ChemicalData[chem, "VertexTypes"];
@@ -29,7 +30,7 @@ expandAdjMat[mat_, tr_, bk_] := Module[
   addlist = seqComplement[tr, orgtr];
   addTr[mat+bkg, addlist] ];
 
-repConnection[] := Module[ {tr, return, repTrRl},
+repConnection[mat_, f_] := Module[ {tr, return, repTrRl},
   tr = Tr[mat, List];
   return = Map[f, mat, {2}];
   repTrRl = Table[{n,n}->tr[[n]], {n,Length[mat]}];
