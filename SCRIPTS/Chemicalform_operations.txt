@@ -1,6 +1,15 @@
 (* Needs: Matrix_operations.txt *)
 (* Needs: List_operations.txt *)
 
+trReplace[mat_, li_] := Module[{rls},
+  rls = Table[{n, n} -> li[[n]], {n, Length[li]}];
+  ReplacePart[mat, rls] ];
+elementAdjMat[mat_, vlist_] := Module[{tr},
+  If[(Map[Head, vlist] // Flatten // Union) == {String},
+    tr = Map[ElementData[#, "AtomicNumber"] &, vlist],
+    tr = vlist
+  ];
+  trReplace[mat, tr] ];
 
 getElementAdjMat[chem_String] := Module[{adj, tr, trn},
   adj = Normal[ChemicalData[chem, "AdjacencyMatrix"]];
