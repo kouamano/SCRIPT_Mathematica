@@ -5,8 +5,7 @@ getElementAdjMat[chem_String] := Module[{adj, tr, trn},
   adj = Normal[ChemicalData[chem, "AdjacencyMatrix"]];
   tr = ChemicalData[chem, "VertexTypes"];
   trn = Map[ElementData[#, "AtomicNumber"] &, tr];
-  trRep[adj, trn]
-  ];
+  trRep[adj, trn] ];
 
 addTr[mat_, tr_] := Module[
   {tmpmat, pos, rn, rls},
@@ -14,15 +13,13 @@ addTr[mat_, tr_] := Module[
   pos = Range[Length[mat] + 1, Length[mat] + Length[tr]];
   rn = Range[Length[tr]];
   rls = Map[{pos[[#]], pos[[#]]} -> tr[[#]] &, rn];
-  ReplacePart[tmpmat, rls]
-  ];
+  ReplacePart[tmpmat, rls] ];
 
 expandAdjMat[mat_, tr_] := Module[
   {orgtr, addlist},
   orgtr = Tr[mat, List];
   addlist = seqComplement[tr, orgtr];
-  addTr[mat, addlist]
-  ];
+  addTr[mat, addlist] ];
 expandAdjMat[mat_, tr_, bk_] := Module[
   {s, orgtr, addlist, bkg},
   s = Dimensions[mat];
@@ -30,8 +27,14 @@ expandAdjMat[mat_, tr_, bk_] := Module[
   For[i=1, i<=s[[1]], i++, bkg[[i,i]]=0 ];
   orgtr = Tr[mat, List];
   addlist = seqComplement[tr, orgtr];
-  addTr[mat+bkg, addlist]
-  ];
+  addTr[mat+bkg, addlist] ];
+
+repConnection[] := Module[ {tr, return, repTrRl},
+  tr = Tr[mat, List];
+  return = Map[f, mat, {2}];
+  repTrRl = Table[{n,n}->tr[[n]], {n,Length[mat]}];
+  ReplacePart[return, repTrRl] ];
+  (* USAGE: repConnection[mat,#/10&] *)
 
 eigenSpectrumDistance[m1_, m2_] := Module[
   {d1, evl1, d2, evl2},
@@ -39,16 +42,14 @@ eigenSpectrumDistance[m1_, m2_] := Module[
   d2 = Diagonal[m2];
   evl1 = Eigenvalues[expandAdjMat[m1, d2] // N];
   evl2 = Eigenvalues[expandAdjMat[m2, d1] // N];
-  EuclideanDistance[evl1, evl2]
-  ];
+  EuclideanDistance[evl1, evl2] ];
 eigenSpectrumDistance[m1_, m2_, func_] := Module[
   {d1, evl1, d2, evl2},
   d1 = Diagonal[m1];
   d2 = Diagonal[m2];
   evl1 = Eigenvalues[expandAdjMat[m1, d2] // N];
   evl2 = Eigenvalues[expandAdjMat[m2, d1] // N];
-  func[evl1, evl2]
-  ];
+  func[evl1, evl2] ];
 
 eigenSpectrumDistanceB[m1_, m2_, bk_] := Module[
   {d1, evl1, d2, evl2},
@@ -56,16 +57,14 @@ eigenSpectrumDistanceB[m1_, m2_, bk_] := Module[
   d2 = Diagonal[m2];
   evl1 = Eigenvalues[expandAdjMat[m1, d2, bk] // N];
   evl2 = Eigenvalues[expandAdjMat[m2, d1, bk] // N];
-  EuclideanDistance[evl1, evl2]
-  ];
+  EuclideanDistance[evl1, evl2] ];
 eigenSpectrumDistanceB[m1_, m2_, bk_, func_] := Module[
   {d1, evl1, d2, evl2},
   d1 = Diagonal[m1];
   d2 = Diagonal[m2];
   evl1 = Eigenvalues[expandAdjMat[m1, d2, bk] // N];
   evl2 = Eigenvalues[expandAdjMat[m2, d1, bk] // N];
-  func[evl1, evl2]
-  ];
+  func[evl1, evl2] ];
 
 eigenSpectrumSim[m1_, m2_] := Module[
   {d1, evl1, d2, evl2},
@@ -75,6 +74,5 @@ eigenSpectrumSim[m1_, m2_] := Module[
   evl2 = Eigenvalues[expandAdjMat[m2, d1] // N];
   Inner[Times, evl1, evl2, Plus]/
    Sqrt[Inner[Times, evl2, evl2, Plus] * 
-     Inner[Times, evl1, evl1, Plus] ]
-  ];
+     Inner[Times, evl1, evl1, Plus] ] ];
 
