@@ -36,6 +36,11 @@ repConnection[mat_, f_] := Module[ {tr, return, repTrRl},
   repTrRl = Table[{n,n}->tr[[n]], {n,Length[mat]}];
   ReplacePart[return, repTrRl] ];
   (* USAGE: repConnection[mat,#/10&] *)
+repConnection[mat_, f_, base_] := Module[{tr, return, repTrRl},
+  tr = Tr[mat, List];
+  return = Map[If[# != base, f[#], #] &, mat, {2}];
+  repTrRl = Table[{n, n} -> tr[[n]], {n, Length[mat]}];
+  ReplacePart[return, repTrRl] ];
 
 eigenSpectrumDistance[m1_, m2_] := Module[
   {d1, evl1, d2, evl2},
