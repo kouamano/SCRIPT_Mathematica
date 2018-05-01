@@ -520,6 +520,18 @@ maxminPim2i[dmat_, medcls_, cls_] :=
    submaxmins = Map[Maxmin[subDMat[dmat, #]] &, cls];
    k^(1/medminmin) Inner[Power, numMems, submaxmins, Times] ]
 
+(** 階層型クラスタリングへの拡張 **)
+clSplitFlatten[cl_, n_] := 
+ Map[ClusterFlatten, ClusterSplit[cl, n], {1}] /. 
+  ClusterFlatten -> List;
+
+dAreaRatio[pt_] := Module[{spt, plotArea, baseArea},
+  spt = Sort[pt];
+  plotArea = Area[Polygon[pt]];
+  baseArea = 
+   Area[Polygon[{spt[[1]], {0, 1}, {spt[[-1]][[1]], 1}, spt[[-1]]}]];
+  plotArea/baseArea ];
+
 (*Brute-force classify*)
 (**Kruskal Method**)
 kruskalFirstGr[li_] := Table[n, {n, Length[li]}]
