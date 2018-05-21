@@ -4,6 +4,7 @@
 trReplace[mat_, li_] := Module[{rls},
   rls = Table[{n, n} -> li[[n]], {n, Length[li]}];
   ReplacePart[mat, rls] ];
+
 elementAdjMat[mat_, vlist_] := Module[{tr},
   If[(Map[Head, vlist] // Flatten // Union) == {String},
     tr = Map[ElementData[#, "AtomicNumber"] &, vlist],
@@ -31,13 +32,10 @@ expandAdjMat[mat_, tr_] := Module[
   addlist = seqComplement[tr, orgtr];
   addTr[mat, addlist] ];
 expandAdjMat[mat_, tr_, bk_] := Module[
-  {s, orgtr, addlist, bkg},
-  s = Dimensions[mat];
-  bkg = Table[bk, {s[[1]]},{s[[2]]}];
-  For[i=1, i<=s[[1]], i++, bkg[[i,i]]=0 ];
+  {orgtr, addlist},
   orgtr = Tr[mat, List];
   addlist = seqComplement[tr, orgtr];
-  addTr[mat+bkg, addlist] ];
+  Replace[addTr[mat, addlist],0->bk,{-1}] ];
 
 repConnection[mat_, f_] := Module[ {tr, return, repTrRl},
   tr = Tr[mat, List];
