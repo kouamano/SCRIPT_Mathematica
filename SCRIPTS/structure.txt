@@ -1,0 +1,4 @@
+quantityStructure[x_]:=If[Head[x]===Quantity,x[[2]],None];
+associationStructure[x_]:=Module[{nx},
+  nx = Normal[x];
+  If[Head===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[quantityStructure[#[[2]]]&,nx]},None]  ];
