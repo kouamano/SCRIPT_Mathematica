@@ -1,4 +1,4 @@
-atomComplex={Quantity,Association};
+atomComplex={Quantity,Association,Dataset};
 structureQuantity[x_]:=If[Head[x]===Quantity,x[[2]],None]
 structureAssociation[x_]:=Module[{nx},
   nx = Normal[x];
