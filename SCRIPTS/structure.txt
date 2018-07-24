@@ -1,6 +1,7 @@
 atomComplex={Quantity,Association,Dataset};
-structureQuantity[x_]:=If[Head[x]===Quantity,x[[2]],None]
+structureRule[x_]:=If[Head[x]===Rule,x[[1]],None];
+structureQuantity[x_]:=If[Head[x]===Quantity,x[[2]],None];
 structureAssociation[x_]:=Module[{nx},
   nx = Normal[x];
-  If[Head[x]===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[structureQuantity[#[[2]]]&,nx]},None]  ]
+  If[Head[x]===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[structureQuantity[#[[2]]]&,nx]},None]  ];
 
