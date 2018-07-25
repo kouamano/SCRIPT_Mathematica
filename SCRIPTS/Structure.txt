@@ -5,3 +5,17 @@ structureAssociation[x_]:=Module[{nx},
   nx = Normal[x];
   If[Head[x]===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[structureQuantity[#[[2]]]&,nx]},None]  ];
 
+mlCheckMerge[x_, y_] := Module[{tx, ty, dtx, dty},
+     tx = Tally[structureAssociation /@ x];
+      ty = Tally[structureAssociation /@ y]; dtx = Dimensions[tx];
+      dty = Dimensions[ty]; If[dtx == dty == {1, 2}, Null, Return[]];
+      If[tx[[1,1]] === ty[[1,1]], Null, Return[]]; If[tx[[1,1]] == ty[[1,1]],
+       Join[x, y], Return[]]];
+
+mlCheckMergeMulti[x__] := Module[{lx, l, maptx, mapdtx, mapftx},
+     lx = {x}; l = Length[lx]; maptx =
+       Table[Tally[structureAssociation /@ lx[[n]]], {n, l}];
+      mapdtx = Table[Dimensions[maptx[[n]]], {n, l}];
+      If[Equal @@ mapdtx, mapftx = (#1[[1,1]] & ) /@ maptx, Return[]];
+      If[SameQ @@ mapftx, Null, Return[]]; If[Equal @@ mapftx, Join[x],
+       Return[]]];
