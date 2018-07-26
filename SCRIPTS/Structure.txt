@@ -1,9 +1,21 @@
 atomComplex={Quantity,Association,Dataset};
+
 structureRule[x_]:=If[Head[x]===Rule,x[[1]],None];
+
 structureQuantity[x_]:=If[Head[x]===Quantity,x[[2]],None];
+
 structureAssociation[x_]:=Module[{nx},
   nx = Normal[x];
   If[Head[x]===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[structureQuantity[#[[2]]]&,nx]},None]  ];
+
+structureComp[x_, y_] := Module[{tx, ty}, tx = Transpose[x];
+      ty = Transpose[y]; Outer[SameQ, tx, ty, 1]];
+
+structureMatch[x_, y_] := Module[{tab, xmatch, xpos},
+     tab = structureComp[x, y]; xmatch = (Flatten[Position[#1, True]] & ) /@
+        tab; xpos = Flatten[Position[xmatch, {__Integer}]]; {xpos, xmatch}];
+
+
 
 mlCheckMerge[x_, y_] := Module[{tx, ty, dtx, dty},
      tx = Tally[structureAssociation /@ x];
@@ -19,3 +31,5 @@ mlCheckMergeMulti[x__] := Module[{lx, l, maptx, mapdtx, mapftx},
       If[Equal @@ mapdtx, mapftx = (#1[[1,1]] & ) /@ maptx, Return[]];
       If[SameQ @@ mapftx, Null, Return[]]; If[Equal @@ mapftx, Join[x],
        Return[]]];
+
+
