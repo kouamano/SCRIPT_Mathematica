@@ -15,7 +15,16 @@ structureMatch[x_, y_] := Module[{tab, xmatch, xpos},
      tab = structureComp[x, y]; xmatch = (Flatten[Position[#1, True]] & ) /@
         tab; xpos = Flatten[Position[xmatch, {__Integer}]]; {xpos, xmatch}];
 
-
+structureMatchComplete[x_,y_] := Module[{tab,xlen,ylen,d,ctab},
+  tab = structureComp[x,y];
+  d = Dimensions[tab];
+  xlen = Length[Transpose[x]];
+  ylen = Length[Transpose[y]];
+  If[d=={xlen,ylen},,Return[False]];
+  ctab = Table[False,{xlen},{ylen}];
+  Map[(ctab[[#,#]]=True)&,Range[5]];
+  tab==ctab
+];
 
 mlCheckMerge[x_, y_] := Module[{tx, ty, dtx, dty},
      tx = Tally[structureAssociation /@ x];
