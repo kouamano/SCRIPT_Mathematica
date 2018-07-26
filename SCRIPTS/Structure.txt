@@ -22,7 +22,7 @@ structureMatchComplete[x_,y_] := Module[{tab,xlen,ylen,d,ctab},
   ylen = Length[Transpose[y]];
   If[d=={xlen,ylen},,Return[False]];
   ctab = Table[False,{xlen},{ylen}];
-  Map[(ctab[[#,#]]=True)&,Range[5]];
+  Map[(ctab[[#,#]]=True)&,Range[xlen]];
   tab==ctab
 ];
 
