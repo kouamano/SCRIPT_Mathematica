@@ -44,4 +44,37 @@ mlCheckMergeMulti[x__] := Module[{lx, l, maptx, mapdtx, mapftx},
 associationSelCol[a_Association,l_List]:=Module[{n},
   Normal[a][[l]]//Association ];
 
+detectRange[a_] := If[Head[a[[1]]] === Quantity || NumericQ[a[[1]]],
+     {Min[a], Max[a]}, None];
+
+detectColRange[t_] := Module[{l, tab}, l = Length[t[[1]]];
+      tab = Table[(#1[[n]] & ) /@ t, {n, l}]; Table[detectRange[tab[[n]]],
+       {n, l}]  ];
+
+splitRange[range_, n_] := Module[{r, t, nuCheck, qtCheck},
+     r = Range[range[[1]], range[[2]], (range[[2]] - range[[1]])/n];
+      Partition[r, 2, 1]  ];
+
+splitColRange[detection_, n_] := Module[{},
+     (If[#1 === None, None, splitRange[#1, n]] & ) /@ detection];
+
+stepRange[range_, n_] := Module[{}, {range[[1]], range[[2]],
+      (range[[2]] - range[[1]])/n}  ];
+
+tepColRange[detection_, n_] := Module[{},
+     (If[#1 === None, None, stepRange[#1, n]] & ) /@ detection ];
+
+caseSplit[data_, pos_, ranges_] := Module[{l, x, tab, last, total},
+     l = Length[ranges]; tab = Table[Cases[data,
+         x_ /; Part @@ Flatten[{x, pos}] >= ranges[[n,1]] &&
+           Part @@ Flatten[{x, pos}] < ranges[[n,2]]], {n, l - 1}];
+      last = Cases[data, x_ /; Part @@ Flatten[{x, pos}] >= ranges[[l,1]] &&
+          Part @@ Flatten[{x, pos}] <= ranges[[l,2]]];
+      total = Append[tab, last]  ];
+
+caseSplitMulti[data_, rangeOfRanges_] := Module[{l, t, i},
+     l = Length[rangeOfRanges]; t[0] = data; For[i = 1, i <= l, i++,
+       t[i] = Map[caseSplit[#1, {1, i}, rangeOfRanges[[i]]] & , t[i - 1],
+          {i - 1}]; ]; t[l]  ];
+
 
