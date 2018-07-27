@@ -61,7 +61,7 @@ splitColRange[detection_, n_] := Module[{},
 stepRange[range_, n_] := Module[{}, {range[[1]], range[[2]],
       (range[[2]] - range[[1]])/n}  ];
 
-tepColRange[detection_, n_] := Module[{},
+stepColRange[detection_, n_] := Module[{},
      (If[#1 === None, None, stepRange[#1, n]] & ) /@ detection ];
 
 caseSplit[data_, pos_, ranges_] := Module[{l, x, tab, last, total},
