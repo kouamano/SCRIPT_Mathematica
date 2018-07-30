@@ -9,11 +9,11 @@ structureAssociation[x_]:=Module[{nx},
   If[Head[x]===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[structureQuantity[#[[2]]]&,nx]},None]  ];
 
 structureComp[x_, y_] := Module[{tx, ty}, tx = Transpose[x];
-      ty = Transpose[y]; Outer[SameQ, tx, ty, 1]];
+  ty = Transpose[y]; Outer[SameQ, tx, ty, 1]];
 
 structureMatch[x_, y_] := Module[{tab, xmatch, xpos},
-     tab = structureComp[x, y]; xmatch = (Flatten[Position[#1, True]] & ) /@
-        tab; xpos = Flatten[Position[xmatch, {__Integer}]]; {xpos, xmatch}];
+  tab = structureComp[x, y]; xmatch = (Flatten[Position[#1, True]] & ) /@ tab; 
+  xpos = Flatten[Position[xmatch, {__Integer}]]; {xpos, xmatch}  ];
 
 structureMatchComplete[x_,y_] := Module[{tab,xlen,ylen,d,ctab},
   tab = structureComp[x,y];
@@ -27,54 +27,56 @@ structureMatchComplete[x_,y_] := Module[{tab,xlen,ylen,d,ctab},
 ];
 
 mlCheckMerge[x_, y_] := Module[{tx, ty, dtx, dty},
-     tx = Tally[structureAssociation /@ x];
-      ty = Tally[structureAssociation /@ y]; dtx = Dimensions[tx];
-      dty = Dimensions[ty]; If[dtx == dty == {1, 2}, Null, Return[]];
-      If[tx[[1,1]] === ty[[1,1]], Null, Return[]]; If[tx[[1,1]] == ty[[1,1]],
-       Join[x, y], Return[]]];
+  tx = Tally[structureAssociation /@ x];
+  ty = Tally[structureAssociation /@ y]; 
+  dtx = Dimensions[tx];
+  dty = Dimensions[ty]; If[dtx == dty == {1, 2}, Null, Return[]];
+  If[tx[[1,1]] === ty[[1,1]], Null, Return[]]; If[tx[[1,1]] == ty[[1,1]],
+    Join[x, y], Return[]]  ];
 
 mlCheckMergeMulti[x__] := Module[{lx, l, maptx, mapdtx, mapftx},
-     lx = {x}; l = Length[lx]; maptx =
-       Table[Tally[structureAssociation /@ lx[[n]]], {n, l}];
-      mapdtx = Table[Dimensions[maptx[[n]]], {n, l}];
-      If[Equal @@ mapdtx, mapftx = (#1[[1,1]] & ) /@ maptx, Return[]];
-      If[SameQ @@ mapftx, Null, Return[]]; If[Equal @@ mapftx, Join[x],
-       Return[]]];
+  lx = {x}; 
+  l = Length[lx]; 
+  maptx = Table[Tally[structureAssociation /@ lx[[n]]], {n, l}];
+  mapdtx = Table[Dimensions[maptx[[n]]], {n, l}];
+  If[Equal @@ mapdtx, mapftx = (#1[[1,1]] & ) /@ maptx, Return[]];
+  If[SameQ @@ mapftx, Null, Return[]]; If[Equal @@ mapftx, Join[x], Return[]]  ];
 
 associationSelCol[a_Association,l_List]:=Module[{n},
   Normal[a][[l]]//Association ];
 
 detectRange[a_] := If[Head[a[[1]]] === Quantity || NumericQ[a[[1]]],
-     {Min[a], Max[a]}, None];
+  {Min[a], Max[a]}, None];
 
 detectColRange[t_] := Module[{l, tab}, l = Length[t[[1]]];
-      tab = Table[(#1[[n]] & ) /@ t, {n, l}]; Table[detectRange[tab[[n]]],
-       {n, l}]  ];
+  tab = Table[(#1[[n]] & ) /@ t, {n, l}]; Table[detectRange[tab[[n]]], {n, l}]  ];
 
 splitRange[range_, n_] := Module[{r, t, nuCheck, qtCheck},
-     r = Range[range[[1]], range[[2]], (range[[2]] - range[[1]])/n];
-      Partition[r, 2, 1]  ];
+  r = Range[range[[1]], range[[2]], (range[[2]] - range[[1]])/n];
+  Partition[r, 2, 1]  ];
 
 splitColRange[detection_, n_] := Module[{},
-     (If[#1 === None, None, splitRange[#1, n]] & ) /@ detection];
+  (If[#1 === None, None, splitRange[#1, n]] & ) /@ detection];
 
 stepRange[range_, n_] := Module[{}, {range[[1]], range[[2]],
-      (range[[2]] - range[[1]])/n}  ];
+  (range[[2]] - range[[1]])/n}  ];
 
 stepColRange[detection_, n_] := Module[{},
-     (If[#1 === None, None, stepRange[#1, n]] & ) /@ detection ];
+  (If[#1 === None, None, stepRange[#1, n]] & ) /@ detection ];
 
 caseSplit[data_, pos_, ranges_] := Module[{l, x, tab, last, total},
-     l = Length[ranges]; tab = Table[Cases[data,
-         x_ /; Part @@ Flatten[{x, pos}] >= ranges[[n,1]] &&
-           Part @@ Flatten[{x, pos}] < ranges[[n,2]]], {n, l - 1}];
-      last = Cases[data, x_ /; Part @@ Flatten[{x, pos}] >= ranges[[l,1]] &&
-          Part @@ Flatten[{x, pos}] <= ranges[[l,2]]];
-      total = Append[tab, last]  ];
+  l = Length[ranges]; 
+  tab = Table[Cases[data, x_ /; Part @@ Flatten[{x, pos}] >= ranges[[n,1]] &&
+    Part @@ Flatten[{x, pos}] < ranges[[n,2]]], {n, l - 1}];
+  last = Cases[data, x_ /; Part @@ Flatten[{x, pos}] >= ranges[[l,1]] &&
+    Part @@ Flatten[{x, pos}] <= ranges[[l,2]]];
+  total = Append[tab, last]  ];
 
 caseSplitMulti[data_, rangeOfRanges_] := Module[{l, t, i},
-     l = Length[rangeOfRanges]; t[0] = data; For[i = 1, i <= l, i++,
-       t[i] = Map[caseSplit[#1, {1, i}, rangeOfRanges[[i]]] & , t[i - 1],
-          {i - 1}]; ]; t[l]  ];
+  l = Length[rangeOfRanges]; t[0] = data; 
+  For[i = 1, i <= l, i++,
+    t[i] = Map[caseSplit[#1, {1, i}, rangeOfRanges[[i]]] & , t[i - 1],
+      {i - 1}]; ]; 
+    t[l]  ];
 
 
