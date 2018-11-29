@@ -1,0 +1,47 @@
+(*Testing*)
+(*Copy from JSIMS work "Citation Network"*)
+
+(*Basic*)
+Ranking[l___]:=Ordering[Ordering[l]];
+
+(*Google Page Score*)
+zeroSelf[mat_]:=Module[ {len,rl},
+  len=Length[mat];
+  rl=Table[{n,n}->0,{n,len}];
+  ReplacePart[mat,rl]
+];
+nextscore[{mat,r_}]:={mat,Map[Tr,Transpose[(mat r)]]};
+linkMToH[mat_]:=Block[{links},
+  links=Map[Tr,mat];
+  (mat/links)/.{Indeterminate->0}
+];
+hToG[mat_,alpha_]:=Block[{n,zerolines,a,elem},
+  n=Lenght[mat];
+  zerolines=Position[Map[Tr,mat],0];
+  a=ReplacePart[Table[0,{n}],zorolines->1];
+  elem=Table[1,{n}];
+  mat*alpha + (alpha*a+(1-alpha)*elem)*1/n
+];
+googlePageScore[linkmat_,alpha_,itr_]:=Block[{n,rstart,h,g},
+  n=Length[linkmat];
+  rstart=Table[1/n,{n}];
+  h=linkMatToH[linkmat];
+  g=hToG[h,alpha];
+  Nest[nextstore,{g,rstart},itr]
+];
+
+(*Eigen Factor*)
+hToE[mat_,alpha_,w_]:=Block[{n,zerolines,a,elem},
+  n=Length[mat];
+  zerolines=Position[Map[Tr,mat],0];
+  a=ReplacePart[Table[0,{n}],zerolines->1];
+  elem=w/Tr[w]*n;
+  Transpose[Transpose[mat]*alpha+(alpha*a+(1-alpha)*elem)*1/n]
+];
+eigenPageScore[linkmat_,alpha_,w_,itr_]:=Block[{n,rstart,h,g},
+  n=Length[linkmat];
+  rstart=Table[1/n,{n}];
+  h=linkMatToH[linkmat];
+  g=hToE[h,alpha,w];
+  Nest[nextscore,{g,rstart},itr]
+]
