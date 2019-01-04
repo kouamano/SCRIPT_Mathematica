@@ -83,8 +83,17 @@ c[n_] :=
   ];
 
 q[n_] := Apply[Plus,
-    Table[
+    Tpable[
       i freqlist[n][[1]][[i]], {i, Length[freqlist[n][[1]]]}
     ]
   ];
+
+perplexity[corpus_(*list of docs*),wordsRule_(*rule of word to probability*)]:=
+  Module[{totalWords,Pcorpus,PPcorpus},
+    totalWords = (Map[Length,corpus]//Total);
+    Pcorpus = Map[Select[#,NumericQ]&,corpus/.wordsRule]/.{{}->{0}};
+    PPcorpus = Apply[Times,Pcorpus,2];
+    Exp[-(Map[Log,PPcorpus]//Total)/totalWords];
+  ];
+
 
