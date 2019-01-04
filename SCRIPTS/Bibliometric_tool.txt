@@ -83,7 +83,7 @@ c[n_] :=
   ];
 
 q[n_] := Apply[Plus,
-    Tpable[
+    Table[
       i freqlist[n][[1]][[i]], {i, Length[freqlist[n][[1]]]}
     ]
   ];
