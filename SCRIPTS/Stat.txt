@@ -42,7 +42,7 @@ quant3[data_,p_]:=
   u=Eigenvectors[S];
   y[p]:=Table[N[u[[p,k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
   x[p]:=N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]];
-  {v,y[p],x[p]}
+  {v,y[p],x[p]} (*{Evalue,Column,Sample}*)
  ];
 
 quant4[nn_List]:=
