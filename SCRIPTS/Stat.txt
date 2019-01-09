@@ -27,7 +27,7 @@ correlation[data_List]:=
   r
  ];
 
-quant3[data_]:=
+quant3[data_,p_]:=
  Module[{n,m,f,g,T,A,B,S,v,r,u,y,x},
   n=Length[data];
   m=Length[data[[1]]];
@@ -40,9 +40,9 @@ quant3[data_]:=
   v=Eigenvalues[S];
   r=Sqrt[v];
   u=Eigenvectors[S];
-  y[p_]:=Table[N[u[[p,k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
-  x[q_]:=N[B.u[[q]] Sqrt[T]/Sqrt[v[[q]]]];
-  {v,y[2],x[2]}
+  y[p]:=Table[N[u[[p,k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
+  x[p]:=N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]];
+  {v,y[p],x[p]}
  ];
 
 quant4[nn_List]:=
