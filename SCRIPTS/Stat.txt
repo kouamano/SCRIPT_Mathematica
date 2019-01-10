@@ -42,7 +42,25 @@ quant3[data_,p_]:=
   u=Eigenvectors[S];
   y[p]:=Table[N[u[[p,k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
   x[p]:=N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]];
-  {v,y[p],x[p]} (*{Evalue,Column,Sample}*)
+  {v,y[p],x[p]} (*{Evalues,Column,Sample}*)
+ ];
+
+quant3[data_]:=
+ Module[{n,m,f,g,T,A,B,S,v,r,u,y,x},
+  n=Length[data];
+  m=Length[data[[1]]];
+  f[i_]:=Apply[Plus,Table[data[[i,t]],{t,1,m}]];
+  g[j_]:=Apply[Plus,Table[data[[s,j]],{s,1,n}]];
+  T=Apply[Plus,Table[f[i],{i,1,n}]];
+  A=N[Table[data[[t,s]]/Sqrt[g[s]],{s,1,m},{t,1,n}]];
+  B=N[Table[data[[t,s]]/f[t]/Sqrt[g[s]],{t,1,n},{s,1,m}]];
+  S=A.B;
+  v=Eigenvalues[S];
+  r=Sqrt[v];
+  u=Eigenvectors[S];
+  y=Table[N[u[[k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
+  x=Table[N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]],{p,Length[u]}];
+  {v,y,x} (*{Evalues,Columns,Samples}*)
  ];
 
 quant4[nn_List]:=
