@@ -1,0 +1,27 @@
+correspondenceAnalysis[sampleCrosstab_] := 
+    Module[{grandTotal, correspondenceMatrix, rowTotals, columnTotals, 
+      independenceModel, chiSquaredStatistic, chisqd, UpperDiagonalMatrix, 
+      chiSquaredDistances, phiSquared, standardizedResiduals, 
+      leftSingularMatrix, singularValuesMatrix, rightSingularMatrix, 
+      rowScores, columnScores}, grandTotal = Total[sampleCrosstab, 2]; 
+      correspondenceMatrix = sampleCrosstab/grandTotal; 
+      rowTotals = Total /@ correspondenceMatrix; columnTotals = 
+       Total /@ Transpose[correspondenceMatrix]; independenceModel = 
+       Outer[Times, rowTotals, columnTotals]; chiSquaredStatistic = 
+       grandTotal*Total[(correspondenceMatrix - independenceModel)^2/
+          independenceModel, 2]; chisqd[row1_, row2_] := 
+       Sqrt[Sum[(row1[[j]]/Total[row1] - row2[[j]]/Total[row2])^2/
+          columnTotals[[j]], {j, Length[columnTotals]}]]; 
+      UpperDiagonalMatrix[f_, (n_Integer)?NonNegative] := 
+       Array[If[#1 <= #2, f[##1], 0] & , {n, n}]; chiSquaredDistances = 
+       UpperDiagonalMatrix[Function[{i, k}, chisqd[correspondenceMatrix[[i]], 
+          correspondenceMatrix[[k]]]], Length[correspondenceMatrix]]; 
+      phiSquared = Sum[rowTotals[[i]]*chisqd[correspondenceMatrix[[i]], 
+           columnTotals]^2, {i, Length[correspondenceMatrix]}]; 
+      standardizedResiduals = (correspondenceMatrix - independenceModel)/
+        Sqrt[independenceModel]; {leftSingularMatrix, singularValuesMatrix, 
+        rightSingularMatrix} = SingularValueDecomposition[
+        N[standardizedResiduals]]; rowScores = 
+       leftSingularMatrix . singularValuesMatrix/Sqrt[rowTotals]; 
+      columnScores = rightSingularMatrix/Sqrt[columnTotals]; 
+      {columnScores, rowScores}]
