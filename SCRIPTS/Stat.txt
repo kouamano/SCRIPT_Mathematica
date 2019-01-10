@@ -40,8 +40,8 @@ quant3[data_,p_]:=
   v=Eigenvalues[S];
   r=Sqrt[v];
   u=Eigenvectors[S];
-  y[p]:=Table[N[u[[p,k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
-  x[p]:=N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]];
+  y[p]=Table[N[u[[p,k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
+  x[p]=N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]];
   {v,y[p],x[p]} (*{Evalues,Column,Sample}*)
  ];
 
@@ -60,6 +60,7 @@ quant3[data_]:=
   u=Eigenvectors[S];
   y=Table[N[u[[k]] Sqrt[T]/Sqrt[g[k]]],{k,1,m}];
   x=Table[N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]],{p,Length[u]}];
+  (*x[p]=N[B.u[[p]] Sqrt[T]/Sqrt[v[[p]]]];*)
   {v,y,x} (*{Evalues,Columns,Samples}*)
  ];
 
