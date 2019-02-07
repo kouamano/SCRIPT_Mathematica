@@ -5,7 +5,7 @@ ToPartitionSheet::usage =
 
 Begin["Private`DataFederation`"]
 
-ToPartitionSheet[101,"xlsx"][list_]:= Module[
+ToPartitionSheet["$$$3[]","$$$2002[]","$$$2004[,]"]["xlsx"][list_]:= Module[
   {itemNames,unitNames,values,rl,rls,lines,cols},
   itemNames = list[[1,1]];
   unitNames = list[[1,2]];
