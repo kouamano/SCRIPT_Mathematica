@@ -1,11 +1,11 @@
 BeginPackage["DataFederation`"]
 
-ToPartitionSheet::usage =
+toPartitionSheet::usage =
   "ToSpreadSheet[_List,___Options]"
 
 Begin["Private`DataFederation`"]
 
-ToPartitionSheet["$$$3[]","$$$2002[]","$$$2004[,]"]["xlsx"][list_]:= Module[
+toPartitionSheet["$$$3[]","$$$2002[]","$$$2004[,]"]["xlsx"][list_]:= Module[
   {itemNames,unitNames,values,rl,rls,lines,cols},
   itemNames = list[[1,1]];
   unitNames = list[[1,2]];
