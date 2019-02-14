@@ -6,7 +6,7 @@ structureQuantity[x_]:=If[Head[x]===Quantity,x[[2]],None];
 
 structureAssociation[x_]:=Module[{nx},
   nx = Normal[x];
-  If[Head[x]===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[structureQuantity[#[[2]]]&,nx]},None]  ];
+  If[Head[x]===Association,{Keys[x],Map[Head[#[[2]]]&,nx],Map[structureQuantity[#[[2]]]&,nx]},NonAssociation]  ];
 
 structureComp[x_, y_] := Module[{tx, ty}, tx = Transpose[x];
   ty = Transpose[y]; Outer[SameQ, tx, ty, 1]];
