@@ -19,3 +19,5 @@ distanceTable[table1_List,table2_List]:=
 nDistanceTable[table1_List,table2_List]:=
   Sqrt[
     Table[ Apply[Plus,(table1[[m]]-table2[[n]])^2],{m,Length[table1]},{n,Length[table2]} ] ]//N;
+
+implicitNormalize[f_,base_]:= Mormalize[f+base*I];
