@@ -1,3 +1,5 @@
+implicitNormalize[f_,base_]:= Normalize[f+base*I];
+
 eigenNormalize[es_] := Module[{val, vec},
   val = es[[1]];
   vec = es[[2]];
