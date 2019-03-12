@@ -1,5 +1,12 @@
 implicitNormalize[f_,base_]:= Normalize[f+base*I];
 
+implicitNormalDiag[m_, base_] := Module[{dg, iNdg, len, dgRl},
+     dg = Diagonal[m]; 
+     iNdg = (implicitNormalize[#1, base] & ) /@ dg;
+     len = Length[dg]; 
+     dgRl = Table[{n, n} -> iNdg[[n]], {n, len}];
+     ReplacePart[m, dgRl] ];
+
 eigenNormalize[es_] := Module[{val, vec},
   val = es[[1]];
   vec = es[[2]];
