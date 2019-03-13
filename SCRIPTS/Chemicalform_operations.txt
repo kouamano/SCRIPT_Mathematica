@@ -64,6 +64,22 @@ eigenSpectrumDistance[m1_, m2_, func_] := Module[
   evl2 = Eigenvalues[expandAdjMat[m2, d1] // N];
   func[evl1, evl2] ];
 
+eigenSpectrumDistanceIND[m1_, m2_, inb_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[implicitNormalDiag[expandAdjMat[m1, d2],inb] // N];
+  evl2 = Eigenvalues[implicitNormalDiag[expandAdjMat[m2, d1],inb] // N];
+  EuclideanDistance[evl1, evl2] ];
+eigenSpectrumDistanceIND[m1_, m2_, inb_, func_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[implicitNormalDiag[expandAdjMat[m1, d2],inb] // N];
+  evl2 = Eigenvalues[implicitNormalDiag[expandAdjMat[m2, d1],inb] // N];
+  func[evl1, evl2] ];
+
+
 eigenSpectrumDistanceB[m1_, m2_, bk_] := Module[
   {d1, evl1, d2, evl2},
   d1 = Diagonal[m1];
@@ -98,4 +114,12 @@ eigenSpectrumSim[m1_, m2_] := Module[
   Inner[Times, evl1, evl2, Plus]/
    Sqrt[Inner[Times, evl2, evl2, Plus] * 
      Inner[Times, evl1, evl1, Plus] ] ];
+
+eigenSpectrumSimIND[m1_, m2_, inb_] := Module[
+  {d1, evl1, d2, evl2},
+  d1 = Diagonal[m1];
+  d2 = Diagonal[m2];
+  evl1 = Eigenvalues[implicitNormalDiag[expandAdjMat[m1, d2],inb] // N];
+  evl2 = Eigenvalues[implicitNormalDiag[expandAdjMat[m2, d1],inb] // N];
+  spectrumSimAbs[evl1,evl2] ];
 
