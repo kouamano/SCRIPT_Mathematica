@@ -37,6 +37,11 @@ toSymmetric[mat_] :=
     Table[
     mat[[k]][[m]]*mat[[l]][[m]], {k, rows}, {l, rows}, {m, cols}], {2} ] ];
 
+randomSymmetricMat[n_,{nmin_,nmax_}]:= Module[{t},
+  t = Table[RandomInteger[{nmin,nmax}],{n},{n}];
+  toSymmetric[t]
+];
+
 matReOrder[mat_, odr_] := Map[#[[odr]] &, mat[[odr]]];
 mapReOrder[mat_, odr_] := Map[#[[odr]] &, mat];
 matRowReOrder[mat_, odr_] := mat[[odr]];
