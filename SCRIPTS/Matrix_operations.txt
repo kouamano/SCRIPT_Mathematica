@@ -136,3 +136,9 @@ trRep[mat_, li_] := Module[{rls},
   ReplacePart[mat, rls]
   ];
 
+trIns[mat_, ins_] := Module[{len, base},
+  len = Length[mat];
+  base = mat;
+  Do[base[[n, n]] = ins, {n, len}];
+  base
+  ];
