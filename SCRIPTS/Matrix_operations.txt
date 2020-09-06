@@ -1,3 +1,5 @@
+ratio[v_]:= v/Tr[v]
+
 implicitNormalize[f_,base_]:= Normalize[f+base*I];
 
 implicitNormalDiag[m_, base_] := Module[{dg, iNdg, len, dgRl},
