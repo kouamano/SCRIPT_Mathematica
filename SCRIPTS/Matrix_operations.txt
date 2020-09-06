@@ -39,6 +39,8 @@ toSymmetric[mat_] :=
     Table[
     mat[[k]][[m]]*mat[[l]][[m]], {k, rows}, {l, rows}, {m, cols}], {2} ] ];
 
+toSymmetricP[mat_] := mat * Transpose[mat];
+
 randomSymmetricMat[n_,{nmin_,nmax_}]:= Module[{t},
   t = Table[RandomInteger[{nmin,nmax}],{n},{n}];
   toSymmetric[t]
