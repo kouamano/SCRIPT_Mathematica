@@ -1,0 +1,28 @@
+octetToB[o_String] := Module[{digit, len, plen},
+  digit = IntegerDigits[ToExpression[o], 2];
+  len = Length[digit];
+  plen = 8 - len;
+  ArrayPad[digit, {plen, 0}]
+  ];
+
+iprangeToB[i_String] := Module[{seed, len, plen},
+  seed = Table[1, {ToExpression[i]}];
+  len = Length[seed];
+  plen = 32 - len;
+  Partition[ArrayPad[seed, {0, plen}], 8]
+  ];
+
+ipaddrToB[a_String] := Module[{q},
+  q = StringSplit[a, "."];
+  Map[octetToB, q]
+  ];
+
+BToI[b_List] := Module[{},
+  FromDigits[b, 2]
+  ];
+
+ip[ip_String] := Module[{addr, subn},
+  {addr, subn} = StringSplit[ip, "/"];
+  {ipaddrToB[addr], iprangeToB[subn], ipaddrToB[addr]*iprangeToB[subn]}
+  ];
+
