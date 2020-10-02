@@ -21,9 +21,15 @@ BToI[b_List] := Module[{},
   FromDigits[b, 2]
   ];
 
+invertB[b_List]:=Module[{},
+  b/.{1->0,0->1}
+  ];
+
 ip[ip_String] := 
   Module[{addr, subn}, {addr, subn} = StringSplit[ip, "/"];
-   {ipaddrToB[addr] -> Map[BToI, ipaddrToB[addr]], 
-    iprangeToB[subn] -> Map[BToI, iprangeToB[subn]], 
-    ipaddrToB[addr]*iprangeToB[subn] -> 
-     Map[BToI, ipaddrToB[addr]*iprangeToB[subn]]}];
+   {"InputAddr" -> ipaddrToB[addr] -> Map[BToI, ipaddrToB[addr]], 
+    "Mask" -> iprangeToB[subn] -> Map[BToI, iprangeToB[subn]], 
+    "NetAddr" -> ipaddrToB[addr]*iprangeToB[subn] -> Map[BToI, ipaddrToB[addr]*iprangeToB[subn]],
+    "BroadAddr" -> Partition[Inner[BitOr,Flatten[Map[invertB,iprangeToB[subn]]],Flatten[ipaddrToB[addr]],List],8]
+}
+  ];
