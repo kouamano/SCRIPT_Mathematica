@@ -1,0 +1,15 @@
+gitACP[] := Module[{}, NotebookSave[EvaluationNotebook[], 
+       NotebookFileName[]]; ReadList[StringJoin["!git add ", 
+        NotebookFileName[]], "String"]; ReadList["!git commit -m add", 
+       "String"]; ReadList["!git push", "String"]; 
+      ReadList["!git --no-pager log -n 10", "String"]]
+ 
+gitACP[dir_String] := Module[{}, SetDirectory[dir]; 
+      NotebookSave[EvaluationNotebook[], NotebookFileName[]]; 
+      ReadList[StringJoin["!git add ", NotebookFileName[]], "String"]; 
+      ReadList["!git commit -m add", "String"]; ReadList["!git push", 
+       "String"]; ReadList["!git --no-pager log -n 10", "String"]]
+gitfileACP[file_String] := Module[{}, ReadList[StringJoin["!git add ", file], 
+       "String"]; ReadList["!git commit -m add", "String"]; 
+      ReadList["!git push", "String"]; ReadList["!git --no-pager log -n 10", 
+       "String"]]
