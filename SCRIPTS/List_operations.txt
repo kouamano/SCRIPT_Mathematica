@@ -151,5 +151,10 @@ seqUnion[list1_, list2_] := Module[
   seqnum2 = Map[numberNumbering, tally2] // Flatten;
   Map[#[[0]] &, Union[seqnum1, seqnum2]]
   ];
+seqUnionM[lists__List] := Module[{tally, seqnum},
+  tally = Map[Tally, {lists}];
+  seqnum = Map[numberNumbering, tally, {2}] // Flatten;
+  Map[#[[0]] &, Union[seqnum]]
+  ];
 
 shift[list_] := {list[[1]], Drop[list, 1]};
