@@ -1,5 +1,7 @@
 atomComplex={Quantity,Association,Dataset};
 
+atomInactivate[a_] := ToExpression["Inactivate[" <> ToString[FullForm[a]] <> "]"];
+
 structureRule[x_]:=If[Head[x]===Rule,x[[1]],None];
 
 structureQuantity[x_]:=If[Head[x]===Quantity,x[[2]],None];
