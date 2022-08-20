@@ -25,6 +25,8 @@ invertB[b_List]:=Module[{},
   b/.{1->0,0->1}
   ];
 
+octetlistToA[o_List] := StringReplace[ToString[o],{" " -> "", "{" -> "", "}" -> "", "," -> "."}]
+
 availAddr[m_Integer] := 2^(32-m);
 
 ip[ip_String] := 
@@ -36,3 +38,4 @@ ip[ip_String] :=
     "AvailAddrs" -> availAddr[ToExpression[subn]]
 }
   ];
+
