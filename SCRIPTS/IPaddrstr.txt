@@ -1,5 +1,5 @@
-octetToB[o_String] := Module[{digit, len, plen},
-  digit = IntegerDigits[ToExpression[o], 2];
+octetToB[o_Integer] := Module[{digit, len, plen},
+  digit = IntegerDigits[o, 2];
   len = Length[digit];
   plen = 8 - len;
   ArrayPad[digit, {plen, 0}]
@@ -13,7 +13,7 @@ iprangeToB[i_String] := Module[{seed, len, plen},
   ];
 
 ipaddrToB[a_String] := Module[{q},
-  q = StringSplit[a, "."];
+  q = ToExpression[StringSplit[a, "."]];
   Map[octetToB, q]
   ];
 
