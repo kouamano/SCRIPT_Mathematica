@@ -27,9 +27,9 @@ invertB[b_List]:=Module[{},
 
 ip[ip_String] := 
   Module[{addr, subn, bba}, {addr, subn} = StringSplit[ip, "/"];
-   {"InputAddr" -> ipaddrToB[addr] -> Map[BToI, ipaddrToB[addr]], 
-    "Mask" -> iprangeToB[subn] -> Map[BToI, iprangeToB[subn]], 
-    "NetAddr" -> ipaddrToB[addr]*iprangeToB[subn] -> Map[BToI, ipaddrToB[addr]*iprangeToB[subn]],
-    "BroadAddr" -> (bba=Partition[Inner[BitOr,Flatten[Map[invertB,iprangeToB[subn]]],Flatten[ipaddrToB[addr]],List],8]) -> Map[BToI,bba]
+   {"InputAddr" -> ipaddrToB[addr] -> Map[BToO, ipaddrToB[addr]], 
+    "Mask" -> iprangeToB[subn] -> Map[BToO, iprangeToB[subn]], 
+    "NetAddr" -> ipaddrToB[addr]*iprangeToB[subn] -> Map[BToO, ipaddrToB[addr]*iprangeToB[subn]],
+    "BroadAddr" -> (bba=Partition[Inner[BitOr,Flatten[Map[invertB,iprangeToB[subn]]],Flatten[ipaddrToB[addr]],List],8]) -> Map[BToO,bba]
 }
   ];
