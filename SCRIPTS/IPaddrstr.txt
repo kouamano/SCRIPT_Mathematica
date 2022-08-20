@@ -17,7 +17,7 @@ ipaddrToB[a_String] := Module[{q},
   Map[octetToB, q]
   ];
 
-BToI[b_List] := Module[{},
+BToO[b_List] := Module[{},
   FromDigits[b, 2]
   ];
 
