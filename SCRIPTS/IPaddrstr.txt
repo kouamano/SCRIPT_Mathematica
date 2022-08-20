@@ -39,3 +39,10 @@ ip[ip_String] :=
 }
   ];
 
+summaryIp[ip_] := {{ip[[1, 1]], octetlistToA[ip[[1, 2, -1]]]}, 
+ {ip[[2, 1]], octetlistToA[ip[[2, 2, -1]]]}, 
+ {ip[[3, 1]], octetlistToA[ip[[3, 2, -1]]]}, 
+ {ip[[4, 1]], octetlistToA[ip[[4, 2, -1]]]}, 
+ {ip[[5, 1]], ip[[5, 2]]}};
+
+
