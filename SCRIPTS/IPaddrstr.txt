@@ -25,11 +25,14 @@ invertB[b_List]:=Module[{},
   b/.{1->0,0->1}
   ];
 
+availAddr[m_Integer] := 2^(32-m);
+
 ip[ip_String] := 
   Module[{addr, subn, bba}, {addr, subn} = StringSplit[ip, "/"];
    {"InputAddr" -> ipaddrToB[addr] -> Map[BToO, ipaddrToB[addr]], 
     "Mask" -> iprangeToB[subn] -> Map[BToO, iprangeToB[subn]], 
     "NetAddr" -> ipaddrToB[addr]*iprangeToB[subn] -> Map[BToO, ipaddrToB[addr]*iprangeToB[subn]],
-    "BroadAddr" -> (bba=Partition[Inner[BitOr,Flatten[Map[invertB,iprangeToB[subn]]],Flatten[ipaddrToB[addr]],List],8]) -> Map[BToO,bba]
+    "BroadAddr" -> (bba=Partition[Inner[BitOr,Flatten[Map[invertB,iprangeToB[subn]]],Flatten[ipaddrToB[addr]],List],8]) -> Map[BToO,bba],
+    "AvailAddrs" -> availAddr[ToExpression[subn]]
 }
   ];
