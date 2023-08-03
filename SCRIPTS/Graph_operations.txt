@@ -1,0 +1,29 @@
+directedConnectedComponents[g_, v_] := 
+ Module[{vAll, vOther, addEdge},
+  vAll = VertexList[g];
+  vOther = Complement[vAll, {v}];
+  addEdge = Map[# -> v &, vOther];
+  ConnectedComponents[Flatten[{EdgeList[g], addEdge}, 1], v]
+  ];
+directedConnectedGraphComponents[g_, v_] := 
+ Module[{vAll, vOther, addEdge},
+  vAll = VertexList[g];
+  vOther = Complement[vAll, {v}];
+  addEdge = Map[# -> v &, vOther];
+  Map[Subgraph[g, #] &, 
+   ConnectedComponents[Flatten[{EdgeList[g], addEdge}, 1], v]]
+  ];
+directedConnectedComponent[g_, v_] := Module[{vAll, vOther, addEdge},
+  vAll = VertexList[g];
+  vOther = Complement[vAll, {v}];
+  addEdge = Map[# -> v &, vOther];
+  ConnectedComponents[Flatten[{EdgeList[g], addEdge}, 1], v][[1]]
+  ];
+directedConnectedGraphComponent[g_, v_] := 
+ Module[{vAll, vOther, addEdge},
+  vAll = VertexList[g];
+  vOther = Complement[vAll, {v}];
+  addEdge = Map[# -> v &, vOther];
+  Subgraph[g, 
+   ConnectedComponents[Flatten[{EdgeList[g], addEdge}, 1], v][[1]]]
+  ];
