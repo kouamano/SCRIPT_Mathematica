@@ -27,3 +27,10 @@ directedConnectedGraphComponent[g_, v_] :=
   Subgraph[g, 
    ConnectedComponents[Flatten[{EdgeList[g], addEdge}, 1], v][[1]]]
   ];
+
+vertexInGraph[g_] := Module[{deg, pos, vname},
+  deg = VertexInDegree[g];
+  pos = Position[deg, 0] // Flatten // Union;
+  vname = VertexList[g][[pos]];
+  Map[directedConnectedGraphComponent[g, #] &, vname]
+  ];
