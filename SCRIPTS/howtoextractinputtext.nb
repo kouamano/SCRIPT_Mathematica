@@ -1,0 +1,117 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3680,        107]
+NotebookOptionsPosition[      2772,         82]
+NotebookOutlinePosition[      3168,         98]
+CellTagsIndexPosition[      3125,         95]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"nbfile", "=", 
+  "\"\</Volumes/home/NII/togo-log/rcoslogs/log/M=202310-202312/log-analysis_\
+202310-202312_vocgr.nb\>\""}]], "Input",
+ CellChangeTimes->{{3.919367082487337*^9, 3.919367084494529*^9}, {
+  3.9193672341533957`*^9, 3.919367261785677*^9}},
+ CellLabel->
+  "(Local) In[1]:=",ExpressionUUID->"38c20f97-b2be-44e7-a2e7-79af0732ddd9"],
+
+Cell[BoxData["\<\"/Volumes/home/NII/togo-log/rcoslogs/log/M=202310-202312/log-\
+analysis_202310-202312_vocgr.nb\"\>"], "Output",
+ CellChangeTimes->{3.91936726314154*^9},
+ CellLabel->
+  "(Local) Out[1]=",ExpressionUUID->"9f7a89bc-7d30-4774-9181-d08469e63b9f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ist", "=", 
+  RowBox[{"NotebookImport", "[", 
+   RowBox[{"nbfile", ",", 
+    RowBox[{"\"\<Input\>\"", "->", "\"\<InputText\>\""}]}], "]"}]}]], "Input",\
+
+ CellChangeTimes->{{3.9193672646280613`*^9, 3.9193673156994267`*^9}},
+ CellLabel->
+  "(Local) In[3]:=",ExpressionUUID->"eb8a5219-9190-4334-9be1-345aa97932f1"],
+
+Cell[BoxData[
+ TemplateBox[<|"shortenedBoxes" -> TagBox[
+     RowBox[{"{", 
+       RowBox[{"\"start = Now\"", ",", 
+         TemplateBox[{"137"}, "OutputSizeLimit`Skeleton"], ",", 
+         "\"Table[FindPath[g1, s, t, Infinity, All], {s, 5}, {t, 5}]\""}], 
+       "}"}], Short[#, 8]& ], "line" -> 3, "sessionID" -> 
+   31287866501091182454, "byteCount" -> 1030224, "size" -> 8, "stored" -> 
+   False, "expr" -> Missing["NotStored"], "wrap" -> OutputSizeLimit`Defer, 
+   "version" -> 1|>,
+  "OutputSizeLimitTemplate"]], "Output",
+ CellChangeTimes->{{3.919367308175597*^9, 3.91936731746835*^9}},
+ CellLabel->
+  "(Local) Out[3]=",ExpressionUUID->"3bdc028a-3b1c-4c06-af73-8dfb4445234f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ist", "[", 
+   RowBox[{"[", "1", "]"}], "]"}], "//", "Head"}]], "Input",
+ CellChangeTimes->{{3.919367319086096*^9, 3.9193673262962227`*^9}},
+ CellLabel->
+  "(Local) In[5]:=",ExpressionUUID->"fe3b94aa-c6f8-4352-8ff0-1b8c8730f7ed"],
+
+Cell[BoxData["String"], "Output",
+ CellChangeTimes->{{3.9193673224780693`*^9, 3.919367326616637*^9}},
+ CellLabel->
+  "(Local) Out[5]=",ExpressionUUID->"58e3912c-c0c2-4696-8d1b-fd9860442aca"]
+}, Open  ]]
+},
+WindowSize->{808, 911},
+WindowMargins->{{464, Automatic}, {Automatic, 0}},
+FrontEndVersion->"13.2 for Mac OS X x86 (64-bit) (January 30, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"68b21721-3f39-4c2d-a942-509b67eee9c9"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 363, 7, 87, "Input",ExpressionUUID->"38c20f97-b2be-44e7-a2e7-79af0732ddd9"],
+Cell[946, 31, 258, 4, 70, "Output",ExpressionUUID->"9f7a89bc-7d30-4774-9181-d08469e63b9f"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1241, 40, 336, 8, 44, "Input",ExpressionUUID->"eb8a5219-9190-4334-9be1-345aa97932f1"],
+Cell[1580, 50, 682, 13, 95, "Output",ExpressionUUID->"3bdc028a-3b1c-4c06-af73-8dfb4445234f"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2299, 68, 264, 6, 44, "Input",ExpressionUUID->"fe3b94aa-c6f8-4352-8ff0-1b8c8730f7ed"],
+Cell[2566, 76, 190, 3, 48, "Output",ExpressionUUID->"58e3912c-c0c2-4696-8d1b-fd9860442aca"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
