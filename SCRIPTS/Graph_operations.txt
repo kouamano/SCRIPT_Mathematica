@@ -34,3 +34,9 @@ vertexInGraph[g_] := Module[{deg, pos, vname},
   vname = VertexList[g][[pos]];
   Map[directedConnectedGraphComponent[g, #] &, vname]
   ];
+
+vertexLabelList[g_] := Module[{gs, defg},
+  gs = ToString[InputForm[g]];
+  defg = ToExpression[StringReplace[gs, "Graph" -> "defGraph"]];
+  Cases[defg, _voc, Infinity]
+  ];
