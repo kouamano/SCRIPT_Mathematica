@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      3680,        107]
-NotebookOptionsPosition[      2772,         82]
-NotebookOutlinePosition[      3168,         98]
-CellTagsIndexPosition[      3125,         95]
+NotebookDataLength[      6283,        175]
+NotebookOptionsPosition[      4717,        138]
+NotebookOutlinePosition[      5113,        154]
+CellTagsIndexPosition[      5070,        151]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -21,19 +21,72 @@ Notebook[{
 
 Cell[CellGroupData[{
 Cell[BoxData[
- RowBox[{"nbfile", "=", 
-  "\"\</Volumes/home/NII/togo-log/rcoslogs/log/M=202310-202312/log-analysis_\
-202310-202312_vocgr.nb\>\""}]], "Input",
- CellChangeTimes->{{3.919367082487337*^9, 3.919367084494529*^9}, {
-  3.9193672341533957`*^9, 3.919367261785677*^9}},
+ RowBox[{"srcdir", "=", 
+  "\"\</Volumes/home/NII/togo-log/rcoslogs/log/M=202310-202312/\>\""}]], \
+"Input",
+ CellChangeTimes->{{3.933737724252816*^9, 3.933737745492029*^9}},
  CellLabel->
-  "(Local) In[1]:=",ExpressionUUID->"38c20f97-b2be-44e7-a2e7-79af0732ddd9"],
+  "(Local) In[477]:=",ExpressionUUID->"4326a469-b069-49ed-89e3-49198fb1ec57"],
+
+Cell[BoxData["\<\"/Volumes/home/NII/togo-log/rcoslogs/log/M=202310-202312/\"\>\
+"], "Output",
+ CellChangeTimes->{3.93373774610435*^9},
+ CellLabel->
+  "(Local) Out[477]=",ExpressionUUID->"726ee15d-568a-4375-9254-90d75d408446"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"basename", "=", 
+  "\"\<log-analysis_202310-202312_vocgr.nb\>\""}]], "Input",
+ CellChangeTimes->{{3.9337377497000017`*^9, 3.933737763131695*^9}},
+ CellLabel->
+  "(Local) In[478]:=",ExpressionUUID->"ccde7ca4-f774-4726-9ba2-f0d367a1b165"],
+
+Cell[BoxData["\<\"log-analysis_202310-202312_vocgr.nb\"\>"], "Output",
+ CellChangeTimes->{3.933737764541388*^9},
+ CellLabel->
+  "(Local) Out[478]=",ExpressionUUID->"fa5c9828-1836-442f-8b6a-85845ca71f70"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"nbfile", "=", 
+  RowBox[{"srcdir", "<>", "basename"}]}]], "Input",
+ CellChangeTimes->{{3.919367082487337*^9, 3.919367084494529*^9}, {
+  3.9193672341533957`*^9, 3.919367261785677*^9}, {3.933737770838409*^9, 
+  3.933737779623713*^9}},
+ CellLabel->
+  "(Local) In[479]:=",ExpressionUUID->"38c20f97-b2be-44e7-a2e7-79af0732ddd9"],
 
 Cell[BoxData["\<\"/Volumes/home/NII/togo-log/rcoslogs/log/M=202310-202312/log-\
 analysis_202310-202312_vocgr.nb\"\>"], "Output",
- CellChangeTimes->{3.91936726314154*^9},
+ CellChangeTimes->{3.91936726314154*^9, 3.933737705898032*^9, 
+  3.933737780485826*^9},
  CellLabel->
-  "(Local) Out[1]=",ExpressionUUID->"9f7a89bc-7d30-4774-9181-d08469e63b9f"]
+  "(Local) Out[479]=",ExpressionUUID->"48643a0b-8f52-45d6-937b-5ea442314d85"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"repname", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"StringSplit", "[", 
+     RowBox[{"basename", ",", "\"\<.\>\""}], "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}], "<>", "\"\<_inputtxt.wl\>\""}]}]], "Input",\
+
+ CellChangeTimes->{{3.933737788253674*^9, 3.933737839710167*^9}},
+ CellLabel->
+  "(Local) In[483]:=",ExpressionUUID->"cdd314dc-a64f-4e52-8e33-9904fa1ca1b9"],
+
+Cell[BoxData["\<\"log-analysis_202310-202312_vocgr_inputtxt.wl\"\>"], "Output",
+ CellChangeTimes->{{3.93373780882235*^9, 3.933737839985153*^9}},
+ CellLabel->
+  "(Local) Out[483]=",ExpressionUUID->"5afc702f-115e-4d11-a1d5-bba1f3ee836c"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -46,38 +99,41 @@ Cell[BoxData[
 
  CellChangeTimes->{{3.9193672646280613`*^9, 3.9193673156994267`*^9}},
  CellLabel->
-  "(Local) In[3]:=",ExpressionUUID->"eb8a5219-9190-4334-9be1-345aa97932f1"],
+  "(Local) In[480]:=",ExpressionUUID->"eb8a5219-9190-4334-9be1-345aa97932f1"],
 
 Cell[BoxData[
  TemplateBox[<|"shortenedBoxes" -> TagBox[
      RowBox[{"{", 
        RowBox[{"\"start = Now\"", ",", 
-         TemplateBox[{"137"}, "OutputSizeLimit`Skeleton"], ",", 
+         TemplateBox[{"138"}, "OutputSizeLimit`Skeleton"], ",", 
          "\"Table[FindPath[g1, s, t, Infinity, All], {s, 5}, {t, 5}]\""}], 
-       "}"}], Short[#, 8]& ], "line" -> 3, "sessionID" -> 
-   31287866501091182454, "byteCount" -> 1030224, "size" -> 8, "stored" -> 
+       "}"}], Short[#, 8]& ], "line" -> 480, "sessionID" -> 
+   31382025028524646632, "byteCount" -> 1030304, "size" -> 8, "stored" -> 
    False, "expr" -> Missing["NotStored"], "wrap" -> OutputSizeLimit`Defer, 
    "version" -> 1|>,
   "OutputSizeLimitTemplate"]], "Output",
- CellChangeTimes->{{3.919367308175597*^9, 3.91936731746835*^9}},
+ CellChangeTimes->{{3.919367308175597*^9, 3.91936731746835*^9}, 
+   3.933737708997703*^9, 3.933737783456251*^9},
  CellLabel->
-  "(Local) Out[3]=",ExpressionUUID->"3bdc028a-3b1c-4c06-af73-8dfb4445234f"]
+  "(Local) Out[480]=",ExpressionUUID->"7c789465-208e-495d-8884-e8f7fa2de31a"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"ist", "[", 
-   RowBox[{"[", "1", "]"}], "]"}], "//", "Head"}]], "Input",
- CellChangeTimes->{{3.919367319086096*^9, 3.9193673262962227`*^9}},
+ RowBox[{"Export", "[", 
+  RowBox[{
+   RowBox[{"srcdir", "<>", "repname"}], ",", "ist", ",", "\"\<Text\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.93373788567754*^9, 3.9337379315312347`*^9}},
  CellLabel->
-  "(Local) In[5]:=",ExpressionUUID->"fe3b94aa-c6f8-4352-8ff0-1b8c8730f7ed"],
+  "(Local) In[485]:=",ExpressionUUID->"aeed9881-c924-461f-8c64-3c1fc052fff8"],
 
-Cell[BoxData["String"], "Output",
- CellChangeTimes->{{3.9193673224780693`*^9, 3.919367326616637*^9}},
+Cell[BoxData["\<\"/Volumes/home/NII/togo-log/rcoslogs/log/M=202310-202312/log-\
+analysis_202310-202312_vocgr_inputtxt.wl\"\>"], "Output",
+ CellChangeTimes->{{3.933737914799073*^9, 3.9337379319389877`*^9}},
  CellLabel->
-  "(Local) Out[5]=",ExpressionUUID->"58e3912c-c0c2-4696-8d1b-fd9860442aca"]
+  "(Local) Out[485]=",ExpressionUUID->"8c1ba224-9e36-4411-b1e7-9eb535540bde"]
 }, Open  ]]
 },
 WindowSize->{808, 911},
@@ -98,20 +154,30 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 363, 7, 87, "Input",ExpressionUUID->"38c20f97-b2be-44e7-a2e7-79af0732ddd9"],
-Cell[946, 31, 258, 4, 70, "Output",ExpressionUUID->"9f7a89bc-7d30-4774-9181-d08469e63b9f"]
+Cell[580, 22, 279, 6, 44, "Input",ExpressionUUID->"4326a469-b069-49ed-89e3-49198fb1ec57"],
+Cell[862, 30, 225, 4, 48, "Output",ExpressionUUID->"726ee15d-568a-4375-9254-90d75d408446"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1241, 40, 336, 8, 44, "Input",ExpressionUUID->"eb8a5219-9190-4334-9be1-345aa97932f1"],
-Cell[1580, 50, 682, 13, 95, "Output",ExpressionUUID->"3bdc028a-3b1c-4c06-af73-8dfb4445234f"]
+Cell[1124, 39, 260, 5, 44, "Input",ExpressionUUID->"ccde7ca4-f774-4726-9ba2-f0d367a1b165"],
+Cell[1387, 46, 203, 3, 48, "Output",ExpressionUUID->"fa5c9828-1836-442f-8b6a-85845ca71f70"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[2299, 68, 264, 6, 44, "Input",ExpressionUUID->"fe3b94aa-c6f8-4352-8ff0-1b8c8730f7ed"],
-Cell[2566, 76, 190, 3, 48, "Output",ExpressionUUID->"58e3912c-c0c2-4696-8d1b-fd9860442aca"]
+Cell[1627, 54, 347, 7, 44, "Input",ExpressionUUID->"38c20f97-b2be-44e7-a2e7-79af0732ddd9"],
+Cell[1977, 63, 307, 5, 70, "Output",ExpressionUUID->"48643a0b-8f52-45d6-937b-5ea442314d85"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2321, 73, 392, 10, 44, "Input",ExpressionUUID->"cdd314dc-a64f-4e52-8e33-9904fa1ca1b9"],
+Cell[2716, 85, 235, 3, 48, "Output",ExpressionUUID->"5afc702f-115e-4d11-a1d5-bba1f3ee836c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2988, 93, 338, 8, 44, "Input",ExpressionUUID->"eb8a5219-9190-4334-9be1-345aa97932f1"],
+Cell[3329, 103, 734, 14, 95, "Output",ExpressionUUID->"7c789465-208e-495d-8884-e8f7fa2de31a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4100, 122, 302, 7, 44, "Input",ExpressionUUID->"aeed9881-c924-461f-8c64-3c1fc052fff8"],
+Cell[4405, 131, 296, 4, 70, "Output",ExpressionUUID->"8c1ba224-9e36-4411-b1e7-9eb535540bde"]
 }, Open  ]]
 }
 ]
 *)
-
-(* End of internal cache information *)
 
