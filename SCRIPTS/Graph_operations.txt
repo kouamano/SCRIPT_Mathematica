@@ -40,3 +40,26 @@ vertexLabelList[g_] := Module[{gs, defg},
   defg = ToExpression[StringReplace[gs, "Graph" -> "defGraph"]];
   Cases[defg, _voc, Infinity]
   ];
+
+graphFederartion[g_, op___] := Module[{v, e},
+  v = Union[Flatten[Map[VertexList, g]]];
+  e = Flatten[Map[EdgeList, g]];
+  Graph[v, e, op]
+  ];
+
+graphRedundancyComplexityElement[g_Graph] := 
+ Module[{vc, ec, ecmean, etp},
+  vc = VertexCount[g] // N;
+  ec = EdgeCount[g] // N;
+  ecmean = ec/(vc^2);
+  etp = Entropy[AdjacencyMatrix[g] // Flatten] // N;
+  {(vc), (E^ecmean), (E^etp), (vc) (E^ecmean) (E^etp)}
+  ];
+
+graphRedundancyComplexity[g_Graph] := Module[{vc, ec, ecmean, etp},
+  vc = VertexCount[g] // N;
+  ec = EdgeCount[g] // N;
+  ecmean = ec/(vc^2);
+  etp = Entropy[AdjacencyMatrix[g] // Flatten] // N;
+  (vc) (E^ecmean) (E^etp)
+  ];
