@@ -158,3 +158,6 @@ seqUnionM[lists__List] := Module[{tally, seqnum},
   ];
 
 shift[list_] := {list[[1]], Drop[list, 1]};
+
+mapIndexArg[l_] := MapIndexed[Apply[#1, #2] &, l];
+setThreadArg[l_] := Flatten[Map[mapIndexArg, Gather[l]]];
