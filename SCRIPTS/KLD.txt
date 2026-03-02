@@ -1,0 +1,18 @@
+KLD[p_, q_] := Module[{pd, qd, pl, ql},
+  pd = p/Total[p];
+  qd = q/Total[q];
+  pl = Length[p];
+  ql = Length[q];
+  If[pl != ql, Error["no match length."], 
+   Total[Table[pd[[n]] Log[pd[[n]]/qd[[n]]], {n, pl}]]]
+  ];
+
+KLDComponents[p_, q_] := Module[{pd, qd, pl, ql},
+  pd = p/Total[p];
+  qd = q/Total[q];
+  pl = Length[p];
+  ql = Length[q];
+  If[pl != ql, Error["no match length."], 
+   Table[pd[[n]] Log[pd[[n]]/qd[[n]]], {n, pl}]]
+  ];
+
