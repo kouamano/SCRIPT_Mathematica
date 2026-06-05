@@ -3,3 +3,22 @@ scaleMW[mw_, scale_] :=
 
 listWT[mw_, signal_] :=
   ListConvolve[Reverse[mw], signal, {-1,-1}];
+
+(*multi modal test*)
+ternarize[x_ /; x > 0] := 1;
+ternarize[x_ /; x == 0] := 0;
+ternarize[x_ /; x < 0] := -1;
+
+bothsidecut[l_] := l[[2 ;; -2]];
+
+WTPE[wtlv_] := Module[{basemat, max},
+  basemat = Map[ternarize, Map[Re, wtlv, {-1}], {-1}];
+  max = Length[basemat];
+  Count[Map[#[[1]] &, Split[bothsidecut[Apply[Plus, basemat]]]], max]
+  ];
+WTPE[wtlv_, "position"] := Module[{basemat, max},
+  basemat = Map[ternarize, Map[Re, wtlv, {-1}], {-1}];
+  max = Length[basemat];
+  Position[bothsidecut[Apply[Plus, basemat]], max] + 1
+  ];
+
