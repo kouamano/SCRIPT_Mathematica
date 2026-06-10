@@ -21,4 +21,4 @@ WTPE[wtlv_, "position"] := Module[{basemat, max},
   max = Length[basemat];
   Position[bothsidecut[Apply[Plus, basemat]], max] + 1
   ];
-
+mergePkPos[l_] := Split[ Flatten[l] , Abs[#1 - #2] <= 1 & ]
