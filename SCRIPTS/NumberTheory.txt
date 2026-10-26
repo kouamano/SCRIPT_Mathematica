@@ -1,0 +1,31 @@
+coverageDensity[{s_, e_}, filled_] := Module[
+  {ints, points, segments, result},
+
+  ints = ({Max[s, #[[1]]], Min[e, #[[2]]]} &) /@ filled;
+  ints = Select[ints, #[[1]] < #[[2]] &];
+
+  points = Sort @ DeleteDuplicates @
+    Join[{s, e}, Flatten[ints]];
+
+  segments = Partition[points, 2, 1];
+
+  result = ({
+      #[[1]], #[[2]],
+      Count[ints,
+        {a_, b_} /; a <= #[[1]] && b >= #[[2]]
+      ]
+    } &) /@ segments;
+
+  (* 被覆密度が同じ隣接区間を結合 *)
+  MergeAdjacent[result]
+]
+
+MergeAdjacent[{}] := {}
+MergeAdjacent[list_] := Fold[
+  If[#[[-1, 3]] == #2[[3]],
+    ReplacePart[#, -1 -> {#[[-1, 1]], #2[[2]], #2[[3]]}],
+    Append[#, #2]
+  ] &,
+  {First[list]},
+  Rest[list]
+]
