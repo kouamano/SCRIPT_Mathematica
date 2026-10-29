@@ -2,7 +2,8 @@
 (* 最大次数 *)
 maxOrderNum = 200;
 (* 画像URL, もしくはローカルパス *)
-imageURL = "http://nex.fm/wp-content/uploads/2012/08/vim-editor_logo.png";
+(* imageURL = "http://nex.fm/wp-content/uploads/2012/08/vim-editor_logo.png"; *)
+imageURL = "/Users/kouamano/Downloads/20131130012207.png";
  
 pointListToLines[pointList_, neighbothoodSize_: 6] :=
  Module[{L = DeleteDuplicates[pointList], NF, lambda,
