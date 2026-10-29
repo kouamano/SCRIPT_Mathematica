@@ -1,0 +1,170 @@
+(*最大次数*)
+max = 300;
+
+(*画像入力&エッジ検出*)
+img = Import["Desktop/TCU_Bird_0.png"]
+edgePoints = {#2, -#1} & @@@ 
+   Position[ImageData[EdgeDetect[img, 1]], 1, {2}];
+
+(*point list to line関数の定義*)
+
+pointListToLines[pointList_, neighbothoodSize_: 6] := 
+ Module[{L = DeleteDuplicates[pointList], NF, λ, lineList, 
+   counter, seenQ, sLB, nearest, nearest1, nextPoint, couldReverseQ, 
+   d, n, s},
+  NF = Nearest[L];
+  λ = Length[L];
+  Monitor[
+   (*線のリスト*)
+   lineList = {};
+   counter = 0;
+   While[counter < λ,
+    sLB = {RandomChoice[DeleteCases[L, _?seenQ]]};
+    seenQ[sLB[[1]]] = True;
+    counter++;
+    couldReverseQ = True;
+    While[(nearest = NF[Last[sLB], {Infinity, neighbothoodSize}];
+      nearest1 = SortBy[DeleteCases[nearest, _?seenQ],
+        1. EuclideanDistance[Last[sLB], #] &];
+      nearest1 =!= {} || couldReverseQ), If[nearest1 === {},
+      (*角の丸め*)
+      sLB = Reverse[sLB]; couldReverseQ = False,
+      nextPoint = If[Length[sLB] <= 3,
+        nearest1[[1]],
+        d = 
+         1. Normalize[(sLB[[-1]] - sLB[[-2]]) + 
+            1/2 (sLB[[-2]] - sLB[[-3]])];
+        n = {-1, 1} Reverse[d];
+        s = Sort[{Sqrt[(d.(# - sLB[[-1]]))^2 + 2
+                 (n.(# - sLB[[-1]]))^2], #} & /@ nearest1];
+        s[[1, 2]]];
+      AppendTo[sLB, nextPoint];
+      seenQ[nextPoint] = True;
+      counter++]];
+    AppendTo[lineList, sLB]];
+   Reverse[SortBy[Select[lineList, Length[#] > 12 &], Length]],
+   
+   (*進捗どうですか表示器*)
+   Grid[
+    {{Text[Style["progress point joining",
+        Darker[Green, 0.66]]],
+      ProgressIndicator[counter/λ]},
+     
+     {Text[Style["number of segments",
+        Darker[Green, 0.66]]], Length[lineList] + 1}},
+    Alignment -> Left, Dividers -> Center]]]
+(*point list to lines関数の定義:ここまで*)
+
+SeedRandom[22];
+hLines = pointListToLines[edgePoints, 6];
+Length[hLines]
+(*点を結んで作った線の表示*)
+Graphics[
+ {ColorData["DarkRainbow"][RandomReal[]], Line[#]} & /@
+  hLines]
+
+Graphics[
+ BSplineCurve[#, SplineDegree -> 6, 
+    SplineClosed -> True] & /@ hLines]
+
+(*フーリエ係数を求めるfourierComponentData関数の定義:ここから*)
+
+fourierComponentData[pointList_, nMax_, op_] := 
+ Module[{ε = 10^-3, µ = 2^14, M = 10000, s, 
+   scale, Δ, L, nds, sMax, if, xyFunction, X, Y, XFT, 
+   YFT, type},
+  (*prepare curve*)
+  scale = 1. Mean[
+     Table[Max[fl /@ pointList] - 
+       Min[fl /@ pointList], {fl, {First, Last}}]];
+  Δ = 
+   EuclideanDistance[First[pointList], Last[pointList]];
+  L = Which[op === "Closed", type = "Closed";
+    If[First[pointList] === Last[pointList], pointList, 
+     Append[pointList, First[pointList]]], op === "Open", 
+    type = "Open";
+    pointList, Δ == 0., type = "Closed";
+    pointList, Δ/scale < op, type = "Closed";
+    Append[pointList, First[pointList]], True, type = "Open";
+    Join[pointList, Rest[Reverse[pointList]]]];
+  (*re-parametrize curve by arclength*)
+  xyFunction = BSplineFunction[L, SplineDegree -> 4];
+  nds = NDSolve[{s'[t] == Sqrt[xyFunction'[t].xyFunction'[t]], 
+     s[0] == 0}, s, {t, 0, 1}, MaxSteps -> 10^5, PrecisionGoal -> 4];
+  (*total curve length*)
+  sMax = s[1] /. nds[[1]];
+  if = Interpolation[
+    Table[{s[σ] /. nds[[1]], σ}, {σ, 0, 1, 1/M}]];
+  X[t_Real] := 
+   BSplineFunction[L][Max[Min[1, if[(t + Pi)/(2 Pi) sMax]], 0]][[1]];
+  Y[t_Real] := 
+   BSplineFunction[L][Max[Min[1, if[(t + Pi)/(2 Pi) sMax]], 0]][[2]];
+  (*extract Fourier coefficients*)
+  {XFT, YFT} = Fourier[Table[#[N@t],
+       {t, -Pi + ε, 
+        Pi - ε, (2 Pi - 
+           2 ε)/µ}]] & /@ {X, Y};
+  {type, 2 Pi/
+     Sqrt[µ]*((Transpose[
+         Table[{Re[#], Im[#]} &[Exp[I k Pi] #[[k + 1]]], {k, 0, 
+           nMax}]] & /@ {XFT, YFT}))}]
+(*フーリエ係数を求めるfourierComponentData関数の定義:ここまで*)
+
+Options[fourierComponents] = {"MaxOrder" -> max, "OpenClose" -> 0.025};
+fourierComponents[pointLists_, OptionsPattern[]] := 
+ Monitor[Table[
+    fourierComponentData[pointLists[[k]], 
+     If[Head[#] === List, #[[k]], #] &[OptionValue["MaxOrder"]], 
+     If[Head[#] === List, #[[k]], #] &[OptionValue["OpenClose"]]], {k,
+      Length[pointLists]}], 
+   Grid[{{Text[
+       Style["progress calculating Fourier coefficients", 
+        Darker[Green, 0.66]]], 
+      ProgressIndicator[k/Length[pointLists]]}}, Alignment -> Left, 
+    Dividers -> Center]] /; Depth[pointLists] === 4
+
+fCs = fourierComponents[hLines, 
+   "OpenClose" -> Table["Closed", {Length[hLines]}]];
+(*切り捨て*)
+(Mean[#] ± StandardDeviation[#]) &[
+  CoefficientList[
+   Fit[Log[Rest[MapIndexed[{1. #2[[1]], #1} &, #]]], {1, x}, x] & /@
+ 
+       Flatten[Abs[Flatten[#[[2]], 1]] & /@ fCs, 1], x, 1]] // 
+ NumberForm[#, 3] &
+GraphicsRow[ListLogLogPlot[Abs[Flatten[#[[2]], 1]],  
+    PlotRange -> All, Joined -> True] & /@ Take[fCs, 3]]
+
+makeFourierSeries[
+  {"Closed" | "Open", {{cax_, sax_}, {cay_, say_}}}, t_, 
+  n_] :=
+ {Sum[If[k == 0, 1/2, 1] cax[[k + 1]] Cos[k t] +
+    sax[[k + 1]] Sin[k t], {k, 0, Min[n, Length[cax]]}],
+  Sum[If[k == 0, 1/2, 1] cay[[k + 1]] Cos[k t] +
+    say[[k + 1]] Sin[k t], {k, 0, Min[n, Length[cay]]}]}
+(*次数を変化させるアニメーション*)
+
+makeFourierSeriesApproximatioManipulate[fCs_, maxOrder_: 60] :=
+ Manipulate[
+  With[
+   {opts = 
+     Sequence[PlotStyle -> Black, Frame -> True, Axes -> False, 
+      FrameTicks -> None, PlotRange -> All, ImagePadding -> 12]},
+   Show[{
+      ParametricPlot[
+       Evaluate[
+        makeFourierSeries[#, t, n] & /@ 
+         Cases[fCs, {"Closed", _}]], {t, -Pi, Pi}, opts],
+      ParametricPlot[
+       Evaluate[
+        makeFourierSeries[#, t, n] & /@
+         Cases[fCs, {"Open", _}]], {t, -Pi, 0}, opts]}] // Quiet],
+  {{n, 1, "max series order"}, 1, maxOrder, 1, 
+   Appearance -> "Labeled"}, 
+  TrackedSymbols :> True, SaveDefinitions -> True]
+
+makeFourierSeriesApproximatioManipulate[fCs, max]
+
+(*数式表示*)
+curves = makeFourierSeries[#, t, 12] & /@ fCs;
+Style[Map[Short, Rationalize[curves, 0.002]], 12] // TraditionalForm
